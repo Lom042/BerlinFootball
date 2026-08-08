@@ -59,8 +59,7 @@ LEAGUES = {
     "regionalliga-nordost": {
         "tier": 4,
         "label": "REGIONALLIGA NORDOST",
-        "url": "https://www.fussball.de/wettbewerb/regionalliga-nordost/-",
-        "known_clubs": ["BFC Dynamo", "VSG Altglienicke", "Tasmania Berlin", "Viktoria 1889 Berlin"],
+"url": "https://www.fussball.de/spielplan/regionalliga-nordost-deutschland-regionalliga-nordost-herren-saison2627-deutschland/-/staffel/0316DK36HK000009VS5489BUVSBBVPEU-G",        "known_clubs": ["BFC Dynamo", "VSG Altglienicke", "Tasmania Berlin", "Viktoria 1889 Berlin"],
     },
     "oberliga-nordost": {
         "tier": 5,
