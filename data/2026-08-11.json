@@ -86,20 +86,6 @@
   {
     "date": "2026-08-11",
     "time": null,
-    "home_team": "FC Erzgebirge Aue",
-    "away_team": "Hertha BSC II",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-erzgebirge-aue-hertha-bsc-u23/-/spiel/031DEIBVKG000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-11",
-    "time": null,
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "BSG Chemie Leipzig",
     "league": "REGIONALLIGA NORDOST",
@@ -128,20 +114,6 @@
   {
     "date": "2026-08-11",
     "time": null,
-    "home_team": "FC Rot-Weiß Erfurt",
-    "away_team": "BFC Preussen",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-rot-weiss-erfurt-bfc-preussen/-/spiel/031DEIC0J4000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-11",
-    "time": null,
     "home_team": "SV Tasmania Berlin",
     "away_team": "Greifswalder FC",
     "league": "REGIONALLIGA NORDOST",
@@ -152,19 +124,5 @@
     "venue_address": "Oderstraße 182, 12049 Berlin",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-greifswalder-fc/-/spiel/031DEIC0C8000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-11",
-    "time": null,
-    "home_team": "FSV 63 Luckenwalde",
-    "away_team": "BFC Dynamo",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fsv-63-luckenwalde-bfc-dynamo/-/spiel/031DEIC0EG000000VS5489BUVUR5FS5A"
   }
 ]

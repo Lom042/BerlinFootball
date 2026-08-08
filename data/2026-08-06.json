@@ -2,62 +2,6 @@
   {
     "date": "2026-08-06",
     "time": null,
-    "home_team": "FC Erzgebirge Aue",
-    "away_team": "BFC Dynamo",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-erzgebirge-aue-bfc-dynamo/-/spiel/031DEIBU1G000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-06",
-    "time": null,
-    "home_team": "Greifswalder FC",
-    "away_team": "VSG Altglienicke Berlin",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/greifswalder-fc-vsg-altglienicke-berlin/-/spiel/031DEIBUHS000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-06",
-    "time": null,
-    "home_team": "FSV 63 Luckenwalde",
-    "away_team": "SV Tasmania Berlin",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fsv-63-luckenwalde-sv-tasmania-berlin/-/spiel/031DEIBUOG000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-06",
-    "time": null,
-    "home_team": "1. FC Lokomotive Leipzig",
-    "away_team": "Hertha BSC II",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/1-fc-lokomotive-leipzig-hertha-bsc-u23/-/spiel/031DEIBUEC000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-06",
-    "time": null,
     "home_team": "BFC Dynamo",
     "away_team": "FSV Zwickau",
     "league": "REGIONALLIGA NORDOST",
@@ -68,19 +12,5 @@
     "venue_address": "Conrad-Blenkle-Straße 33, 13405 Berlin",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bfc-dynamo-fsv-zwickau/-/spiel/031DEIBUJG000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-08-06",
-    "time": null,
-    "home_team": "FC Erzgebirge Aue",
-    "away_team": "BFC Preussen",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-erzgebirge-aue-bfc-preussen/-/spiel/031DEIBUQG000000VS5489BUVUR5FS5A"
   }
 ]
