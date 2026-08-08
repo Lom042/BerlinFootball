@@ -56,10 +56,20 @@ GENDER = "M"
 
 # Substring markers used to keep only fixtures involving a Berlin club.
 # Broader than just "Berlin" because several Berlin clubs don't have
-# "Berlin" in their name (BFC Dynamo, BFC Preussen), and reserve/youth
-# sides of top-flight Berlin clubs can show up at these tiers too
-# (e.g. "Hertha BSC II" was found playing in Regionalliga Nordost).
-BERLIN_MARKERS = ["Berlin", "Hertha", "Union", "BFC"]
+# "Berlin" in their name at all - either a historic name (BFC Dynamo,
+# BFC Preussen), or a Berlin-district name used instead of the city name
+# (e.g. fussball.de may list "Reinickendorfer Füchse" rather than
+# "Füchse Berlin Reinickendorf", "SV Lichtenberg" rather than "... Berlin
+# Lichtenberg"). District names below are all real districts/localities
+# of clubs already tracked in this file's known_clubs lists - added
+# proactively so lower-tier leagues don't silently miss a club just
+# because of which name variant the page happens to use.
+BERLIN_MARKERS = [
+    "Berlin", "Hertha", "Union", "BFC",
+    "Lichtenberg", "Zehlendorf", "Mahlsdorf", "Staaken", "Reinickendorf",
+    "Wilmersdorf", "Charlottenburg", "Spandau", "Biesdorf", "Altglienicke",
+    "Mariendorf", "Frohnau",
+]
 
 # One entry per league *staffel* (tier 4 = highest below 3. Liga).
 # `known_clubs` is only a sanity-check list for tiers where rosters are
@@ -81,8 +91,12 @@ LEAGUES = {
     "oberliga-nordost": {
         "tier": 5,
         "label": "OBERLIGA NORDOST",
-        "url": "https://www.fussball.de/wettbewerb/oberliga-nordost/-",
-        "verified": False,  # guessed URL, needs the same fix as regionalliga-nordost got
+        # Real URL found via search (Oberliga Nordost splits into Nord/
+        # Süd staffeln - Berlin's clubs are in Nord). Not yet confirmed
+        # against a --debug run the way regionalliga-nordost was, so
+        # still marked unverified until that happens.
+        "url": "https://www.fussball.de/spieltag/nofv-oberliga-nord-deutschland-oberliga-herren-saison2627-deutschland/-/staffel/0316DLRBJC00000AVS5489BUVSBBVPEU-G",
+        "verified": False,
         "known_clubs": [
             "Berliner AK 07", "SV Lichtenberg 47", "Hertha 03 Zehlendorf",
             "Tennis Borussia Berlin", "TuS Makkabi Berlin", "Eintracht Mahlsdorf",
