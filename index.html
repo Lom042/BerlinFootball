@@ -149,8 +149,22 @@
     color: var(--gold);
     text-align: center;
   }
-  .teams { font-size: 16px; font-weight: 500; }
-  .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 6px; }
+  .teams { font-size: 16px; font-weight: 500; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 2px; }
+  .crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--pitch-dark);
+    flex-shrink: 0;
+  }
   .venue { color: var(--chalk-dim); font-size: 12px; margin-top: 3px; }
   .badge {
     font-family: 'Oswald', sans-serif;
@@ -210,22 +224,47 @@ const DEMO_DATA = {
   "2026-08-08": [
     { date: "2026-08-08", time: "15:30", home_team: "Hertha BSC", away_team: "1. FC Union Berlin", league: "BL2", venue: "Olympiastadion Berlin" },
     { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", venue: "Sportforum Berlin" },
-    { date: "2026-08-08", time: "14:00", home_team: "Viktoria 1889 Berlin", away_team: "FC Energie Cottbus", league: "REGIONALLIGA NORDOST", venue: "Stadion Lichterfelde" }
+    { date: "2026-08-08", time: "14:00", home_team: "VSG Altglienicke", away_team: "Tasmania Berlin", league: "REGIONALLIGA NORDOST", venue: "Sportpark Altglienicke" },
+    { date: "2026-08-08", time: "14:00", home_team: "Berliner AK 07", away_team: "SV Lichtenberg 47", league: "OBERLIGA NORDOST", venue: "Poststadion" },
+    { date: "2026-08-08", time: "15:00", home_team: "Tennis Borussia Berlin", away_team: "TuS Makkabi Berlin", league: "OBERLIGA NORDOST", venue: "Mommsenstadion" }
   ],
   "2026-08-09": [
-    { date: "2026-08-09", time: "18:30", home_team: "Tennis Borussia Berlin", away_team: "VSG Altglienicke", league: "REGIONALLIGA NORDOST", venue: "Mommsenstadion" }
+    { date: "2026-08-09", time: "14:00", home_team: "Hertha 03 Zehlendorf", away_team: "Eintracht Mahlsdorf", league: "OBERLIGA NORDOST", venue: "Rehwiese" },
+    { date: "2026-08-09", time: "14:00", home_team: "Füchse Berlin Reinickendorf", away_team: "SV Sparta Lichtenberg", league: "OBERLIGA NORDOST", venue: "Stadion Reinickendorf" },
+    { date: "2026-08-09", time: "13:00", home_team: "SC Staaken", away_team: "TSG Neustrelitz", league: "OBERLIGA NORDOST", venue: "Stadion Staaken" }
   ],
   "2026-08-15": [
     { date: "2026-08-15", time: "15:30", home_team: "1. FC Union Berlin", away_team: "Hertha BSC", league: "BL2", venue: "Stadion An der Alten Försterei" },
-    { date: "2026-08-15", time: "14:00", home_team: "VSG Altglienicke", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", venue: "Sportpark Altglienicke" }
+    { date: "2026-08-15", time: "14:00", home_team: "Tasmania Berlin", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", venue: "Werner-Seelenbinder-Sportpark" },
+    { date: "2026-08-16", time: "14:00", home_team: "Blau-Weiss 90 Berlin", away_team: "1. FC Wilmersdorf", league: "BERLIN-LIGA", venue: "Poststadion Nebenplatz" },
+    { date: "2026-08-16", time: "14:00", home_team: "SC Charlottenburg", away_team: "Spandauer Kickers", league: "BERLIN-LIGA", venue: "Mommsenstadion" }
   ],
   "2026-08-22": [
-    { date: "2026-08-22", time: "13:00", home_team: "Berliner AK 07", away_team: "Viktoria 1889 Berlin", league: "OBERLIGA", venue: "Poststadion" }
+    { date: "2026-08-22", time: "13:00", home_team: "SSC Südwest", away_team: "Fortuna Biesdorf", league: "BERLIN-LIGA", venue: "Poststadion" },
+    { date: "2026-08-22", time: "14:00", home_team: "Türkiyemspor Berlin", away_team: "SV Empor Berlin", league: "BERLIN-LIGA", venue: "Stadion Rathenower Straße" },
+    { date: "2026-08-22", time: "14:00", home_team: "TSV Mariendorf 1897", away_team: "Frohnauer SC", league: "BERLIN-LIGA", venue: "Sportplatz Mariendorf" }
   ]
 };
 
 let allData = {};
 let currentDate = null;
+
+// No real club crests are used here (they're trademarked) — instead we
+// generate a simple colored monogram per team from its initials.
+const CREST_COLORS = ['#d4a73d', '#c1443a', '#6f9c73', '#8891c4', '#c48fa0', '#5fa8a0'];
+function teamInitials(name) {
+  const words = name.replace(/^\d+\.\s*/, '').split(/\s+/).filter(w => w.length > 1 || /[A-ZÄÖÜ]/.test(w));
+  const letters = words.slice(0, 2).map(w => w[0]).join('');
+  return (letters || name.slice(0, 2)).toUpperCase();
+}
+function teamColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return CREST_COLORS[Math.abs(hash) % CREST_COLORS.length];
+}
+function crestHtml(name) {
+  return `<span class="crest" style="background:${teamColor(name)}">${teamInitials(name)}</span>`;
+}
 
 function fmtDateLabel(iso) {
   const d = new Date(iso + "T00:00:00");
@@ -287,7 +326,7 @@ function render() {
         <div class="match">
           <div class="match-time">${m.time || '—'}</div>
           <div>
-            <div class="teams">${m.home_team} <span class="vs">vs</span> ${m.away_team}</div>
+            <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
             <div class="venue">${searchTerm ? fmtDateLabel(m.date) + (m.venue ? ' · ' + m.venue : '') : (m.venue || '')}</div>
           </div>
           <div class="badge">${league}</div>
