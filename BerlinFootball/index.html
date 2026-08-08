@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berlin Football — Fixtures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pitch: #0f3d2e;
+    --pitch-dark: #0a2b20;
+    --chalk: #f4f2ea;
+    --chalk-dim: #b9c9c0;
+    --gold: #d4a73d;
+    --red-card: #c1443a;
+    --line: rgba(244,242,234,0.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--pitch-dark);
+    background-image:
+      repeating-linear-gradient(0deg, var(--pitch) 0px, var(--pitch) 60px, var(--pitch-dark) 60px, var(--pitch-dark) 120px);
+    color: var(--chalk);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    padding: 32px 20px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--line);
+  }
+  header .eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 6vw, 48px);
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  header p.sub {
+    color: var(--chalk-dim);
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .controls {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .dates {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px;
+  }
+  .date-pill {
+    font-family: 'Oswald', sans-serif;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: all 0.15s ease;
+  }
+  .date-pill:hover { border-color: var(--gold); color: var(--chalk); }
+  .date-pill.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+
+  select {
+    background: var(--pitch-dark);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 28px auto 60px;
+    padding: 0 20px;
+  }
+  .league-group { margin-bottom: 28px; }
+  .league-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .match {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    background: rgba(244,242,234,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .match-time {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+    text-align: center;
+  }
+  .teams { font-size: 16px; font-weight: 500; }
+  .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 6px; }
+  .venue { color: var(--chalk-dim); font-size: 12px; margin-top: 3px; }
+  .badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--pitch-dark);
+    background: var(--chalk-dim);
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .empty {
+    text-align: center;
+    color: var(--chalk-dim);
+    padding: 60px 20px;
+    font-size: 15px;
+  }
+  .empty .ball { font-size: 32px; display: block; margin-bottom: 10px; }
+  footer {
+    text-align: center;
+    color: var(--chalk-dim);
+    font-size: 12px;
+    padding: 20px;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Matchday</div>
+  <h1>Berlin Football</h1>
+  <p class="sub">Every club, every level — Bundesliga down to the local pitch.</p>
+</header>
+
+<div class="controls">
+  <div class="dates" id="dates"></div>
+  <select id="league-filter">
+    <option value="">All leagues</option>
+  </select>
+</div>
+
+<main id="main">
+  <div class="empty">Loading fixtures…</div>
+</main>
+
+<footer>Free & ad-free. Data refreshed automatically.</footer>
+
+<script>
+const DEMO_DATA = {
+  "2026-08-08": [
+    { date: "2026-08-08", time: "15:30", home_team: "Hertha BSC", away_team: "1. FC Union Berlin", league: "BL2", venue: "Olympiastadion Berlin" },
+    { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", venue: "Sportforum Berlin" },
+    { date: "2026-08-08", time: "14:00", home_team: "Viktoria 1889 Berlin", away_team: "FC Energie Cottbus", league: "REGIONALLIGA NORDOST", venue: "Stadion Lichterfelde" }
+  ]
+};
+
+let allData = {};
+let currentDate = null;
+
+function fmtDateLabel(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
+}
+
+function renderDatePills(dates) {
+  const el = document.getElementById('dates');
+  el.innerHTML = '';
+  dates.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'date-pill' + (d === currentDate ? ' active' : '');
+    btn.textContent = fmtDateLabel(d);
+    btn.onclick = () => { currentDate = d; render(); };
+    el.appendChild(btn);
+  });
+}
+
+function populateLeagueFilter(matches) {
+  const sel = document.getElementById('league-filter');
+  const leagues = [...new Set(matches.map(m => m.league))].sort();
+  sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
+}
+
+function render() {
+  const main = document.getElementById('main');
+  const matches = (allData[currentDate] || []);
+  const leagueFilter = document.getElementById('league-filter').value;
+  const filtered = leagueFilter ? matches.filter(m => m.league === leagueFilter) : matches;
+
+  if (!filtered.length) {
+    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixtures found for this day.</div>`;
+    return;
+  }
+
+  const byLeague = {};
+  filtered.forEach(m => {
+    (byLeague[m.league] = byLeague[m.league] || []).push(m);
+  });
+
+  main.innerHTML = Object.entries(byLeague).map(([league, ms]) => `
+    <div class="league-group">
+      <div class="league-label">${league}</div>
+      ${ms.sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
+        <div class="match">
+          <div class="match-time">${m.time || '—'}</div>
+          <div>
+            <div class="teams">${m.home_team} <span class="vs">vs</span> ${m.away_team}</div>
+            ${m.venue ? `<div class="venue">${m.venue}</div>` : ''}
+          </div>
+          <div class="badge">${league}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+async function init() {
+  document.getElementById('league-filter').addEventListener('change', render);
+
+  try {
+    const idxResp = await fetch('data/index.json');
+    if (!idxResp.ok) throw new Error('no live data');
+    const dates = await idxResp.json();
+    for (const d of dates) {
+      const r = await fetch(`data/${d}.json`);
+      if (r.ok) allData[d] = await r.json();
+    }
+  } catch (e) {
+    allData = DEMO_DATA;
+  }
+
+  const dates = Object.keys(allData).sort();
+  if (!dates.length) {
+    document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
+    return;
+  }
+  currentDate = dates[0];
+  renderDatePills(dates);
+  populateLeagueFilter(Object.values(allData).flat());
+  render();
+}
+
+init();
+</script>
+
+</body>
+</html>
