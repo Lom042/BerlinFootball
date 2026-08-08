@@ -16,12 +16,26 @@ way as BerlinKino (Share → Add to Home Screen).
   scraping needed here, so this one's reliable out of the box. Filters to
   matches involving Berlin clubs (Hertha, Union, or any Berlin club that
   reaches 3. Liga).
-- **`scraper_fussballde.py`** — targets `fussball.de` for Regionalliga
-  Nordost and lower (BFC Dynamo, Viktoria 1889 Berlin, Tennis Borussia
-  Berlin, VSG Altglienicke, and further down to Kreisliga). **Unverified**
-  — the site is JS-rendered, so this plain-requests version is a first
-  pass and likely needs Playwright instead. Not wired into the scheduled
-  workflow yet.
+- **`scraper_fussballde.py`** — targets `fussball.de` for the three
+  divisions below 3. Liga, organized league football only (no pub/
+  five-a-side teams). Current 2026–27 rosters:
+  - **Regionalliga Nordost** (tier 4): BFC Dynamo, VSG Altglienicke,
+    Tasmania Berlin
+  - **NOFV-Oberliga Nord** (tier 5): Berliner AK 07, SV Lichtenberg 47,
+    Hertha 03 Zehlendorf, Tennis Borussia Berlin, TuS Makkabi Berlin,
+    Eintracht Mahlsdorf, SC Staaken, SV Sparta Lichtenberg, Füchse
+    Berlin Reinickendorf
+  - **Berlin-Liga** (tier 6, Berlin-only): Blau-Weiss 90 Berlin, 1. FC
+    Wilmersdorf, SC Charlottenburg, Spandauer Kickers, SSC Südwest,
+    Polar Pinguin, Fortuna Biesdorf, VSG Altglienicke II, SFC Stern
+    1900, SV Empor Berlin, TSV Mariendorf 1897, Frohnauer SC,
+    Türkiyemspor Berlin
+
+  **Unverified** — the site is JS-rendered, so this plain-requests
+  version is a first pass and likely needs Playwright instead. Not wired
+  into the scheduled workflow yet. Also worth knowing: promotion and
+  relegation reshuffle these three lists every summer, so this roster
+  needs a re-check each season.
 - **`.github/workflows/update-fixtures.yml`** — runs the OpenLigaDB
   scraper twice a day and commits fresh data automatically. Includes a
   separate manual `debug-fussballde` job to help verify that scraper.
@@ -53,6 +67,12 @@ does list these, but coverage depends on the scraper above working),
 and any Berlin club not yet added to `BERLIN_LOWER_LEAGUE_CLUBS` in
 `scraper_fussballde.py` — that list is easy to extend once the scraper
 itself is confirmed working.
+
+## Team badges
+
+Real club crests are trademarked, so the app doesn't display any actual
+logos. Instead, each team gets a small generated monogram (initials in a
+colored circle) — gives visual structure without any copyright risk.
 
 ## Other things worth knowing
 
