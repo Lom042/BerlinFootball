@@ -92,10 +92,12 @@ LEAGUES = {
         "tier": 5,
         "label": "OBERLIGA NORDOST",
         # Real URL found via search (Oberliga Nordost splits into Nord/
-        # Süd staffeln - Berlin's clubs are in Nord). Not yet confirmed
-        # against a --debug run the way regionalliga-nordost was, so
-        # still marked unverified until that happens.
-        "url": "https://www.fussball.de/spieltag/nofv-oberliga-nord-deutschland-oberliga-herren-saison2627-deutschland/-/staffel/0316DLRBJC00000AVS5489BUVSBBVPEU-G",
+        # Süd staffeln - Berlin's clubs are in Nord). Search turned up a
+        # "/spieltag/" (single matchday) link rather than "/spielplan/"
+        # (full season) - swapped to the full-season path, same staffel
+        # ID, matching the URL shape that worked for regionalliga-nordost.
+        # Not yet confirmed against a --debug run, still unverified.
+        "url": "https://www.fussball.de/spielplan/nofv-oberliga-nord-deutschland-oberliga-herren-saison2627-deutschland/-/staffel/0316DLRBJC00000AVS5489BUVSBBVPEU-G",
         "verified": False,
         "known_clubs": [
             "Berliner AK 07", "SV Lichtenberg 47", "Hertha 03 Zehlendorf",
