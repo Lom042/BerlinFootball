@@ -1,0 +1,35 @@
+name: debug-fussballde
+
+on:
+  workflow_dispatch:
+    inputs:
+      league:
+        description: "League key (see LEAGUES in scraper_fussballde.py)"
+        required: true
+        default: "regionalliga-nordost"
+        type: choice
+        options:
+          - regionalliga-nordost
+          - oberliga-nordost
+          - berlin-liga
+          - landesliga-1
+          - landesliga-2
+          - bezirksliga-1
+          - bezirksliga-2
+          - bezirksliga-3
+          - kreisliga-a
+          - kreisliga-b
+          - kreisliga-c
+
+jobs:
+  debug-fussballde:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Debug fetch against a fussball.de league page
+        run: python scraper_fussballde.py --debug --league "${{ github.event.inputs.league }}"
