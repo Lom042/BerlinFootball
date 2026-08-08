@@ -347,12 +347,20 @@ function monthOf(iso) {
 // Fallback tier lookup for older/incoming data that might not carry an
 // explicit league_tier yet. Keep in sync with both scrapers' tier maps.
 const TIER_BY_LEAGUE = {
+  "DFB-POKAL": 0, "BERLIN-POKAL": 0.5,
   "BL1": 1, "BL2": 2, "BL3": 3,
   "REGIONALLIGA NORDOST": 4, "OBERLIGA NORDOST": 5, "BERLIN-LIGA": 6,
   "LANDESLIGA STAFFEL 1": 7, "LANDESLIGA STAFFEL 2": 7,
 };
 function tierOf(m) {
   return typeof m.league_tier === "number" ? m.league_tier : (TIER_BY_LEAGUE[m.league] ?? 99);
+}
+// Cups aren't part of the league pyramid, so "Tier 0" would be
+// meaningless to show - this decides whether a match belongs to a cup
+// competition (explicit `is_cup` flag from live data, or a name-based
+// fallback for older/demo data that predates the flag).
+function isCup(m) {
+  return Boolean(m.is_cup) || m.league === "DFB-POKAL" || m.league === "BERLIN-POKAL";
 }
 
 // Two-level nav: pick a MONTH first, then optionally narrow to one DATE
@@ -475,11 +483,12 @@ function render() {
     return orderedLeagues.map(league => {
       const ms = byLeague[league];
       const tier = tierOf(ms[0]);
+      const tierTag = isCup(ms[0]) ? 'Cup' : `Tier ${tier}`;
       return `
       <div class="league-group">
         <div class="league-label">
           <span>${league}</span>
-          <span class="tier-tag">Tier ${tier}</span>
+          <span class="tier-tag">${tierTag}</span>
         </div>
         ${ms.slice().sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
           <div class="match">
