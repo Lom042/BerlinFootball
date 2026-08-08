@@ -1,6 +1,9 @@
 """
 Scrapes fussball.de for Berlin men's football below 3. Liga: Regionalliga
-Nordost down through Kreisliga C (tiers 4-11).
+Nordost down through Landesliga (tiers 4-7).
+
+Deliberately stops at Landesliga rather than continuing into Bezirksliga/
+Kreisliga (tiers 8-11) - see the note above the LEAGUES dict for why.
 
 STATUS as of the first real debug run against "regionalliga-nordost":
 the page IS server-rendered (not a JS shell - no Playwright needed) and
@@ -106,8 +109,8 @@ BERLIN_MARKERS = [
 # One entry per league *staffel* (tier 4 = highest below 3. Liga).
 # `known_clubs` is only a sanity-check list for tiers where rosters are
 # stable and small enough to hand-maintain (4-6) - it plays no part in
-# filtering anymore, that's BERLIN_MARKERS' job now. For 7-11 it's
-# deliberately empty: those clubs come FROM the scrape, not a hand-typed
+# filtering anymore, that's BERLIN_MARKERS' job now. Landesliga (tier 7)
+# leaves it empty: those clubs come FROM the scrape, not a hand-typed
 # list, because that's the part that doesn't scale.
 LEAGUES = {
     "regionalliga-nordost": {
@@ -159,55 +162,27 @@ LEAGUES = {
     "landesliga-2": {
         "tier": 7,
         "label": "LANDESLIGA STAFFEL 2",
-        # Found via search - real 2026/27 staffel ID. Not yet flipped to
-        # verified - needs a --debug run first.
+        # Confirmed via --debug: 75 Berlin home fixtures, dates vary
+        # correctly across the season, real Landesliga clubs.
         "url": "https://www.fussball.de/spielplan/herren-landesliga-st2-berlin-landesliga-herren-saison2627-berlin/-/staffel/0317AFVREC000003VS5489BUVSBBVPEU-G",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "bezirksliga-1": {
-        "tier": 8,
-        "label": "BEZIRKSLIGA STAFFEL 1",
-        "url": "https://www.fussball.de/wettbewerb/bezirksliga-1-berlin/-",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "bezirksliga-2": {
-        "tier": 8,
-        "label": "BEZIRKSLIGA STAFFEL 2",
-        "url": "https://www.fussball.de/wettbewerb/bezirksliga-2-berlin/-",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "bezirksliga-3": {
-        "tier": 8,
-        "label": "BEZIRKSLIGA STAFFEL 3",
-        "url": "https://www.fussball.de/wettbewerb/bezirksliga-3-berlin/-",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "kreisliga-a": {
-        "tier": 9,
-        "label": "KREISLIGA A",
-        "url": "https://www.fussball.de/wettbewerb/kreisliga-a-berlin/-",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "kreisliga-b": {
-        "tier": 10,
-        "label": "KREISLIGA B",
-        "url": "https://www.fussball.de/wettbewerb/kreisliga-b-berlin/-",
-        "verified": False,
-        "known_clubs": [],
-    },
-    "kreisliga-c": {
-        "tier": 11,
-        "label": "KREISLIGA C",
-        "url": "https://www.fussball.de/wettbewerb/kreisliga-c-berlin/-",
-        "verified": False,
+        "verified": True,
         "known_clubs": [],
     },
 }
+
+# DELIBERATELY NOT GOING BELOW TIER 7 (Landesliga). Bezirksliga (tier 8)
+# alone is 3 separate staffeln in Berlin, and Kreisliga A/B/C (tiers
+# 9-11) split into even more - at least 4 groups for Kreisliga A alone -
+# each one its own staffel needing its own real URL found and verified.
+# Weighed the effort against the payoff and decided Landesliga is a
+# sensible floor for this project: still real organized league football,
+# without chasing a dozen+ small district groups. If this ever changes,
+# the pattern for adding a new staffel is the same as every entry above:
+# find its real "/spielplan/.../staffel/<ID>-G" URL (via WebSearch, or a
+# known club's team page for the current season, since fussball.de's own
+# league browser is a JS dropdown that can't be queried directly), add
+# it here with `verified: False`, confirm via
+# `--debug --league "<key>"`, then flip to True.
 
 # FALLBACK ONLY. Each match's own page now gives a real, per-fixture
 # venue + address via a Google Maps link (see fetch_match_detail()) -
