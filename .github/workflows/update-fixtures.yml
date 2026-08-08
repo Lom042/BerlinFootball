@@ -22,6 +22,9 @@ jobs:
       - name: Run OpenLigaDB scraper
         run: python scraper_openligadb.py
 
+      - name: Run fussball.de scraper
+        run: python scraper_fussballde.py
+
       - name: Commit updated fixtures
         run: |
           git config user.name "berlin-football-bot"
