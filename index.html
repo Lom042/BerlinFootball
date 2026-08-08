@@ -92,6 +92,28 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
   }
+  .search-row {
+    max-width: 900px;
+    margin: 16px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #team-search {
+    background: rgba(244,242,234,0.06);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    width: 220px;
+    max-width: 60vw;
+  }
+  #team-search::placeholder { color: var(--chalk-dim); }
+  .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
 
   main {
     max-width: 900px;
@@ -167,8 +189,11 @@
 <div class="controls">
   <div class="dates" id="dates"></div>
   <select id="league-filter">
-    <option value="">All leagues</option>
+    <option value="">All divisions</option>
   </select>
+</div>
+<div class="search-row">
+  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off">
 </div>
 
 <main id="main">
@@ -178,11 +203,24 @@
 <footer>Free & ad-free. Data refreshed automatically.</footer>
 
 <script>
+// Placeholder fixtures only — not real games. Shown until the live
+// scrapers (scraper_openligadb.py / scraper_fussballde.py) have run
+// and produced real data/index.json + data/<date>.json files.
 const DEMO_DATA = {
   "2026-08-08": [
     { date: "2026-08-08", time: "15:30", home_team: "Hertha BSC", away_team: "1. FC Union Berlin", league: "BL2", venue: "Olympiastadion Berlin" },
     { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", venue: "Sportforum Berlin" },
     { date: "2026-08-08", time: "14:00", home_team: "Viktoria 1889 Berlin", away_team: "FC Energie Cottbus", league: "REGIONALLIGA NORDOST", venue: "Stadion Lichterfelde" }
+  ],
+  "2026-08-09": [
+    { date: "2026-08-09", time: "18:30", home_team: "Tennis Borussia Berlin", away_team: "VSG Altglienicke", league: "REGIONALLIGA NORDOST", venue: "Mommsenstadion" }
+  ],
+  "2026-08-15": [
+    { date: "2026-08-15", time: "15:30", home_team: "1. FC Union Berlin", away_team: "Hertha BSC", league: "BL2", venue: "Stadion An der Alten Försterei" },
+    { date: "2026-08-15", time: "14:00", home_team: "VSG Altglienicke", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", venue: "Sportpark Altglienicke" }
+  ],
+  "2026-08-22": [
+    { date: "2026-08-22", time: "13:00", home_team: "Berliner AK 07", away_team: "Viktoria 1889 Berlin", league: "OBERLIGA", venue: "Poststadion" }
   ]
 };
 
@@ -214,12 +252,26 @@ function populateLeagueFilter(matches) {
 
 function render() {
   const main = document.getElementById('main');
-  const matches = (allData[currentDate] || []);
   const leagueFilter = document.getElementById('league-filter').value;
-  const filtered = leagueFilter ? matches.filter(m => m.league === leagueFilter) : matches;
+  const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
+
+  // If searching by team, look across ALL dates, not just the selected one —
+  // otherwise a search would silently show nothing on days with no matches.
+  const pool = searchTerm
+    ? Object.values(allData).flat()
+    : (allData[currentDate] || []);
+
+  let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
+  if (searchTerm) {
+    filtered = filtered.filter(m =>
+      m.home_team.toLowerCase().includes(searchTerm) ||
+      m.away_team.toLowerCase().includes(searchTerm)
+    );
+  }
 
   if (!filtered.length) {
-    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixtures found for this day.</div>`;
+    const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this day.';
+    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
     return;
   }
 
@@ -231,12 +283,12 @@ function render() {
   main.innerHTML = Object.entries(byLeague).map(([league, ms]) => `
     <div class="league-group">
       <div class="league-label">${league}</div>
-      ${ms.sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
+      ${ms.sort((a,b) => (a.date + (a.time||'')).localeCompare(b.date + (b.time||''))).map(m => `
         <div class="match">
           <div class="match-time">${m.time || '—'}</div>
           <div>
             <div class="teams">${m.home_team} <span class="vs">vs</span> ${m.away_team}</div>
-            ${m.venue ? `<div class="venue">${m.venue}</div>` : ''}
+            <div class="venue">${searchTerm ? fmtDateLabel(m.date) + (m.venue ? ' · ' + m.venue : '') : (m.venue || '')}</div>
           </div>
           <div class="badge">${league}</div>
         </div>
@@ -247,6 +299,7 @@ function render() {
 
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
+  document.getElementById('team-search').addEventListener('input', render);
 
   try {
     const idxResp = await fetch('data/index.json');
