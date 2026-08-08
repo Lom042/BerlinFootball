@@ -23,13 +23,44 @@ import urllib.request
 DEBUG = "--debug" in sys.argv
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
-# Berlin clubs to track in Regionalliga Nordost / Oberliga / Kreisliga.
-# Add more here as coverage expands - each needs its fussball.de club slug.
+# Berlin clubs to track below 3. Liga, organized by division. This is
+# organized league football only (deliberately excludes pub/five-a-side
+# teams). Built from the current 2026-27 season rosters where available;
+# promotion/relegation shifts clubs between these lists every summer, so
+# this needs a re-check each season. Add more here as coverage expands -
+# each needs its real fussball.de club slug confirmed via a debug run
+# (slugs below are best-guess and unverified).
 BERLIN_LOWER_LEAGUE_CLUBS = {
-    "BFC Dynamo": "bfc-dynamo-berlin",
-    "Viktoria 1889 Berlin": "viktoria-1889-berlin",
-    "Tennis Borussia Berlin": "tennis-borussia-berlin",
-    "VSG Altglienicke": "vsg-altglienicke",
+    # Regionalliga Nordost (tier 4)
+    "BFC Dynamo": ("bfc-dynamo-berlin", "REGIONALLIGA NORDOST"),
+    "VSG Altglienicke": ("vsg-altglienicke", "REGIONALLIGA NORDOST"),
+    "Tasmania Berlin": ("sv-tasmania-berlin", "REGIONALLIGA NORDOST"),
+
+    # NOFV-Oberliga Nord (tier 5)
+    "Berliner AK 07": ("berliner-ak-07", "OBERLIGA NORDOST"),
+    "SV Lichtenberg 47": ("sv-lichtenberg-47", "OBERLIGA NORDOST"),
+    "Hertha 03 Zehlendorf": ("hertha-03-zehlendorf", "OBERLIGA NORDOST"),
+    "Tennis Borussia Berlin": ("tennis-borussia-berlin", "OBERLIGA NORDOST"),
+    "TuS Makkabi Berlin": ("tus-makkabi-berlin", "OBERLIGA NORDOST"),
+    "Eintracht Mahlsdorf": ("eintracht-mahlsdorf", "OBERLIGA NORDOST"),
+    "SC Staaken": ("sc-staaken", "OBERLIGA NORDOST"),
+    "SV Sparta Lichtenberg": ("sv-sparta-lichtenberg", "OBERLIGA NORDOST"),
+    "Füchse Berlin Reinickendorf": ("fuechse-berlin-reinickendorf", "OBERLIGA NORDOST"),
+
+    # Berlin-Liga (tier 6, Berlin-only)
+    "Blau-Weiss 90 Berlin": ("blau-weiss-90-berlin", "BERLIN-LIGA"),
+    "1. FC Wilmersdorf": ("1-fc-wilmersdorf", "BERLIN-LIGA"),
+    "SC Charlottenburg": ("sc-charlottenburg", "BERLIN-LIGA"),
+    "Spandauer Kickers": ("fsv-spandauer-kickers", "BERLIN-LIGA"),
+    "SSC Südwest": ("ssc-suedwest-berlin", "BERLIN-LIGA"),
+    "Polar Pinguin": ("polar-pinguin-berlin", "BERLIN-LIGA"),
+    "Fortuna Biesdorf": ("fortuna-biesdorf", "BERLIN-LIGA"),
+    "VSG Altglienicke II": ("vsg-altglienicke-ii", "BERLIN-LIGA"),
+    "SFC Stern 1900": ("sfc-stern-1900", "BERLIN-LIGA"),
+    "SV Empor Berlin": ("sv-empor-berlin", "BERLIN-LIGA"),
+    "TSV Mariendorf 1897": ("tsv-mariendorf-1897", "BERLIN-LIGA"),
+    "Frohnauer SC": ("frohnauer-sc", "BERLIN-LIGA"),
+    "Türkiyemspor Berlin": ("tuerkiyemspor-berlin", "BERLIN-LIGA"),
 }
 
 
@@ -64,12 +95,13 @@ def main():
         )
         return
 
-    for name, slug in clubs.items():
-        if not slug:
-            log(f"No slug configured for '{name}', skipping.")
+    for name, entry in clubs.items():
+        if not entry:
+            log(f"No entry configured for '{name}', skipping.")
             continue
+        slug, league = entry
         url = f"https://www.fussball.de/verein/{slug}/-"
-        log(f"Fetching {url}")
+        log(f"Fetching {url} ({league})")
         try:
             html = fetch_page(url)
             log(f"  got {len(html)} bytes")
