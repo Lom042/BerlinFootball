@@ -1,9 +1,34 @@
 """
 Scrapes fussball.de for Berlin men's football below 3. Liga: Regionalliga
-Nordost down through Landesliga (tiers 4-7).
+Nordost down through Landesliga (tiers 4-7), plus two cup competitions
+(DFB-Pokal and the Berlin Landespokal - see CUPS below).
 
 Deliberately stops at Landesliga rather than continuing into Bezirksliga/
 Kreisliga (tiers 8-11) - see the note above the LEAGUES dict for why.
+
+CUPS ARE STRUCTURALLY DIFFERENT FROM LEAGUES - worth understanding before
+touching CUPS below. A league staffel is one flat table covering the
+whole season. A cup competition is a knockout: several separate rounds
+(Qualifikation, 1. Hauptrunde, Achtelfinale, ...), each its own staffel
+page with its own ID, drawn one round at a time as the previous round
+finishes. There's no single page listing every round's fixtures at once.
+
+The competition-level URL (ending `-C`, e.g. the one under "DFB-Pokal" in
+the site's own league picker) isn't itself a fixture list - fetching it
+redirects (a real HTTP redirect, which Python's urllib follows
+automatically) to whichever round is CURRENTLY active, ending `-R`
+instead. That means CUPS entries below can just point at the stable `-C`
+URL and this file never needs to know or track which round is live -
+fussball.de's own redirect handles that for us, every single run. No
+extra "find the next round" logic needed.
+
+Confirmed at time of writing: both cups' current round has zero fixtures
+because this season's draw hasn't been published yet ("Leider wurden zu
+deiner Eingabe keine Treffer gefunden" on the page) - that's expected,
+not a bug. `collect_league()` handles an empty page the same as any
+other: zero raw fixtures in, zero written out. Once each competition's
+first-round draw is published, real fixtures should start appearing on
+the next scheduled run with no code change required.
 
 STATUS as of the first real debug run against "regionalliga-nordost":
 the page IS server-rendered (not a JS shell - no Playwright needed) and
@@ -183,6 +208,35 @@ LEAGUES = {
 # league browser is a JS dropdown that can't be queried directly), add
 # it here with `verified: False`, confirm via
 # `--debug --league "<key>"`, then flip to True.
+
+# Cup competitions - see the "CUPS ARE STRUCTURALLY DIFFERENT" module
+# docstring section above before touching this. `url` is the STABLE
+# competition-level "-C" page for each cup, which fussball.de redirects
+# to whichever round is currently active - not a specific round's page,
+# so this dict never needs manual updates as the tournament progresses.
+# `tier` here is a display/sort weight, not a real league tier (cups
+# aren't part of the pyramid) - both sit ahead of Bundesliga so they
+# stand out, and `is_cup: True` tells the frontend to show a "CUP" tag
+# instead of a nonsensical "Tier 0".
+CUPS = {
+    "dfb-pokal": {
+        "tier": 0,
+        "label": "DFB-POKAL",
+        "is_cup": True,
+        "url": "https://www.fussball.de/spielplan/dfb-pokal-deutschland-dfb-pokal-herren-saison2627-deutschland/-/staffel/0316JUJV90000000VS5489BTVU7GTVLE-C",
+        "verified": True,
+        "known_clubs": [],
+    },
+    "berlin-pokal": {
+        "tier": 0.5,
+        "label": "BERLIN-POKAL",
+        "is_cup": True,
+        # "Cosy Wasch-Landespokal 1.Herren" - the Berlin regional cup.
+        "url": "https://www.fussball.de/spielplan/cosy-wasch-landespokal-1herren-berlin-berlin-pokal-herren-saison2627-berlin/-/staffel/031CI7P4GS000000VS5489BUVUR5FS5A-C",
+        "verified": True,
+        "known_clubs": [],
+    },
+}
 
 # FALLBACK ONLY. Each match's own page now gives a real, per-fixture
 # venue + address via a Google Maps link (see fetch_match_detail()) -
@@ -408,6 +462,7 @@ def normalize_fixture(raw, detail, league_key, league_info):
         "away_team": raw["away_team"],
         "league": league_info["label"],
         "league_tier": league_info["tier"],
+        "is_cup": bool(league_info.get("is_cup", False)),
         "gender": GENDER,
         "matchday": "",
         "venue": venue,
@@ -492,7 +547,12 @@ def main():
     if "--league" in sys.argv:
         league_filter = sys.argv[sys.argv.index("--league") + 1]
 
-    leagues = {league_filter: LEAGUES.get(league_filter)} if league_filter else LEAGUES
+    # CUPS is a separate dict from LEAGUES (see the module docstring for
+    # why cups need different handling), but merged here so --league
+    # works identically for both, and a plain run without --league
+    # covers everything verified across leagues AND cups in one pass.
+    all_entries = {**LEAGUES, **CUPS}
+    leagues = {league_filter: all_entries.get(league_filter)} if league_filter else all_entries
 
     all_fixtures = []
     for key, info in leagues.items():
