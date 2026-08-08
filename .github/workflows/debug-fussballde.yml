@@ -1,5 +1,15 @@
 name: debug-fussballde
 
+# Manual-only. Fetches one real fussball.de league page and prints the
+# raw HTML so real selectors can be written into parse_league_page() in
+# scraper_fussballde.py. Doesn't touch data/ and never commits anything -
+# scraper_fussballde.py stays out of the scheduled update-fixtures.yml
+# job until it's actually verified against real output from this run.
+#
+# Run it from: Actions → debug-fussballde → Run workflow, pick a league
+# key from the dropdown, then paste the job's log output back so the
+# parsing logic can be fixed against real markup.
+
 on:
   workflow_dispatch:
     inputs:
@@ -14,12 +24,8 @@ on:
           - berlin-liga
           - landesliga-1
           - landesliga-2
-          - bezirksliga-1
-          - bezirksliga-2
-          - bezirksliga-3
-          - kreisliga-a
-          - kreisliga-b
-          - kreisliga-c
+          - dfb-pokal
+          - berlin-pokal
 
 jobs:
   debug-fussballde:
