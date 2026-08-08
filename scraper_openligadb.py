@@ -136,37 +136,48 @@ def main():
 
     log(f"Total Berlin-related matches found: {len(all_matches)}")
 
-    # Group by date, write every date from today onward that has data -
-    # no cutoff (see module docstring for why the old 14-day window got
-    # removed).
     by_date = {}
     for m in all_matches:
         by_date.setdefault(m["date"], []).append(m)
-
-    today_iso = date.today().isoformat()
-    written_dates = []
-    for d in sorted(by_date):
-        if d < today_iso:
-            continue
-        existing = []
-        existing_path = os.path.join(DATA_DIR, f"{d}.json")
-        if os.path.exists(existing_path):
-            with open(existing_path) as f:
-                existing = json.load(f)
-        # merge, replacing any prior openligadb entries for this date
-        merged = [x for x in existing if x.get("source") != "openligadb"] + by_date[d]
-        with open(existing_path, "w") as f:
-            json.dump(merged, f, indent=2, ensure_ascii=False)
-        written_dates.append(d)
 
     index_path = os.path.join(DATA_DIR, "index.json")
     existing_index = []
     if os.path.exists(index_path):
         with open(index_path) as f:
             existing_index = json.load(f)
-    combined_index = sorted(set(existing_index) | set(written_dates))
+
+    # IMPORTANT: reconcile every date this source has EVER written
+    # (existing_index), not just dates that still have a match this run
+    # (by_date). Otherwise a date that used to qualify - e.g. before the
+    # home-only filter existed, when an away fixture counted - but no
+    # longer does, never gets revisited again, and its stale openligadb
+    # entry just sits in the file forever even after the filter logic
+    # is fixed. This was a real bug: tightening is_home_fixture_in_berlin
+    # alone didn't remove already-written away fixtures until this
+    # reconciliation was added.
+    today_iso = date.today().isoformat()
+    candidate_dates = sorted(set(existing_index) | set(by_date))
+    written_dates = []
+    for d in candidate_dates:
+        if d < today_iso:
+            continue
+        existing_path = os.path.join(DATA_DIR, f"{d}.json")
+        existing = []
+        if os.path.exists(existing_path):
+            with open(existing_path) as f:
+                existing = json.load(f)
+        # merge: drop ALL prior openligadb entries for this date, then
+        # add back only what THIS run actually found (empty list if none)
+        merged = [x for x in existing if x.get("source") != "openligadb"] + by_date.get(d, [])
+        if merged:
+            with open(existing_path, "w") as f:
+                json.dump(merged, f, indent=2, ensure_ascii=False)
+            written_dates.append(d)
+        elif os.path.exists(existing_path):
+            os.remove(existing_path)  # nothing left for this date at all
+
     with open(index_path, "w") as f:
-        json.dump(combined_index, f, indent=2)
+        json.dump(sorted(written_dates), f, indent=2)
 
     print(f"OpenLigaDB: wrote {len(written_dates)} date file(s), {len(all_matches)} matches total.")
 
