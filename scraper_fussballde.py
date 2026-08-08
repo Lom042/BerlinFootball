@@ -217,7 +217,14 @@ def clean_team_name(text):
 
 
 def is_berlin_fixture(home, away):
-    return any(marker in home for marker in BERLIN_MARKERS) or any(marker in away for marker in BERLIN_MARKERS)
+    """
+    HOME team only, deliberately - this project shows fixtures being
+    PLAYED IN Berlin, not every fixture a Berlin club is involved in.
+    A Berlin club playing away (e.g. at a club elsewhere in Brandenburg
+    or further out) is a real game, just not one happening in Berlin, so
+    it's left out here rather than shown as if it were a local match.
+    """
+    return any(marker in home for marker in BERLIN_MARKERS)
 
 
 class FixtureListParser(HTMLParser):
