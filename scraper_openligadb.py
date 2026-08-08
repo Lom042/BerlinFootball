@@ -76,6 +76,15 @@ def is_berlin_club(team_name):
     return any(marker in team_name for marker in BERLIN_CLUB_MARKERS)
 
 
+def is_home_fixture_in_berlin(home_team):
+    """
+    HOME team only, deliberately - this project shows fixtures PLAYED IN
+    Berlin, not every fixture a Berlin club is involved in. A Berlin
+    club playing away is a real match, just not one happening in Berlin.
+    """
+    return is_berlin_club(home_team)
+
+
 def fetch_league_matches(league):
     url = f"{API_BASE}/getmatchdata/{league}/{SEASON}"
     log(f"Fetching {url}")
@@ -120,7 +129,7 @@ def main():
         for m in matches:
             home = m.get("team1", {}).get("teamName", "")
             away = m.get("team2", {}).get("teamName", "")
-            if is_berlin_club(home) or is_berlin_club(away):
+            if is_home_fixture_in_berlin(home):
                 norm = normalize(m, league)
                 if norm["date"]:
                     all_matches.append(norm)
