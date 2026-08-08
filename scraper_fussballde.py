@@ -65,11 +65,17 @@ GENDER = "M"
 # proactively so lower-tier leagues don't silently miss a club just
 # because of which name variant the page happens to use.
 BERLIN_MARKERS = [
-    "Berlin", "Hertha", "Union", "BFC",
+    "Berlin", "Hertha", "Union Berlin", "BFC",
     "Lichtenberg", "Zehlendorf", "Mahlsdorf", "Staaken", "Reinickendorf",
     "Wilmersdorf", "Charlottenburg", "Spandau", "Biesdorf", "Altglienicke",
     "Mariendorf", "Frohnau",
 ]
+# NOTE: "Union" on its own is deliberately NOT a marker - it's an
+# extremely common generic name fragment in German amateur football
+# (e.g. "SG Union Klosterfelde" in Brandenburg, nothing to do with
+# Berlin). A real false positive from bare "Union" showed up the first
+# time this ran against Oberliga Nordost - "Union Berlin" is specific
+# enough to still catch 1. FC Union Berlin without that risk.
 
 # One entry per league *staffel* (tier 4 = highest below 3. Liga).
 # `known_clubs` is only a sanity-check list for tiers where rosters are
