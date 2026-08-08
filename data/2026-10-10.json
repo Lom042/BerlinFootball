@@ -12,5 +12,61 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
+    "home_team": "SV Lichtenberg 47",
+    "away_team": "FC Anker Wismar",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, HOWOGE-Arena »Hans Zoschke« NR1",
+    "venue_address": "Normannenstraße 28, 10365 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/lichtenberg-47-fc-anker-wismar/-/spiel/031AFMQNJ0000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
+    "home_team": "BSV Eintracht Mahlsdorf",
+    "away_team": "TSG Neustrelitz",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Am Rosenhag KR",
+    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-tsg-neustrelitz/-/spiel/031AFMQNL4000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
+    "home_team": "Berliner AK 07",
+    "away_team": "SG Union Klosterfelde",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Poststadion Stadion NR1",
+    "venue_address": "Lehrter Str. 59, 10557 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-ak-07-sg-union-klosterfelde/-/spiel/031AFMQNN8000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
+    "home_team": "Füchse Berlin Reinickendorf",
+    "away_team": "1. FC Lok Stendal",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Kienhorststraße NR1",
+    "venue_address": "Kienhorststr. 170, 13403 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fuechse-berlin-reinickendorf-1-fc-lok-stendal/-/spiel/031AFMQNRS000000VS5489BUVV628VP4"
   }
 ]

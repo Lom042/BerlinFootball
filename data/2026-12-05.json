@@ -12,5 +12,19 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-12-05",
+    "time": null,
+    "home_team": "SV Lichtenberg 47",
+    "away_team": "Berliner AK 07",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, HOWOGE-Arena »Hans Zoschke« NR1",
+    "venue_address": "Normannenstraße 28, 10365 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/lichtenberg-47-berliner-ak-07/-/spiel/031AFMQK0G000000VS5489BUVV628VP4"
   }
 ]

@@ -12,5 +12,19 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-09-11",
+    "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "Chemnitzer FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-chemnitzer-fc/-/spiel/031DEIC0RC000000VS5489BUVUR5FS5A"
   }
 ]

@@ -1,0 +1,58 @@
+[
+  {
+    "date": "2026-08-30",
+    "time": null,
+    "home_team": "SV Tasmania Berlin",
+    "away_team": "Greifswalder FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, W.-Seelenb.-Sportpark NR1",
+    "venue_address": "Oderstr. 182, 12051 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-greifswalder-fc/-/spiel/031DEIC0C8000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-08-30",
+    "time": null,
+    "home_team": "SV Lichtenberg 47",
+    "away_team": "F.C. Hertha 03 Zehlendorf",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, HOWOGE-Arena »Hans Zoschke« NR1",
+    "venue_address": "Normannenstraße 28, 10365 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/lichtenberg-47-fc-hertha-03/-/spiel/031AFMQQ54000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-08-30",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "Berliner AK 07",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-berliner-ak-07/-/spiel/031AFMQQCO000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-08-30",
+    "time": null,
+    "home_team": "Füchse Berlin Reinickendorf",
+    "away_team": "BSV Eintracht Mahlsdorf",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Kienhorststraße NR1",
+    "venue_address": "Kienhorststr. 170, 13403 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fuechse-berlin-reinickendorf-bsv-eintracht-mahlsdorf/-/spiel/031AFMQQF8000000VS5489BUVV628VP4"
+  }
+]

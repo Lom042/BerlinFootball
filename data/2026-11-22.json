@@ -1,0 +1,72 @@
+[
+  {
+    "date": "2026-11-22",
+    "time": null,
+    "home_team": "BFC Dynamo",
+    "away_team": "Hallescher FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Sportforum Stadion",
+    "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-dynamo-hallescher-fc/-/spiel/031DEIC740000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-22",
+    "time": null,
+    "home_team": "BFC Preussen",
+    "away_team": "BSG Chemie Leipzig",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Preussen-Stadion NR1",
+    "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-preussen-bsg-chemie-leipzig/-/spiel/031DEIC76O000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-22",
+    "time": null,
+    "home_team": "SV Tasmania Berlin",
+    "away_team": "Hertha BSC II",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, W.-Seelenb.-Sportpark NR1",
+    "venue_address": "Oderstr. 182, 12051 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-hertha-bsc-u23/-/spiel/031DEIC79S000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-22",
+    "time": null,
+    "home_team": "F.C. Hertha 03 Zehlendorf",
+    "away_team": "FC Mecklenburg Schwerin",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Ernst-Reuter-Sportf. NR1",
+    "venue_address": "Onkel-Tom-Str. 40, 14169 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-hertha-03-fc-mecklenburg-schwerin/-/spiel/031AFMQKO8000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-11-22",
+    "time": null,
+    "home_team": "Tennis Borussia Berlin",
+    "away_team": "BSV Eintracht Mahlsdorf",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/tennis-borussia-berlin-bsv-eintracht-mahlsdorf/-/spiel/031AFMQL1K000000VS5489BUVV628VP4"
+  }
+]

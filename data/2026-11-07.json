@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2026-11-07",
+    "time": null,
+    "home_team": "BSV Eintracht Mahlsdorf",
+    "away_team": "TUS Makkabi",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Am Rosenhag KR",
+    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-tus-makkabi/-/spiel/031AFMQLCK000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-11-07",
+    "time": null,
+    "home_team": "Füchse Berlin Reinickendorf",
+    "away_team": "F.C. Hansa Rostock II",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Kienhorststraße NR1",
+    "venue_address": "Kienhorststr. 170, 13403 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fuechse-berlin-reinickendorf-fc-hansa-rostock-u23/-/spiel/031AFMQLI4000000VS5489BUVV628VP4"
+  }
+]

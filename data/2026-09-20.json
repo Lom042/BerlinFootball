@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2026-09-20",
+    "time": null,
+    "home_team": "BFC Dynamo",
+    "away_team": "1. FC Magdeburg II",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Sportforum Stadion",
+    "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-dynamo-1-fc-magdeburg-ii/-/spiel/031DEIC2IK000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-09-20",
+    "time": null,
+    "home_team": "Berliner AK 07",
+    "away_team": "BSV Eintracht Mahlsdorf",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Poststadion Stadion NR1",
+    "venue_address": "Lehrter Str. 59, 10557 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-ak-07-bsv-eintracht-mahlsdorf/-/spiel/031AFMQP04000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-09-20",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "TSG Neustrelitz",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-tsg-neustrelitz/-/spiel/031AFMQP30000000VS5489BUVV628VP4"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2026-09-27",
+    "time": null,
+    "home_team": "SV Tasmania Berlin",
+    "away_team": "FC Carl Zeiss Jena",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, W.-Seelenb.-Sportpark NR1",
+    "venue_address": "Oderstr. 182, 12051 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-fc-carl-zeiss-jena/-/spiel/031DEIC2VC000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-09-27",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "FSV Zwickau",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
+    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-fsv-zwickau/-/spiel/031DEIC340000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-09-27",
+    "time": null,
+    "home_team": "BFC Dynamo",
+    "away_team": "Greifswalder FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Sportforum Stadion",
+    "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-dynamo-greifswalder-fc/-/spiel/031DEIC36C000000VS5489BUVUR5FS5A"
+  }
+]

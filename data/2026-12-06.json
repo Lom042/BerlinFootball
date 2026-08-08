@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2026-12-06",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "VSG Altglienicke Berlin",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
+    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-vsg-altglienicke-berlin/-/spiel/031DEIC8R8000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-12-06",
+    "time": null,
+    "home_team": "BFC Preussen",
+    "away_team": "Chemnitzer FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Preussen-Stadion NR1",
+    "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-preussen-chemnitzer-fc/-/spiel/031DEIC8U0000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-12-06",
+    "time": null,
+    "home_team": "Tennis Borussia Berlin",
+    "away_team": "SG Union Klosterfelde",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/tennis-borussia-berlin-sg-union-klosterfelde/-/spiel/031AFMQK5K000000VS5489BUVV628VP4"
+  }
+]

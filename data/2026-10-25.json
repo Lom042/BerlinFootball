@@ -12,5 +12,47 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-10-25",
+    "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "FSV 63 Luckenwalde",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-fsv-63-luckenwalde/-/spiel/031DEIC5AO000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-10-25",
+    "time": null,
+    "home_team": "Berliner AK 07",
+    "away_team": "1. FC Lok Stendal",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Poststadion Stadion NR1",
+    "venue_address": "Lehrter Str. 59, 10557 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-ak-07-1-fc-lok-stendal/-/spiel/031AFMQMG8000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-25",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "TUS Makkabi",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-tus-makkabi/-/spiel/031AFMQMI8000000VS5489BUVV628VP4"
   }
 ]

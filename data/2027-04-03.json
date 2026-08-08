@@ -12,5 +12,19 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2027-04-03",
+    "time": null,
+    "home_team": "BSV Eintracht Mahlsdorf",
+    "away_team": "SG Union Klosterfelde",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Am Rosenhag NR",
+    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-sg-union-klosterfelde/-/spiel/031AFMR1LO000000VS5489BUVV628VP4"
   }
 ]

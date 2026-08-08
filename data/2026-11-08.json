@@ -12,5 +12,61 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-11-08",
+    "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "SV Tasmania Berlin",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-sv-tasmania-berlin/-/spiel/031DEIC6DO000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-08",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "1. FC Magdeburg II",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
+    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-1-fc-magdeburg-ii/-/spiel/031DEIC6P0000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-08",
+    "time": null,
+    "home_team": "Berliner AK 07",
+    "away_team": "Tennis Borussia Berlin",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Poststadion Stadion NR1",
+    "venue_address": "Lehrter Str. 59, 10557 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-ak-07-tennis-borussia-berlin/-/spiel/031AFMQLEC000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-11-08",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "FC Anker Wismar",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-fc-anker-wismar/-/spiel/031AFMQLG8000000VS5489BUVV628VP4"
   }
 ]

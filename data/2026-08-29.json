@@ -12,5 +12,19 @@
     "venue": "",
     "venue_address": "",
     "source": "openligadb"
+  },
+  {
+    "date": "2026-08-29",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "Hallescher FC",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
+    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-hallescher-fc/-/spiel/031DEIC030000000VS5489BUVUR5FS5A"
   }
 ]

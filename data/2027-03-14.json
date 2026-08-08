@@ -1,0 +1,72 @@
+[
+  {
+    "date": "2027-03-14",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "FC Carl Zeiss Jena",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "",
+    "venue_address": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-fc-carl-zeiss-jena/-/spiel/031DEICEJS000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2027-03-14",
+    "time": null,
+    "home_team": "SV Tasmania Berlin",
+    "away_team": "BFC Dynamo",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, W.-Seelenb.-Sportpark NR1",
+    "venue_address": "Oderstr. 182, 12051 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-bfc-dynamo/-/spiel/031DEICEU8000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2027-03-14",
+    "time": null,
+    "home_team": "Füchse Berlin Reinickendorf",
+    "away_team": "F.C. Hertha 03 Zehlendorf",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Kienhorststraße NR1",
+    "venue_address": "Kienhorststr. 170, 13403 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fuechse-berlin-reinickendorf-fc-hertha-03/-/spiel/031AFMR38G000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2027-03-14",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "SG Union Klosterfelde",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-sg-union-klosterfelde/-/spiel/031AFMR3BS000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2027-03-14",
+    "time": null,
+    "home_team": "Berliner AK 07",
+    "away_team": "TSG Neustrelitz",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Poststadion Stadion NR1",
+    "venue_address": "Lehrter Str. 59, 10557 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-ak-07-tsg-neustrelitz/-/spiel/031AFMR3F4000000VS5489BUVV628VP4"
+  }
+]

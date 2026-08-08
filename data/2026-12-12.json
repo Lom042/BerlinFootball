@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2026-12-12",
+    "time": null,
+    "home_team": "BSV Eintracht Mahlsdorf",
+    "away_team": "SV Lichtenberg 47",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Am Rosenhag KR",
+    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-lichtenberg-47/-/spiel/031AFMQJLG000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-12-12",
+    "time": null,
+    "home_team": "Füchse Berlin Reinickendorf",
+    "away_team": "FC Mecklenburg Schwerin",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Kienhorststraße NR1",
+    "venue_address": "Kienhorststr. 170, 13403 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fuechse-berlin-reinickendorf-fc-mecklenburg-schwerin/-/spiel/031AFMQJPS000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-12-12",
+    "time": null,
+    "home_team": "SV Sparta Lichtenberg 1911",
+    "away_team": "FSV Optik Rathenow",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
+    "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-fsv-optik-rathenow/-/spiel/031AFMQJOC000000VS5489BUVV628VP4"
+  }
+]

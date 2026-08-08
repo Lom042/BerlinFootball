@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2027-05-23",
+    "time": null,
+    "home_team": "Hertha BSC II",
+    "away_team": "SV Tasmania Berlin",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
+    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-sv-tasmania-berlin/-/spiel/031DEICNV8000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2027-05-23",
+    "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "FC Rot-Weiß Erfurt",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-fc-rot-weiss-erfurt/-/spiel/031DEICO2O000000VS5489BUVUR5FS5A"
+  }
+]
