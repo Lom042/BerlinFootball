@@ -13,18 +13,43 @@ via stdlib `html.parser` rather than guessing at CSS classes, since
 those patterns should survive a markup redesign better than class names
 would.
 
-Known gaps, both confirmed against the live "regionalliga-nordost" page
-at time of writing:
-  - No kickoff TIME or VENUE on the listing page itself - only date.
-    Getting those would mean fetching every individual
-    `/spiel/.../spiel/<MATCHID>` detail page, one request per fixture,
-    which this first pass deliberately doesn't do yet (see TIME/VENUE
-    note in normalize_fixture()).
-  - fussball.de was showing a site-wide "technische Probleme" (technical
-    issues) banner and the schedule was flagged "vorläufige Spiele"
-    (provisional, not yet approved by the league admin) - scores were
-    all blank for that reason, which is expected pre-season, not a
-    parsing bug.
+KNOWN BUG, FOUND AND FIXED (real user report - worth understanding since
+it's a subtle one): the listing page's "Datum | Zeit" column is only
+populated with a real date link for a handful of near-term matchdays -
+most matchday blocks, especially further into the season, have a
+completely BLANK date cell in the initial HTML (no text, no link at
+all - presumably filled in client-side for a "load more" view this
+scraper never triggers). The original version of this file assumed
+every matchday block carried its own date link and fell back to
+"carry forward the last date seen" for rows without one - so once it
+hit a blank stretch, EVERY fixture in that stretch silently got
+stamped with whichever real date happened to appear earlier in the
+document. On a page with only one real date link on it (which is
+common for the less-imminent leagues), that meant literally every
+fixture returned the same date - which is exactly what surfaced as
+"all of Tennis Borussia's fixtures show Sun 04 Oct" on the live site.
+
+FIX: stop trusting the listing page for date entirely. Fetch each
+Berlin-home fixture's own `/spiel/.../spiel/<MATCHID>` detail page
+instead (fetch_match_detail() below) - every match page reliably has
+its own real date (via a breadcrumb link back to its matchday), its
+real kickoff time ("Anpfiff HH:MM Uhr"), and a Google Maps link with
+its exact venue + street address, all as plain text/hrefs regardless
+of how blank the listing page's date column was. This also incidentally
+delivers the real kickoff time and a real per-fixture venue address,
+both previously deferred as "would need a per-match fetch, not done in
+this pass" - since that fetch was already unavoidable to get a
+trustworthy date, it made no sense not to pull time/venue from the same
+page while we're there. Costs one extra HTTP request per Berlin-home
+fixture per run (a few dozen to ~150 today) - acceptable for a job that
+only runs twice a day, with a short pause between requests below so
+it's not hammering fussball.de.
+
+Also confirmed on the live pages at time of writing: fussball.de was
+showing a site-wide "technische Probleme" (technical issues) banner and
+the schedule was flagged "vorläufige Spiele" (provisional, not yet
+approved by the league admin) - scores were blank for that reason,
+which is expected pre-season, not a parsing bug.
 
 Only "regionalliga-nordost" has a CONFIRMED real URL (found via search,
 since fussball.de uses long opaque per-season competition IDs, not
@@ -43,6 +68,7 @@ import json
 import os
 import re
 import sys
+import time as time_module
 import urllib.request
 from datetime import date
 from html.parser import HTMLParser
@@ -177,11 +203,11 @@ LEAGUES = {
     },
 }
 
-# Best-effort ground addresses for the tier 4-6 clubs above, same pattern
-# as the cinema addresses in BerlinKino. Amateur ground addresses aren't
-# as well-documented as pro stadiums - treat these as a starting point to
-# verify, not a guaranteed-correct source. Keyed by club name since venue
-# isn't available from the listing page itself yet (see module docstring).
+# FALLBACK ONLY. Each match's own page now gives a real, per-fixture
+# venue + address via a Google Maps link (see fetch_match_detail()) -
+# this hand-typed table is only used on the rare fixture where that
+# page doesn't have one. Same pattern as the cinema addresses in
+# BerlinKino. Keyed by club name.
 VENUE_ADDRESSES_BY_CLUB = {
     "BFC Dynamo": ("Sportforum Berlin", "Conrad-Blenkle-Straße 33, 13405 Berlin"),
     "VSG Altglienicke": ("Sportpark Altglienicke", "Rudolf-Seiffert-Straße 30, 12524 Berlin"),
@@ -248,14 +274,17 @@ def is_berlin_fixture(home, away):
 class FixtureListParser(HTMLParser):
     """
     Walks the raw HTML in document order and reconstructs fixtures from
-    three stable URL patterns rather than CSS classes (see module
-    docstring for why): team links, per-fixture match-detail links, and
-    the one date link at the start of each matchday block.
+    two stable URL patterns rather than CSS classes (see module
+    docstring for why): team links and per-fixture match-detail links.
+
+    Deliberately does NOT try to read a date off this page anymore - see
+    the module docstring's "KNOWN BUG, FOUND AND FIXED" section for why
+    that turned out to be unreliable. Date (plus time and venue) comes
+    from fetch_match_detail() against each fixture's own page instead.
     """
 
     def __init__(self):
         super().__init__()
-        self.current_date = None
         self.pending_teams = []  # [(href, text), ...] - collapsed, de-duped
         self.fixtures = []
         self._in_a = False
@@ -268,9 +297,6 @@ class FixtureListParser(HTMLParser):
             self._in_a = True
             self._a_href = attrs.get("href", "") or ""
             self._a_text_parts = []
-            m = SPIELDATUM_RE.search(self._a_href)
-            if m:
-                self.current_date = m.group(1)
         elif tag == "img" and self._in_a:
             alt = attrs.get("alt")
             if alt:
@@ -299,7 +325,6 @@ class FixtureListParser(HTMLParser):
             match_id = m.group(1)
             (_, home_text), (_, away_text) = self.pending_teams[-2:]
             self.fixtures.append({
-                "date": self.current_date,
                 "home_team": home_text,
                 "away_team": away_text,
                 "match_id": match_id,
@@ -318,20 +343,86 @@ def parse_league_page(html, league_key, league_info):
     return parser.fixtures
 
 
-def normalize_fixture(raw, league_key, league_info):
+MATCH_MAPS_RE = re.compile(
+    r'href="https://www\.google\.[a-z.]+/maps\?q=[^"]*"[^>]*>(.*?)</a>', re.S
+)
+# Tolerant of a bit of markup between "Anpfiff" and the time, and
+# between the time and "Uhr" - real markup nesting around these two
+# words isn't confirmed (only seen via a markdown-converted fetch, which
+# collapses tags), so this errs on the side of a wider, cheap window
+# rather than an exact adjacency assumption that might not hold in the
+# actual raw HTML a plain urllib request gets back.
+ANPFIFF_TIME_RE = re.compile(r"Anpfiff.{0,300}?(\d{1,2}:\d{2}).{0,80}?Uhr", re.S)
+TAG_RE = re.compile(r"<[^>]+>")
+
+
+def fetch_match_detail(url):
+    """
+    Fetch one fixture's own page for its real date, kickoff time, and
+    venue - see the module docstring's "KNOWN BUG, FOUND AND FIXED"
+    section for why the listing page's date can't be trusted. Every
+    match page reliably has:
+      - a breadcrumb link back to its own matchday, e.g.
+        `.../spieldatum/2026-08-07/staffel/...` - reuses SPIELDATUM_RE.
+      - a kickoff time as plain text near the word "Anpfiff", e.g.
+        "Anpfiff ... 20:15Uhr".
+      - a Google Maps link whose visible text is the full venue,
+        typically "<pitch type>, <ground name>, <street>, <plz+city>",
+        e.g. "Rasenplatz, Mommsenstadion NR1, Waldschulallee 34-42,
+        14055 Berlin" - split on the last two comma-separated parts to
+        get a street address, the rest becomes the venue name.
+    Returns {} (and every field falls back downstream) if the fetch
+    itself fails - this only ever affects one fixture, not the whole run.
+    """
+    try:
+        html = fetch_page(url)
+    except Exception as e:
+        log(f"    match detail fetch failed for {url}: {e}")
+        return {}
+
+    match_date = None
+    m = SPIELDATUM_RE.search(html)
+    if m:
+        match_date = m.group(1)
+
+    kickoff_time = None
+    m = ANPFIFF_TIME_RE.search(html)
+    if m:
+        kickoff_time = m.group(1)
+
     venue, venue_address = "", ""
-    for club, (v, addr) in VENUE_ADDRESSES_BY_CLUB.items():
-        if club in raw["home_team"]:
-            venue, venue_address = v, addr
-            break
+    m = MATCH_MAPS_RE.search(html)
+    if m:
+        raw_text = " ".join(TAG_RE.sub(" ", m.group(1)).split())
+        parts = [p.strip() for p in raw_text.split(",") if p.strip()]
+        if len(parts) >= 2:
+            venue_address = ", ".join(parts[-2:])
+            venue = ", ".join(parts[:-2]) or parts[0]
+        elif parts:
+            venue = parts[0]
+
     return {
-        "date": raw["date"],
-        # TIME/VENUE: not present on the listing page (see module
-        # docstring) - would need one extra HTTP request per fixture to
-        # each match's own page, not done in this pass. venue/address
-        # above are a same-club guess from the home team's usual ground,
-        # not confirmed for this specific fixture.
-        "time": None,
+        "date": match_date,
+        "time": kickoff_time,
+        "venue": venue,
+        "venue_address": venue_address,
+    }
+
+
+def normalize_fixture(raw, detail, league_key, league_info):
+    venue = detail.get("venue") or ""
+    venue_address = detail.get("venue_address") or ""
+    if not venue_address:
+        # Fallback only - shouldn't normally trigger since the match
+        # page itself almost always has a Maps link (see
+        # fetch_match_detail).
+        for club, (v, addr) in VENUE_ADDRESSES_BY_CLUB.items():
+            if club in raw["home_team"]:
+                venue, venue_address = v, addr
+                break
+    return {
+        "date": detail["date"],
+        "time": detail.get("time"),
         "home_team": raw["home_team"],
         "away_team": raw["away_team"],
         "league": league_info["label"],
@@ -355,14 +446,24 @@ def collect_league(key, info):
     log(f"  got {len(html)} bytes")
     raw_fixtures = parse_league_page(html, key, info)
     log(f"  parsed {len(raw_fixtures)} total fixture(s) on the page")
-    berlin_fixtures = [
-        normalize_fixture(f, key, info)
-        for f in raw_fixtures
-        if is_berlin_fixture(f["home_team"], f["away_team"]) and f["date"]
-    ]
-    log(f"  {len(berlin_fixtures)} involve a Berlin club:")
+
+    # Filter to Berlin HOME fixtures BEFORE doing any per-match fetches -
+    # keeps the extra network cost limited to fixtures we actually want.
+    candidates = [f for f in raw_fixtures if is_berlin_fixture(f["home_team"], f["away_team"])]
+    log(f"  {len(candidates)} are Berlin home fixtures - fetching each match page for its real date/time/venue")
+
+    berlin_fixtures = []
+    for f in candidates:
+        detail = fetch_match_detail(f["match_url"])
+        time_module.sleep(0.3)  # polite pause - one request per fixture
+        if not detail.get("date"):
+            log(f"    skip (no real date found on match page): {f['home_team']} vs {f['away_team']}")
+            continue
+        berlin_fixtures.append(normalize_fixture(f, detail, key, info))
+
+    log(f"  {len(berlin_fixtures)} confirmed with a real date:")
     for f in berlin_fixtures[:10]:
-        log(f"    {f['date']}  {f['home_team']} vs {f['away_team']}  ({f['league']})")
+        log(f"    {f['date']} {f['time'] or '(no time)'}  {f['home_team']} vs {f['away_team']}  ({f['league']})")
     return berlin_fixtures
 
 
