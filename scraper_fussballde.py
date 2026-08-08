@@ -136,11 +136,10 @@ LEAGUES = {
     "berlin-liga": {
         "tier": 6,
         "label": "BERLIN-LIGA",
-        # Found via search - real 2026/27 staffel ID, same "/spielplan/"
-        # full-season URL pattern as the two leagues already verified.
-        # Not yet flipped to verified - needs a --debug run first.
+        # Confirmed via --debug: 269 Berlin home fixtures, dates vary
+        # correctly across the season, real clubs match the known list.
         "url": "https://www.fussball.de/spielplan/herren-berlin-liga-berlin-berlin-liga-herren-saison2627-berlin/-/staffel/0317AFL2VO000008VS5489BUVSBBVPEU-G",
-        "verified": False,
+        "verified": True,
         "known_clubs": [
             "Blau-Weiss 90 Berlin", "1. FC Wilmersdorf", "SC Charlottenburg",
             "Spandauer Kickers", "SSC Südwest", "Polar Pinguin", "Fortuna Biesdorf",
@@ -151,14 +150,18 @@ LEAGUES = {
     "landesliga-1": {
         "tier": 7,
         "label": "LANDESLIGA STAFFEL 1",
-        "url": "https://www.fussball.de/wettbewerb/landesliga-1-berlin/-",
+        # Found via search - real 2026/27 staffel ID. Not yet flipped to
+        # verified - needs a --debug run first.
+        "url": "https://www.fussball.de/spielplan/herren-landesliga-st1-berlin-landesliga-herren-saison2627-berlin/-/staffel/0317AFVR84000006VS5489BUVSBBVPEU-G",
         "verified": False,
         "known_clubs": [],
     },
     "landesliga-2": {
         "tier": 7,
         "label": "LANDESLIGA STAFFEL 2",
-        "url": "https://www.fussball.de/wettbewerb/landesliga-2-berlin/-",
+        # Found via search - real 2026/27 staffel ID. Not yet flipped to
+        # verified - needs a --debug run first.
+        "url": "https://www.fussball.de/spielplan/herren-landesliga-st2-berlin-landesliga-herren-saison2627-berlin/-/staffel/0317AFVREC000003VS5489BUVSBBVPEU-G",
         "verified": False,
         "known_clubs": [],
     },
