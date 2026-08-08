@@ -1,0 +1,47 @@
+name: Update Berlin football fixtures
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 08:00 Berlin time (CEST=UTC+2)
+    - cron: "0 18 * * *"  # 20:00 Berlin time
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run OpenLigaDB scraper
+        run: python scraper_openligadb.py
+
+      # fussball.de scraper is not yet verified against live pages
+      # (JS-rendered, same situation Yorck was in for BerlinKino).
+      # Uncomment once selectors are confirmed via a debug run:
+      # - name: Run fussball.de scraper
+      #   run: python scraper_fussballde.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Update fixtures $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
+
+  debug-fussballde:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Debug fussball.de scraper
+        run: python scraper_fussballde.py --debug --club "BFC Dynamo"
