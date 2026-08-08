@@ -77,6 +77,22 @@ it's the reason gender is now explicit rather than assumed.)
   a real per-fixture venue address as a bonus, both previously deferred
   as "would need a per-match fetch."
 
+  **Also covers two cup competitions** (`CUPS` in the same file, kept
+  separate from `LEAGUES` since cups work differently - see below):
+  - **DFB-Pokal** (national cup)
+  - **Berlin-Pokal** ("Cosy Wasch-Landespokal", the Berlin regional cup)
+
+  A cup isn't one flat season schedule like a league - it's a knockout
+  played in separate rounds, each drawn only once the previous one
+  finishes, with no single page listing every round at once. Rather than
+  track "which round is currently live" ourselves, each `CUPS` entry
+  points at the competition's stable overview URL, which fussball.de
+  itself redirects to whichever round is currently active - so this file
+  never needs manual updates as a tournament progresses. As of shipping
+  this, neither cup's current round has a published draw yet, so both
+  show zero fixtures for now - that's expected, not a bug, and fixtures
+  should start appearing automatically once each draw is published.
+
 - **`.github/workflows/update-fixtures.yml`** — runs the OpenLigaDB
   scraper twice a day and commits fresh data automatically.
 
@@ -102,13 +118,17 @@ Berlin football fixtures → Run workflow**.
 1. FC Union Berlin, and any Berlin club in the top 3 divisions (tiers
 1–3). Matchday and finished-status included where available.
 
-**`scraper_fussballde.py`** → verified and live for all 5 staffeln it
-targets (Regionalliga Nordost, Oberliga Nordost, Berlin-Liga, Landesliga
-1 & 2 — tiers 4–7). To add another staffel, find its real
+**`scraper_fussballde.py`** → verified and live for all 5 league staffeln
+it targets (Regionalliga Nordost, Oberliga Nordost, Berlin-Liga,
+Landesliga 1 & 2 — tiers 4–7), plus 2 cup competitions (DFB-Pokal,
+Berlin-Pokal) that show zero fixtures until each one's current-round
+draw is published. To add another league staffel, find its real
 `/spielplan/.../staffel/<ID>-G` URL (WebSearch, or a known club's
 current-season team page), add it to `LEAGUES` with `verified: False`,
 confirm via **Actions → debug-fussballde → Run workflow**, then flip it
-to `True`.
+to `True`. Adding another cup follows the same verification step but
+goes in `CUPS` instead, using the competition's stable `-C` overview URL
+(not a specific round's `-R` URL).
 
 **Stadium addresses** → each match's own fussball.de page now gives a
 real, per-fixture venue + street address (via a Google Maps link) - see
