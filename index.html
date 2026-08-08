@@ -67,11 +67,18 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  .dates {
+  .months, .dates {
     display: flex;
     gap: 8px;
     overflow-x: auto;
     padding: 4px 2px;
+  }
+  .nav-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
   }
   .date-pill {
     font-family: 'Oswald', sans-serif;
@@ -219,7 +226,10 @@
 </header>
 
 <div class="controls">
-  <div class="dates" id="dates"></div>
+  <div class="nav-row">
+    <div class="months" id="months"></div>
+    <div class="dates" id="dates"></div>
+  </div>
   <select id="league-filter">
     <option value="">All divisions</option>
   </select>
@@ -235,18 +245,6 @@
 <footer>Free & ad-free. Data refreshed automatically. Tiers 7–11 (Landesliga through Kreisliga C) are wired into the schema but not yet populated — see README.</footer>
 
 <script>
-// Placeholder fixtures only — not real games. Shown until the live
-// scrapers (scraper_openligadb.py / scraper_fussballde.py) have run and
-// produced real data/index.json + data/<date>.json files.
-//
-// Every fixture below is internally consistent with real current
-// divisions: Hertha BSC (BL2, tier 2) and 1. FC Union Berlin (BL1, tier
-// 1) are shown against other clubs in THEIR OWN tier, never against
-// each other, because that pairing can't happen in real league play
-// while they sit in different divisions. Each fixture also carries an
-// explicit `gender` and `league_tier` so the schema itself rules out
-// the kind of mixup that produced the old demo data's Hertha-vs-Union
-// fixture.
 const DEMO_DATA = {
   "2026-08-08": [
     { date: "2026-08-08", time: "15:30", home_team: "1. FC Union Berlin", away_team: "VfL Wolfsburg", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 1", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin" },
@@ -276,10 +274,9 @@ const DEMO_DATA = {
 };
 
 let allData = {};
+let currentMonth = null;
 let currentDate = null;
 
-// No real club crests are used here (they're trademarked) — instead we
-// generate a simple colored monogram per team from its initials.
 const CREST_COLORS = ['#d4a73d', '#c1443a', '#6f9c73', '#8891c4', '#c48fa0', '#5fa8a0'];
 function teamInitials(name) {
   const words = name.replace(/^\d+\.\s*/, '').split(/\s+/).filter(w => w.length > 1 || /[A-ZÄÖÜ]/.test(w));
@@ -299,125 +296,5 @@ function fmtDateLabel(iso) {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
 }
-
-// Fallback tier lookup for older/incoming data that might not carry an
-// explicit league_tier yet. Keep in sync with both scrapers' tier maps.
-const TIER_BY_LEAGUE = {
-  "BL1": 1, "BL2": 2, "BL3": 3,
-  "REGIONALLIGA NORDOST": 4, "OBERLIGA NORDOST": 5, "BERLIN-LIGA": 6,
-  "LANDESLIGA STAFFEL 1": 7, "LANDESLIGA STAFFEL 2": 7,
-  "BEZIRKSLIGA STAFFEL 1": 8, "BEZIRKSLIGA STAFFEL 2": 8, "BEZIRKSLIGA STAFFEL 3": 8,
-  "KREISLIGA A": 9, "KREISLIGA B": 10, "KREISLIGA C": 11,
-};
-function tierOf(m) {
-  return typeof m.league_tier === "number" ? m.league_tier : (TIER_BY_LEAGUE[m.league] ?? 99);
-}
-
-function renderDatePills(dates) {
-  const el = document.getElementById('dates');
-  el.innerHTML = '';
-  dates.forEach(d => {
-    const btn = document.createElement('button');
-    btn.className = 'date-pill' + (d === currentDate ? ' active' : '');
-    btn.textContent = fmtDateLabel(d);
-    btn.onclick = () => { currentDate = d; render(); };
-    el.appendChild(btn);
-  });
-}
-
-function populateLeagueFilter(matches) {
-  const sel = document.getElementById('league-filter');
-  const leagues = [...new Set(matches.map(m => m.league))]
-    .sort((a, b) => tierOf({ league: a }) - tierOf({ league: b }));
-  sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
-}
-
-function render() {
-  const main = document.getElementById('main');
-  const leagueFilter = document.getElementById('league-filter').value;
-  const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
-
-  const pool = searchTerm
-    ? Object.values(allData).flat()
-    : (allData[currentDate] || []);
-
-  let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
-  if (searchTerm) {
-    filtered = filtered.filter(m =>
-      m.home_team.toLowerCase().includes(searchTerm) ||
-      m.away_team.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  if (!filtered.length) {
-    const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this day.';
-    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
-    return;
-  }
-
-  const byLeague = {};
-  filtered.forEach(m => {
-    (byLeague[m.league] = byLeague[m.league] || []).push(m);
-  });
-  const orderedLeagues = Object.keys(byLeague).sort((a, b) => {
-    const ta = tierOf({ league: a, league_tier: byLeague[a][0]?.league_tier });
-    const tb = tierOf({ league: b, league_tier: byLeague[b][0]?.league_tier });
-    return ta !== tb ? ta - tb : a.localeCompare(b);
-  });
-
-  main.innerHTML = orderedLeagues.map(league => {
-    const ms = byLeague[league];
-    const tier = tierOf(ms[0]);
-    return `
-    <div class="league-group">
-      <div class="league-label">
-        <span>${league}</span>
-        <span class="tier-tag">Tier ${tier}</span>
-      </div>
-      ${ms.slice().sort((a,b) => (a.date + (a.time||'')).localeCompare(b.date + (b.time||''))).map(m => `
-        <div class="match">
-          <div class="match-time">${m.time || '—'}</div>
-          <div>
-            <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
-            <div class="venue">${searchTerm ? fmtDateLabel(m.date) + (m.venue ? ' · ' + m.venue : '') : (m.venue || '')}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
-          </div>
-          <div class="matchday">${m.matchday || ''}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  }).join('');
-}
-
-async function init() {
-  document.getElementById('league-filter').addEventListener('change', render);
-  document.getElementById('team-search').addEventListener('input', render);
-
-  try {
-    const idxResp = await fetch('data/index.json');
-    if (!idxResp.ok) throw new Error('no live data');
-    const dates = await idxResp.json();
-    for (const d of dates) {
-      const r = await fetch(`data/${d}.json`);
-      if (r.ok) allData[d] = await r.json();
-    }
-  } catch (e) {
-    allData = DEMO_DATA;
-  }
-
-  const dates = Object.keys(allData).sort();
-  if (!dates.length) {
-    document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
-    return;
-  }
-  currentDate = dates[0];
-  renderDatePills(dates);
-  populateLeagueFilter(Object.values(allData).flat());
-  render();
-}
-
-init();
-</script>
-
-</body>
-</html>
+function fmtMonthLabel(ym) {
+  const [y, m] =
