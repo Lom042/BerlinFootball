@@ -70,7 +70,8 @@
   .months, .dates {
     display: flex;
     gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 4px 2px;
   }
   .nav-row {
@@ -138,6 +139,24 @@
      the league identity travels WITH its matches (label right above the
      team rows it belongs to) rather than as a separate badge floating
      off to the side, disconnected from the teams it describes. */
+  /* When multiple dates are shown together (the "All dates" pill, or a
+     team search - which can match fixtures on any date), fixtures are
+     grouped under a date heading first, then by league within that date
+     - so the sort hierarchy is genuinely date > league > team, not
+     league-across-all-dates. A single selected date has only one date
+     in play already, so it skips straight to the league groups below. */
+  .date-heading {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk);
+    margin: 26px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .date-heading:first-of-type { margin-top: 0; }
   .league-group { margin-bottom: 28px; }
   .league-label {
     font-family: 'Oswald', sans-serif;
@@ -240,14 +259,15 @@
   </select>
 </div>
 <div class="search-row">
-  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off">
+  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off" list="team-list">
+  <datalist id="team-list"></datalist>
 </div>
 
 <main id="main">
   <div class="empty">Loading fixtures…</div>
 </main>
 
-<footer>Free & ad-free. Data refreshed automatically. Tiers 7–11 (Landesliga through Kreisliga C) are wired into the schema but not yet populated — see README.</footer>
+<footer>Free & ad-free. Data refreshed automatically. Covers Bundesliga down through Landesliga — see README.</footer>
 
 <script>
 // Placeholder fixtures only — not real games. Shown until the live
@@ -330,8 +350,6 @@ const TIER_BY_LEAGUE = {
   "BL1": 1, "BL2": 2, "BL3": 3,
   "REGIONALLIGA NORDOST": 4, "OBERLIGA NORDOST": 5, "BERLIN-LIGA": 6,
   "LANDESLIGA STAFFEL 1": 7, "LANDESLIGA STAFFEL 2": 7,
-  "BEZIRKSLIGA STAFFEL 1": 8, "BEZIRKSLIGA STAFFEL 2": 8, "BEZIRKSLIGA STAFFEL 3": 8,
-  "KREISLIGA A": 9, "KREISLIGA B": 10, "KREISLIGA C": 11,
 };
 function tierOf(m) {
   return typeof m.league_tier === "number" ? m.league_tier : (TIER_BY_LEAGUE[m.league] ?? 99);
@@ -394,6 +412,16 @@ function populateLeagueFilter(matches) {
   sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
 }
 
+// Native browser autocomplete for the team search box via <datalist> -
+// no custom dropdown UI needed, the browser renders the suggestion list
+// itself as you type. Only downside is it can't be restyled to match
+// the pitch theme, but it's free, accessible, and works on mobile too.
+function populateTeamList(matches) {
+  const dl = document.getElementById('team-list');
+  const teams = [...new Set(matches.flatMap(m => [m.home_team, m.away_team]))].sort();
+  dl.innerHTML = teams.map(t => `<option value="${t}"></option>`).join('');
+}
+
 function render() {
   const main = document.getElementById('main');
   const leagueFilter = document.getElementById('league-filter').value;
@@ -424,43 +452,61 @@ function render() {
     return;
   }
 
-  // Sort hierarchy: date (already the pill selection) > league, by real
-  // tier order, not alphabetically > team. Each league's matches sit as
-  // one block directly under that league's own label, so league and
-  // team are always presented together rather than the league identity
-  // floating off separately.
-  const byLeague = {};
-  filtered.forEach(m => {
-    (byLeague[m.league] = byLeague[m.league] || []).push(m);
-  });
-  const orderedLeagues = Object.keys(byLeague).sort((a, b) => {
-    const ta = tierOf({ league: a, league_tier: byLeague[a][0]?.league_tier });
-    const tb = tierOf({ league: b, league_tier: byLeague[b][0]?.league_tier });
-    return ta !== tb ? ta - tb : a.localeCompare(b);
-  });
-
-  main.innerHTML = orderedLeagues.map(league => {
-    const ms = byLeague[league];
-    const tier = tierOf(ms[0]);
-    return `
-    <div class="league-group">
-      <div class="league-label">
-        <span>${league}</span>
-        <span class="tier-tag">Tier ${tier}</span>
-      </div>
-      ${ms.slice().sort((a,b) => (a.date + (a.time||'')).localeCompare(b.date + (b.time||''))).map(m => `
-        <div class="match">
-          <div class="match-time">${m.time || '—'}</div>
-          <div>
-            <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
-            <div class="venue">${showingMultipleDates ? fmtDateLabel(m.date) + (m.venue ? ' · ' + m.venue : '') : (m.venue || '')}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
-          </div>
-          <div class="matchday">${m.matchday || ''}</div>
+  // Sort hierarchy: date > league (by real tier order, not
+  // alphabetically) > team. When only one date is in view (a specific
+  // date pill selected), that outer "date" level is a no-op - there's
+  // only one - so it goes straight to league groups. When several
+  // dates are in view (the "All dates" pill, or any team search, which
+  // can match fixtures on any date), matches are grouped under a date
+  // heading FIRST and league groups sit inside each date, rather than
+  // grouping by league across every date at once (which used to bury
+  // "what's on which day" inside a date printed on every single match
+  // row instead of leading with it).
+  function renderLeagueGroups(matches) {
+    const byLeague = {};
+    matches.forEach(m => {
+      (byLeague[m.league] = byLeague[m.league] || []).push(m);
+    });
+    const orderedLeagues = Object.keys(byLeague).sort((a, b) => {
+      const ta = tierOf({ league: a, league_tier: byLeague[a][0]?.league_tier });
+      const tb = tierOf({ league: b, league_tier: byLeague[b][0]?.league_tier });
+      return ta !== tb ? ta - tb : a.localeCompare(b);
+    });
+    return orderedLeagues.map(league => {
+      const ms = byLeague[league];
+      const tier = tierOf(ms[0]);
+      return `
+      <div class="league-group">
+        <div class="league-label">
+          <span>${league}</span>
+          <span class="tier-tag">Tier ${tier}</span>
         </div>
-      `).join('')}
-    </div>
-  `;
-  }).join('');
+        ${ms.slice().sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
+          <div class="match">
+            <div class="match-time">${m.time || '—'}</div>
+            <div>
+              <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
+              <div class="venue">${m.venue || ''}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
+            </div>
+            <div class="matchday">${m.matchday || ''}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    }).join('');
+  }
+
+  if (showingMultipleDates) {
+    const byDate = {};
+    filtered.forEach(m => { (byDate[m.date] = byDate[m.date] || []).push(m); });
+    const orderedDates = Object.keys(byDate).sort();
+    main.innerHTML = orderedDates.map(d => `
+      <div class="date-heading">${fmtDateLabel(d)}</div>
+      ${renderLeagueGroups(byDate[d])}
+    `).join('');
+  } else {
+    main.innerHTML = renderLeagueGroups(filtered);
+  }
 }
 
 async function init() {
@@ -487,6 +533,7 @@ async function init() {
   currentMonth = months[0];
   currentDate = null; // start on "All dates" within the first month, per the ask to see everything before narrowing
   populateLeagueFilter(Object.values(allData).flat());
+  populateTeamList(Object.values(allData).flat());
   renderAll();
 }
 
