@@ -1,13 +1,13 @@
 [
   {
-    "date": "2026-08-15",
-    "time": "13:00",
-    "home_team": "Hertha BSC",
-    "away_team": "1. FC Heidenheim 1846",
+    "date": "2027-03-03",
+    "time": "18:30",
+    "home_team": "SpVgg Greuther Fürth",
+    "away_team": "Hertha BSC",
     "league": "BL2",
     "league_tier": 2,
     "gender": "M",
-    "matchday": "2. Spieltag",
+    "matchday": "24. Spieltag",
     "finished": false,
     "venue": "",
     "venue_address": "",

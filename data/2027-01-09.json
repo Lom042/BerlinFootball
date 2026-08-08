@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-01-09",
+    "time": "15:30",
+    "home_team": "SV Werder Bremen",
+    "away_team": "1. FC Union Berlin",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "15. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

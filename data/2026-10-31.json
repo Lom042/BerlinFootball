@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-10-31",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "1. FC Köln",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "8. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

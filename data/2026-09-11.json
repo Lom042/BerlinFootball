@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-09-11",
+    "time": "20:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "FC Schalke 04",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "3. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

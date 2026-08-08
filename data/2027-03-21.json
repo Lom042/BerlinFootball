@@ -1,13 +1,13 @@
 [
   {
-    "date": "2026-08-15",
-    "time": "13:00",
+    "date": "2027-03-21",
+    "time": "13:30",
     "home_team": "Hertha BSC",
-    "away_team": "1. FC Heidenheim 1846",
+    "away_team": "1. FC Kaiserslautern",
     "league": "BL2",
     "league_tier": 2,
     "gender": "M",
-    "matchday": "2. Spieltag",
+    "matchday": "27. Spieltag",
     "finished": false,
     "venue": "",
     "venue_address": "",

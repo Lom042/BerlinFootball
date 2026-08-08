@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-12-05",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "Hamburger SV",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "12. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

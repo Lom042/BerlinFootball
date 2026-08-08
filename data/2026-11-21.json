@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-11-21",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "RB Leipzig",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "10. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-11-07",
+    "time": "15:30",
+    "home_team": "SC Freiburg",
+    "away_team": "1. FC Union Berlin",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "9. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

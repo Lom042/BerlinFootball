@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-05-22",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "Borussia Mönchengladbach",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "34. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

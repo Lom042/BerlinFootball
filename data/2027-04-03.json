@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-04-03",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "1. FSV Mainz 05",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "28. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

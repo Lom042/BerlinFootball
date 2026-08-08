@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-01-16",
+    "time": "15:30",
+    "home_team": "Borussia Mönchengladbach",
+    "away_team": "1. FC Union Berlin",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "17. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

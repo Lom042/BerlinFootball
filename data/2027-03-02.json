@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-03-02",
+    "time": "20:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "FC Augsburg",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "24. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]

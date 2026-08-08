@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2027-01-30",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "Bayer 04 Leverkusen",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "19. Spieltag",
+    "finished": false,
+    "venue": "",
+    "venue_address": "",
+    "source": "openligadb"
+  }
+]
