@@ -150,10 +150,10 @@ LEAGUES = {
     "landesliga-1": {
         "tier": 7,
         "label": "LANDESLIGA STAFFEL 1",
-        # Found via search - real 2026/27 staffel ID. Not yet flipped to
-        # verified - needs a --debug run first.
+        # Confirmed via --debug: 105 Berlin home fixtures, dates vary
+        # correctly across the season, real Landesliga clubs.
         "url": "https://www.fussball.de/spielplan/herren-landesliga-st1-berlin-landesliga-herren-saison2627-berlin/-/staffel/0317AFVR84000006VS5489BUVSBBVPEU-G",
-        "verified": False,
+        "verified": True,
         "known_clubs": [],
     },
     "landesliga-2": {
