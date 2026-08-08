@@ -1,14 +1,25 @@
 """
 Scrapes api.openligadb.de for fixtures involving Berlin-based clubs.
 
-Covers: Bundesliga (bl1), 2. Bundesliga (bl2), 3. Liga (bl3).
+Covers: Bundesliga (bl1), 2. Bundesliga (bl2), 3. Liga (bl3) — men's
+football only (OpenLigaDB's men's league codes; women's Bundesliga has
+its own separate codes and is deliberately out of scope for this
+project for now — see the `gender` field on every fixture, and the
+README for why that's called out explicitly).
+
 This is a clean JSON API - no HTML parsing, no scraping fragility.
 Writes data/<date>.json for the next 14 days + data/index.json.
 
 Berlin clubs that can appear in these leagues:
-  - Hertha BSC (bl1/bl2)
-  - 1. FC Union Berlin (bl1/bl2)
+  - Hertha BSC (bl1/bl2 - currently bl2)
+  - 1. FC Union Berlin (bl1/bl2 - currently bl1)
   - Any Berlin club promoted into 3. Liga (currently checked by name match)
+
+Because Hertha and Union sit in different tiers as of the 2025-26/2026-27
+seasons, they cannot appear as each other's opponent in real league data.
+If you ever see them paired as opponents in this project's data, that's a
+bug, not news of a promotion/relegation swap - check SEASON and the two
+clubs' actual current divisions before trusting it.
 
 Run: python scraper_openligadb.py [--debug]
 """
@@ -24,6 +35,21 @@ SEASON = str(date.today().year if date.today().month >= 7 else date.today().year
 
 # Name fragments used to detect a Berlin-based club in the API's team names
 BERLIN_CLUB_MARKERS = ["Berlin", "Hertha", "Union"]
+
+# Every fixture in this project carries an explicit gender so tier/gender
+# mixups (like men's vs women's Hertha-Union) can't happen silently. This
+# scraper only ever touches OpenLigaDB's men's league codes above, so it's
+# hardcoded here rather than inferred.
+GENDER = "M"
+
+# OpenLigaDB's `location` field is usually just a city, not a street
+# address. Ground addresses for the Berlin clubs likely to show up here
+# are hardcoded below, same approach as the cinema addresses in BerlinKino.
+# Best-effort / worth spot-checking before treating as authoritative.
+VENUE_ADDRESSES = {
+    "Olympiastadion Berlin": "Olympischer Platz 3, 14053 Berlin",
+    "Stadion An der Alten Försterei": "Hämmerlingstraße 61, 12559 Berlin",
+}
 
 DEBUG = "--debug" in sys.argv
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -60,13 +86,21 @@ def normalize(match, league):
     home = match.get("team1", {}).get("teamName", "")
     away = match.get("team2", {}).get("teamName", "")
     kickoff = match.get("matchDateTime")  # ISO string
+    location = match.get("location") or {}
+    venue = location.get("locationStadium") or location.get("locationCity") or ""
+    group = match.get("group") or {}
     return {
         "date": kickoff.split("T")[0] if kickoff else None,
         "time": kickoff.split("T")[1][:5] if kickoff else None,
         "home_team": home,
         "away_team": away,
         "league": league.upper(),
-        "venue": match.get("location", {}).get("locationCity", "") if match.get("location") else "",
+        "league_tier": {"bl1": 1, "bl2": 2, "bl3": 3}[league],
+        "gender": GENDER,
+        "matchday": group.get("groupName", ""),
+        "finished": bool(match.get("matchIsFinished")),
+        "venue": venue,
+        "venue_address": VENUE_ADDRESSES.get(venue, ""),
         "source": "openligadb",
     }
 
