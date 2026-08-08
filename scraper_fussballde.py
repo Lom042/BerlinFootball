@@ -354,26 +354,36 @@ def write_fixtures(all_fixtures):
     for f in all_fixtures:
         by_date.setdefault(f["date"], []).append(f)
 
-    written = []
-    for d, fixtures in by_date.items():
-        path = os.path.join(DATA_DIR, f"{d}.json")
-        existing = []
-        if os.path.exists(path):
-            with open(path) as fh:
-                existing = json.load(fh)
-        merged = [x for x in existing if x.get("source") != "fussballde"] + fixtures
-        with open(path, "w") as fh:
-            json.dump(merged, fh, indent=2, ensure_ascii=False)
-        written.append(d)
-
     index_path = os.path.join(DATA_DIR, "index.json")
     existing_index = []
     if os.path.exists(index_path):
         with open(index_path) as fh:
             existing_index = json.load(fh)
-    combined = sorted(set(existing_index) | set(written))
+
+    # IMPORTANT: reconcile every date this source has EVER written
+    # (existing_index), not just dates with a match this run (by_date).
+    # Otherwise a date that used to qualify (e.g. before the home-only
+    # filter) but no longer does never gets revisited, and its stale
+    # fussballde entry sits in the file forever - same bug class as
+    # scraper_openligadb.py had, fixed the same way here.
+    candidate_dates = sorted(set(existing_index) | set(by_date))
+    written = []
+    for d in candidate_dates:
+        path = os.path.join(DATA_DIR, f"{d}.json")
+        existing = []
+        if os.path.exists(path):
+            with open(path) as fh:
+                existing = json.load(fh)
+        merged = [x for x in existing if x.get("source") != "fussballde"] + by_date.get(d, [])
+        if merged:
+            with open(path, "w") as fh:
+                json.dump(merged, fh, indent=2, ensure_ascii=False)
+            written.append(d)
+        elif os.path.exists(path):
+            os.remove(path)
+
     with open(index_path, "w") as fh:
-        json.dump(combined, fh, indent=2)
+        json.dump(sorted(written), fh, indent=2)
     return written
 
 
