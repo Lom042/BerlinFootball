@@ -136,7 +136,10 @@ LEAGUES = {
     "berlin-liga": {
         "tier": 6,
         "label": "BERLIN-LIGA",
-        "url": "https://www.fussball.de/wettbewerb/berlin-liga/-",
+        # Found via search - real 2026/27 staffel ID, same "/spielplan/"
+        # full-season URL pattern as the two leagues already verified.
+        # Not yet flipped to verified - needs a --debug run first.
+        "url": "https://www.fussball.de/spielplan/herren-berlin-liga-berlin-berlin-liga-herren-saison2627-berlin/-/staffel/0317AFL2VO000008VS5489BUVSBBVPEU-G",
         "verified": False,
         "known_clubs": [
             "Blau-Weiss 90 Berlin", "1. FC Wilmersdorf", "SC Charlottenburg",
