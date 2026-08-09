@@ -234,6 +234,27 @@
   }
   #team-search::placeholder { color: var(--chalk-dim); }
   .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
+  #postcode-input {
+    background: rgba(244,242,234,0.06);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    width: 180px;
+    max-width: 50vw;
+  }
+  #postcode-input::placeholder { color: var(--chalk-dim); }
+  .postcode-hint {
+    max-width: 900px;
+    margin: 6px auto 0;
+    padding: 0 20px;
+    text-align: center;
+    color: var(--gold);
+    font-size: 12px;
+    min-height: 14px;
+  }
 
   main {
     max-width: 900px;
@@ -374,6 +395,15 @@
   <datalist id="team-list"></datalist>
   <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
 </div>
+<div class="search-row">
+  <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
+  <select id="sort-mode">
+    <option value="">Sort: date</option>
+    <option value="distance">Sort: closest to me</option>
+    <option value="time">Sort: kick-off time</option>
+  </select>
+</div>
+<p class="postcode-hint" id="postcode-hint"></p>
 
 <main id="main">
   <div class="empty">Loading fixtures…</div>
@@ -484,6 +514,128 @@ function isCup(m) {
   return Boolean(m.is_cup) || m.league === "DFB-POKAL" || m.league === "BERLIN-POKAL";
 }
 
+// "Closest to me" postcode feature - entirely client-side, no backend,
+// no live geocoding API. One shared lookup table covers BOTH sides of
+// the distance calc: the postcode a visitor types in, and the postcode
+// already embedded in every fixture's own venue_address (e.g. "...,
+// 14055 Berlin"). All 191 real Berlin postal codes, centroid lat/lon,
+// rounded to 3 decimal places (~100m of rounding error - plenty for
+// "which stadium is roughly closer," not meant for turn-by-turn).
+// Sourced from OpenPLZ (which PLZs are real, current Berlin codes - not
+// just numeric range guessing, which would wrongly sweep in Brandenburg
+// towns like Schönefeld/Potsdam that share Berlin's 10000-14999 block)
+// cross-checked against the WZB Berlin Social Science Center's
+// plz_geocoord dataset (geocoded from the official Destatis postal code
+// registry) for the actual coordinates.
+// One flagged exception: "15569" straddles Berlin-Rahnsdorf and
+// Woltersdorf, Brandenburg - the source's single centroid for that PLZ
+// may skew slightly toward the Brandenburg side since it treats the
+// whole postal area as one shape. Worth keeping in mind if a venue ever
+// resolves to it, but not worth a special case for one edge PLZ.
+const BERLIN_PLZ_COORDS = {
+  "10115": [52.533, 13.378], "10117": [52.516, 13.385], "10119": [52.531, 13.406],
+  "10178": [52.522, 13.409], "10179": [52.512, 13.414], "10243": [52.515, 13.439],
+  "10245": [52.502, 13.455], "10247": [52.517, 13.463], "10249": [52.524, 13.441],
+  "10315": [52.515, 13.514], "10317": [52.499, 13.485], "10318": [52.481, 13.519],
+  "10319": [52.496, 13.514], "10365": [52.519, 13.495], "10367": [52.521, 13.480],
+  "10369": [52.529, 13.467],
+  "10405": [52.534, 13.423], "10407": [52.534, 13.456], "10409": [52.543, 13.441],
+  "10435": [52.538, 13.410], "10437": [52.546, 13.407], "10439": [52.552, 13.412],
+  "10551": [52.532, 13.339], "10553": [52.528, 13.321], "10555": [52.522, 13.336],
+  "10557": [52.523, 13.365], "10559": [52.532, 13.348], "10585": [52.515, 13.305],
+  "10587": [52.517, 13.324], "10589": [52.530, 13.307],
+  "10623": [52.507, 13.328], "10625": [52.509, 13.314], "10627": [52.507, 13.302],
+  "10629": [52.502, 13.303],
+  "10707": [52.495, 13.315], "10709": [52.492, 13.304], "10711": [52.499, 13.292],
+  "10713": [52.487, 13.314], "10715": [52.484, 13.330], "10717": [52.491, 13.328],
+  "10719": [52.499, 13.325],
+  "10777": [52.497, 13.343], "10779": [52.492, 13.340], "10781": [52.493, 13.353],
+  "10783": [52.498, 13.362], "10785": [52.507, 13.365], "10787": [52.509, 13.343],
+  "10789": [52.501, 13.338],
+  "10823": [52.486, 13.349], "10825": [52.484, 13.340], "10827": [52.483, 13.354],
+  "10829": [52.480, 13.360],
+  "10961": [52.493, 13.397], "10963": [52.499, 13.378], "10965": [52.485, 13.399],
+  "10967": [52.491, 13.416], "10969": [52.503, 13.402], "10997": [52.500, 13.433],
+  "10999": [52.496, 13.427],
+  "12043": [52.478, 13.442], "12045": [52.487, 13.434], "12047": [52.490, 13.428],
+  "12049": [52.477, 13.422], "12051": [52.467, 13.430], "12053": [52.476, 13.433],
+  "12055": [52.471, 13.450], "12057": [52.469, 13.462], "12059": [52.481, 13.453],
+  "12099": [52.459, 13.403], "12101": [52.476, 13.396], "12103": [52.464, 13.373],
+  "12105": [52.445, 13.379], "12107": [52.433, 13.391], "12109": [52.447, 13.402],
+  "12157": [52.466, 13.345], "12159": [52.474, 13.335], "12161": [52.469, 13.325],
+  "12163": [52.463, 13.320], "12165": [52.457, 13.312], "12167": [52.450, 13.329],
+  "12169": [52.456, 13.340], "12203": [52.443, 13.310], "12205": [52.433, 13.298],
+  "12207": [52.421, 13.308], "12209": [52.418, 13.329],
+  "12247": [52.440, 13.343], "12249": [52.427, 13.349],
+  "12277": [52.411, 13.376], "12279": [52.411, 13.349], "12305": [52.405, 13.400],
+  "12307": [52.382, 13.399], "12309": [52.390, 13.417],
+  "12347": [52.451, 13.430], "12349": [52.428, 13.415], "12351": [52.434, 13.456],
+  "12353": [52.423, 13.457], "12355": [52.408, 13.498], "12357": [52.428, 13.488],
+  "12359": [52.448, 13.452],
+  "12435": [52.484, 13.470], "12437": [52.461, 13.482], "12439": [52.450, 13.524],
+  "12459": [52.461, 13.528], "12487": [52.438, 13.513], "12489": [52.437, 13.547],
+  "12524": [52.413, 13.547], "12526": [52.400, 13.575], "12527": [52.392, 13.629],
+  "12555": [52.462, 13.587], "12557": [52.427, 13.588], "12559": [52.417, 13.649],
+  "12587": [52.461, 13.641], "12589": [52.448, 13.704],
+  "12619": [52.524, 13.591], "12621": [52.505, 13.588], "12623": [52.503, 13.607],
+  "12627": [52.538, 13.613], "12629": [52.540, 13.592], "12679": [52.548, 13.562],
+  "12681": [52.555, 13.540], "12683": [52.498, 13.558], "12685": [52.538, 13.566],
+  "12687": [52.556, 13.564], "12689": [52.564, 13.572],
+  "13051": [52.582, 13.491], "13053": [52.556, 13.506], "13055": [52.538, 13.499],
+  "13057": [52.573, 13.545], "13059": [52.579, 13.521],
+  "13086": [52.555, 13.447], "13088": [52.559, 13.476], "13089": [52.569, 13.442],
+  "13125": [52.633, 13.478], "13127": [52.611, 13.428], "13129": [52.593, 13.458],
+  "13156": [52.582, 13.398], "13158": [52.592, 13.384], "13159": [52.625, 13.404],
+  "13187": [52.572, 13.413], "13189": [52.560, 13.422],
+  "13347": [52.550, 13.364], "13349": [52.559, 13.344], "13351": [52.550, 13.339],
+  "13353": [52.541, 13.351], "13355": [52.542, 13.390], "13357": [52.550, 13.379],
+  "13359": [52.559, 13.383],
+  "13403": [52.574, 13.319], "13405": [52.558, 13.310], "13407": [52.574, 13.351],
+  "13409": [52.569, 13.371], "13435": [52.602, 13.342], "13437": [52.588, 13.335],
+  "13439": [52.595, 13.354],
+  "13465": [52.632, 13.288], "13467": [52.614, 13.306], "13469": [52.613, 13.340],
+  "13503": [52.611, 13.242], "13505": [52.588, 13.246], "13507": [52.575, 13.271],
+  "13509": [52.589, 13.303],
+  "13581": [52.530, 13.187], "13583": [52.542, 13.183], "13585": [52.547, 13.207],
+  "13587": [52.573, 13.192], "13589": [52.566, 13.158], "13591": [52.535, 13.143],
+  "13593": [52.519, 13.170], "13595": [52.508, 13.192], "13597": [52.530, 13.214],
+  "13599": [52.549, 13.239], "13627": [52.541, 13.304], "13629": [52.540, 13.265],
+  "14050": [52.520, 13.273], "14052": [52.513, 13.260], "14053": [52.521, 13.227],
+  "14055": [52.503, 13.236], "14057": [52.506, 13.286], "14059": [52.521, 13.287],
+  "14089": [52.474, 13.152], "14109": [52.415, 13.147], "14129": [52.431, 13.201],
+  "14163": [52.448, 13.240], "14165": [52.416, 13.259], "14167": [52.419, 13.276],
+  "14169": [52.442, 13.265],
+  "14193": [52.468, 13.211], "14195": [52.453, 13.289], "14197": [52.472, 13.314],
+  "14199": [52.477, 13.296],
+  "15569": [52.457, 13.751],
+};
+
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+function extractPlz(address) {
+  const m = (address || '').match(/\b(\d{5})\b/);
+  return m ? m[1] : null;
+}
+function coordsForPlz(plz) {
+  return BERLIN_PLZ_COORDS[plz] || null;
+}
+// Returns null (rather than a distance) whenever either side can't be
+// resolved - an unrecognized/incomplete postcode typed in, or a fixture
+// whose venue_address doesn't carry a Berlin PLZ we have on file. The
+// render code below is responsible for showing those as "distance
+// unknown" rather than silently sorting them to the top as if 0km away.
+function distanceFromPostcode(postcodeValue, venueAddress) {
+  const from = coordsForPlz((postcodeValue || '').trim());
+  const to = coordsForPlz(extractPlz(venueAddress));
+  if (!from || !to) return null;
+  return haversineKm(from[0], from[1], to[0], to[1]);
+}
+
 // Two-level nav: pick a MONTH first (via the ‹ › arrows), then
 // optionally narrow to one DATE within it by clicking a day that has a
 // gold dot on it ("show all fixtures this month" stays available below
@@ -565,15 +717,76 @@ function populateTeamList(matches) {
   dl.innerHTML = teams.map(t => `<option value="${t}"></option>`).join('');
 }
 
+// Flat ranked list for "closest to me" / "kick-off time" sort modes -
+// deliberately not grouped by date or league like the default view,
+// since the whole point is one single ranking across everything in
+// scope. Each row still shows its date and league inline (that context
+// isn't implicit anymore once there's no date-heading/league-label
+// grouping it). `hint` is the small message strip above the results -
+// used to tell someone their postcode wasn't recognized rather than
+// silently reordering nothing.
+function renderFlatSorted(matches, mode, postcodeValue, hint) {
+  let list = matches.slice();
+
+  if (mode === 'distance') {
+    if (!postcodeValue) {
+      hint.textContent = 'Enter your postcode above to sort by distance.';
+      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+    } else if (!coordsForPlz(postcodeValue)) {
+      hint.textContent = `"${postcodeValue}" isn't a Berlin postcode I recognize - showing date order instead.`;
+      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+    } else {
+      list.forEach(m => { m.__distanceKm = distanceFromPostcode(postcodeValue, m.venue_address); });
+      list.sort((a, b) => {
+        if (a.__distanceKm == null && b.__distanceKm == null) return 0;
+        if (a.__distanceKm == null) return 1;
+        if (b.__distanceKm == null) return -1;
+        return a.__distanceKm - b.__distanceKm;
+      });
+    }
+  } else if (mode === 'time') {
+    list.sort((a, b) => {
+      if (!a.time && !b.time) return (a.date).localeCompare(b.date);
+      if (!a.time) return 1;
+      if (!b.time) return -1;
+      return a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date);
+    });
+  }
+
+  return list.map(m => {
+    const tierTag = isCup(m) ? 'Cup' : `Tier ${tierOf(m)}`;
+    const distanceNote = m.__distanceKm != null
+      ? `<span class="addr">${m.__distanceKm < 1 ? '<1 km away' : Math.round(m.__distanceKm) + ' km away'}</span>`
+      : (mode === 'distance' && postcodeValue && coordsForPlz(postcodeValue) ? `<span class="addr">distance unknown</span>` : '');
+    return `
+      <div class="match">
+        <div class="match-time">${m.time || '—'}</div>
+        <div>
+          <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
+          <div class="venue">${fmtDateLabel(m.date)} · ${m.league} (${tierTag})${m.venue ? ' · ' + m.venue : ''}${distanceNote}</div>
+        </div>
+        <div class="matchday">${m.matchday || ''}</div>
+      </div>
+    `;
+  }).join('');
+}
+
 function render() {
   const main = document.getElementById('main');
+  const hint = document.getElementById('postcode-hint');
   const leagueFilter = document.getElementById('league-filter').value;
   const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
+  const sortMode = document.getElementById('sort-mode').value; // "" | "distance" | "time"
+  const postcodeValue = document.getElementById('postcode-input').value.trim();
+  hint.textContent = '';
 
   // If searching by team, look across ALL dates, not just the selected
   // month/date - otherwise a search would silently show nothing outside
   // whatever's currently picked. Otherwise: a specific date if one's
   // selected, or every date in the current month if "All dates" is picked.
+  // A distance/time sort (below) reuses whichever of those pools is
+  // already in play - it doesn't widen or narrow the date range itself,
+  // it just changes how the result gets grouped/ordered afterwards.
   const showingMultipleDates = Boolean(searchTerm) || currentDate === null;
   const pool = searchTerm
     ? Object.values(allData).flat()
@@ -592,6 +805,18 @@ function render() {
   if (!filtered.length) {
     const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this selection.';
     main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
+    return;
+  }
+
+  // "Closest to me" / "kick-off time" are flat ranked lists across
+  // whatever's currently in view (the month/date + league/search
+  // filters above still apply) - deliberately NOT grouped by date or
+  // league on top of that, since a genuine distance or time ranking
+  // spanning several dates wouldn't make sense chopped up by date
+  // headings first. Plain "date" mode below keeps the existing
+  // date > league > team grouping untouched.
+  if (sortMode === 'distance' || sortMode === 'time') {
+    main.innerHTML = renderFlatSorted(filtered, sortMode, postcodeValue, hint);
     return;
   }
 
@@ -656,13 +881,25 @@ function render() {
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('team-search').addEventListener('input', render);
-  // Clears the league dropdown and team search back to "everything," and
-  // drops back to viewing the whole current month rather than one single
-  // day - the calendar position itself (which month you're looking at)
-  // is left alone since that's browsing, not really a "filter."
+  document.getElementById('sort-mode').addEventListener('change', render);
+  // Postcode is only numbers - restrict input as you type rather than
+  // waiting to reject it on submit, and re-render on every keystroke so
+  // "closest to me" updates live like everything else here.
+  document.getElementById('postcode-input').addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+    render();
+  });
+  // Clears the league dropdown, team search, and sort mode back to
+  // "everything," and drops back to viewing the whole current month
+  // rather than one single day - the calendar position itself (which
+  // month you're looking at) is left alone since that's browsing, not
+  // really a "filter." The postcode itself is deliberately NOT cleared -
+  // it's more like "who you are" than a transient filter, no reason to
+  // make someone retype it just for resetting everything else.
   document.getElementById('reset-filters').addEventListener('click', () => {
     document.getElementById('league-filter').value = '';
     document.getElementById('team-search').value = '';
+    document.getElementById('sort-mode').value = '';
     currentDate = null;
     // Jump back to the CURRENT calendar month specifically, not just
     // "whatever month you happened to be on" - a reset should feel like
