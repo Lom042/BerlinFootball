@@ -6,10 +6,13 @@
     "away_team": "SV Tasmania Berlin",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Sportforum Stadion",
     "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "home_team_website": "https://bfc.com",
+    "away_team_website": "https://www.sv-tasmania-berlin.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bfc-dynamo-sv-tasmania-berlin/-/spiel/031DEIC0P4000000VS5489BUVUR5FS5A"
   }

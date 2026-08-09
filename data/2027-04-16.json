@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2027-04-16",
+    "time": null,
+    "home_team": "SC Staaken1919",
+    "away_team": "TSV Rudow",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Sportpark Staaken KR1",
+    "venue_address": "Eichholzbahn 116, 13591 Berlin",
+    "home_team_website": "https://sc-staaken.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-staaken1919-tsv-rudow/-/spiel/031G0H6QL8000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-04-16",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "Berlin Türkspor",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-berlin-tuerkspor/-/spiel/031G0H6RH8000000VS5489BUVSJ4CRAP"
+  }
+]

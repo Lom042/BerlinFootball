@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2026-11-27",
+    "time": null,
+    "home_team": "SC Charlottenburg",
+    "away_team": "Berliner SC",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "home_team_website": "https://www.scc-berlin-fussball.de/",
+    "away_team_website": "https://www.berlinersc-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-charlottenburg-berliner-sc/-/spiel/031G0H6A4C000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-11-27",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "TSV Mariendorf 1897",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "https://tsvmariendorf97.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-tsv-mariendorf-1897/-/spiel/031G0H6A6C000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-11-27",
+    "time": null,
+    "home_team": "Berlin Türkspor",
+    "away_team": "TSV Rudow",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Heckerdamm NR1",
+    "venue_address": "Heckerdamm 204, 13627 Berlin",
+    "home_team_website": "",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-tsv-rudow/-/spiel/031G0H6A7K000000VS5489BUVSJ4CRAP"
+  }
+]

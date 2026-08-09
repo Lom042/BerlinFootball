@@ -11,6 +11,8 @@
     "finished": false,
     "venue": "",
     "venue_address": "",
+    "home_team_website": "https://www.fc-union-berlin.de",
+    "away_team_website": "",
     "source": "openligadb"
   },
   {
@@ -20,10 +22,13 @@
     "away_team": "F.C. Hertha 03 Zehlendorf",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Mommsenstadion NR1",
     "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "home_team_website": "https://www.tebe.de",
+    "away_team_website": "https://www.h03.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/tennis-borussia-berlin-fc-hertha-03/-/spiel/031AFMQS3O000000VS5489BUVV628VP4"
   },
@@ -34,11 +39,31 @@
     "away_team": "BSV Eintracht Mahlsdorf",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, HOWOGE-Arena »Hans Zoschke« NR1",
     "venue_address": "Normannenstraße 28, 10365 Berlin",
+    "home_team_website": "https://www.lichtenberg47.de",
+    "away_team_website": "https://bsv-eintracht-mahlsdorf.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/lichtenberg-47-bsv-eintracht-mahlsdorf/-/spiel/031AFMQSBS000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2027-05-22",
+    "time": null,
+    "home_team": "SV Empor Berlin",
+    "away_team": "Viktoria Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Friedr-Ludwig-Jahn-Spp KR1",
+    "venue_address": "Cantianstr. 24, 10437 Berlin",
+    "home_team_website": "https://www.empor-berlin.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-viktoria-berlin/-/spiel/031G0H6NSS000000VS5489BUVSJ4CRAP"
   }
 ]

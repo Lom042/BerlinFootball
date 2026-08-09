@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2027-02-19",
+    "time": null,
+    "home_team": "Berlin Türkspor",
+    "away_team": "VfB Fortuna Biesdorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Heckerdamm NR1",
+    "venue_address": "Heckerdamm 204, 13627 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://www.fortuna-biesdorf.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-vfb-fortuna-biesdorf/-/spiel/031G0H6VRC000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-02-19",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "SV Empor Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "https://www.empor-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-sv-empor-berlin/-/spiel/031G0H6VUO000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-02-19",
+    "time": null,
+    "home_team": "SC Charlottenburg",
+    "away_team": "B.W. Hohen Neuendorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "home_team_website": "https://www.scc-berlin-fussball.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-charlottenburg-bw-hohen-neuendorf/-/spiel/031G0H7024000000VS5489BUVSJ4CRAP"
+  }
+]

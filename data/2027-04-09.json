@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2027-04-09",
+    "time": null,
+    "home_team": "Berlin Türkspor",
+    "away_team": "S.D. Croatia Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Heckerdamm NR1",
+    "venue_address": "Heckerdamm 204, 13627 Berlin",
+    "home_team_website": "",
+    "away_team_website": "http://sdcroatia.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-sd-croatia-berlin/-/spiel/031G0H6SB0000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-04-09",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-spvg-blau-weiss-1890-berlin/-/spiel/031G0H6SE4000000VS5489BUVSJ4CRAP"
+  }
+]

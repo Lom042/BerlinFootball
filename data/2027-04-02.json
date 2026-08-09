@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2027-04-02",
+    "time": null,
+    "home_team": "SC Charlottenburg",
+    "away_team": "TSV Mariendorf 1897",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "home_team_website": "https://www.scc-berlin-fussball.de/",
+    "away_team_website": "https://tsvmariendorf97.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-charlottenburg-tsv-mariendorf-1897/-/spiel/031G0H7890000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-04-02",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "Berlin Türkspor",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-berlin-tuerkspor/-/spiel/031G0H79CC000000VS5489BUVSJ4CRAP"
+  }
+]

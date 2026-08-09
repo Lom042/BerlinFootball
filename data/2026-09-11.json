@@ -11,6 +11,8 @@
     "finished": false,
     "venue": "",
     "venue_address": "",
+    "home_team_website": "https://www.fc-union-berlin.de",
+    "away_team_website": "",
     "source": "openligadb"
   },
   {
@@ -20,11 +22,31 @@
     "away_team": "Chemnitzer FC",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Spree-Arena",
     "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-chemnitzer-fc/-/spiel/031DEIC0RC000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-09-11",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "TSV Mariendorf 1897",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "https://tsvmariendorf97.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-tsv-mariendorf-1897/-/spiel/031G0H6D80000000VS5489BUVSJ4CRAP"
   }
 ]

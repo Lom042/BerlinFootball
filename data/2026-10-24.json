@@ -6,11 +6,31 @@
     "away_team": "F.C. Hertha 03 Zehlendorf",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Kunstrasenplatz, Am Rosenhag KR",
     "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
+    "away_team_website": "https://www.h03.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-fc-hertha-03/-/spiel/031AFMQME4000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-24",
+    "time": null,
+    "home_team": "FC Internationale Berlin",
+    "away_team": "S.D. Croatia Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
+    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
+    "home_team_website": "https://www.inter-berlin.de/",
+    "away_team_website": "http://sdcroatia.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-sd-croatia-berlin/-/spiel/031G0H6G6S000000VS5489BUVSJ4CRAP"
   }
 ]

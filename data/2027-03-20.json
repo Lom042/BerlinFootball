@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2027-03-20",
+    "time": null,
+    "home_team": "FC Internationale Berlin",
+    "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
+    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
+    "home_team_website": "https://www.inter-berlin.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-spvg-blau-weiss-1890-berlin/-/spiel/031G0H72SK000000VS5489BUVSJ4CRAP"
+  }
+]

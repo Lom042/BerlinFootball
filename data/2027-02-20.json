@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2027-02-20",
+    "time": null,
+    "home_team": "FC Internationale Berlin",
+    "away_team": "BFC Meteor 06",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
+    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
+    "home_team_website": "https://www.inter-berlin.de/",
+    "away_team_website": "https://meteor06.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-bfc-meteor-06/-/spiel/031G0H70CC000000VS5489BUVSJ4CRAP"
+  }
+]

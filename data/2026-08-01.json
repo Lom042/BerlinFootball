@@ -6,10 +6,13 @@
     "away_team": "BSG Chemie Leipzig",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Sportforum Stadion",
     "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "home_team_website": "https://bfc.com",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bfc-dynamo-bsg-chemie-leipzig/-/spiel/031DEIBTI4000000VS5489BUVUR5FS5A"
   }

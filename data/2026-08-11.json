@@ -6,10 +6,13 @@
     "away_team": "Hertha BSC II",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Spree-Arena",
     "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "https://www.herthabsc.com",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-hertha-bsc-u23/-/spiel/031DEIBTLO000000VS5489BUVUR5FS5A"
   }

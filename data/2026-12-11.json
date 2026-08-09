@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-12-11",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "SC Staaken1919",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "https://sc-staaken.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-sc-staaken1919/-/spiel/031G0H6ECG000000VS5489BUVSJ4CRAP"
+  }
+]

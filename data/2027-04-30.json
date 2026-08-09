@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2027-04-30",
+    "time": null,
+    "home_team": "SC Staaken1919",
+    "away_team": "TSV Mariendorf 1897",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Sportpark Staaken KR1",
+    "venue_address": "Eichholzbahn 116, 13591 Berlin",
+    "home_team_website": "https://sc-staaken.de/",
+    "away_team_website": "https://tsvmariendorf97.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-staaken1919-tsv-mariendorf-1897/-/spiel/031G0H6OSO000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-04-30",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "SC Charlottenburg",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "https://www.scc-berlin-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-sc-charlottenburg/-/spiel/031G0H6PE8000000VS5489BUVSJ4CRAP"
+  }
+]

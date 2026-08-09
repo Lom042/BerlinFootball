@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2026-10-14",
+    "time": null,
+    "home_team": "TSV Mariendorf 1897",
+    "away_team": "Spandauer Kickers",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volkspark Mariendorf KR1",
+    "venue_address": "Prühßstr. 90, 12105 Berlin",
+    "home_team_website": "https://tsvmariendorf97.de/",
+    "away_team_website": "https://www.spaki-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/tsv-mariendorf-1897-spandauer-kickers/-/spiel/031G0H6IU0000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-10-14",
+    "time": null,
+    "home_team": "SC Staaken1919",
+    "away_team": "B.W. Hohen Neuendorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Sportpark Staaken KR1",
+    "venue_address": "Eichholzbahn 116, 13591 Berlin",
+    "home_team_website": "https://sc-staaken.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-staaken1919-bw-hohen-neuendorf/-/spiel/031G0H6J30000000VS5489BUVSJ4CRAP"
+  }
+]

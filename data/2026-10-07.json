@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2026-10-07",
+    "time": null,
+    "home_team": "Berliner SC",
+    "away_team": "Frohnauer SC",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Hubertussportplatz KR1",
+    "venue_address": "Hubertusallee 50, 14193 Berlin",
+    "home_team_website": "https://www.berlinersc-fussball.de/",
+    "away_team_website": "https://www.frohnauersc.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-sc-frohnauer-sc/-/spiel/031G0H6J0G000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-10-07",
+    "time": null,
+    "home_team": "FC Internationale Berlin",
+    "away_team": "VfB Fortuna Biesdorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
+    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
+    "home_team_website": "https://www.inter-berlin.de/",
+    "away_team_website": "https://www.fortuna-biesdorf.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-vfb-fortuna-biesdorf/-/spiel/031G0H6J80000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-10-07",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "SC Charlottenburg",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "https://www.scc-berlin-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-sc-charlottenburg/-/spiel/031G0H6JF8000000VS5489BUVSJ4CRAP"
+  }
+]

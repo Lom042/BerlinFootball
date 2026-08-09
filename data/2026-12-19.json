@@ -11,6 +11,8 @@
     "finished": false,
     "venue": "",
     "venue_address": "",
+    "home_team_website": "https://www.fc-union-berlin.de",
+    "away_team_website": "",
     "source": "openligadb"
   },
   {
@@ -20,10 +22,13 @@
     "away_team": "SV Siedenbollentin",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Kunstrasenplatz, Am Rosenhag KR",
     "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-sv-siedenbollentin/-/spiel/031AFMR84S000000VS5489BUVV628VP4"
   }

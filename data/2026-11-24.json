@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-11-24",
+    "time": null,
+    "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "away_team": "Viktoria Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Rathausstraße KR1",
+    "venue_address": "Rathausstr. 10 A, 12105 Berlin",
+    "home_team_website": "",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/spvg-blau-weiss-1890-berlin-viktoria-berlin/-/spiel/031G0H6L34000000VS5489BUVSJ4CRAP"
+  }
+]

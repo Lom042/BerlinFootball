@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2026-11-11",
+    "time": null,
+    "home_team": "TSV Mariendorf 1897",
+    "away_team": "SC Charlottenburg",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volkspark Mariendorf KR1",
+    "venue_address": "Prühßstr. 90, 12105 Berlin",
+    "home_team_website": "https://tsvmariendorf97.de/",
+    "away_team_website": "https://www.scc-berlin-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/tsv-mariendorf-1897-sc-charlottenburg/-/spiel/031G0H6KGG000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-11-11",
+    "time": null,
+    "home_team": "Berliner SC",
+    "away_team": "SF Johannisthal",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Hubertussportplatz KR1",
+    "venue_address": "Hubertusallee 50, 14193 Berlin",
+    "home_team_website": "https://www.berlinersc-fussball.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-sc-sf-johannisthal/-/spiel/031G0H6KJ4000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-11-11",
+    "time": null,
+    "home_team": "Berlin Türkspor",
+    "away_team": "1. FC Wilmersdorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Heckerdamm NR1",
+    "venue_address": "Heckerdamm 204, 13627 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://fcwilmersdorf.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-1-fc-wilmersdorf/-/spiel/031G0H6L5S000000VS5489BUVSJ4CRAP"
+  }
+]

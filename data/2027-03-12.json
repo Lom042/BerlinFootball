@@ -6,11 +6,31 @@
     "away_team": "Tennis Borussia Berlin",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, HOWOGE-Arena »Hans Zoschke« NR1",
     "venue_address": "Normannenstraße 28, 10365 Berlin",
+    "home_team_website": "https://www.lichtenberg47.de",
+    "away_team_website": "https://www.tebe.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/lichtenberg-47-tennis-borussia-berlin/-/spiel/031AFMR3OS000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2027-03-12",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "Berliner SC",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "https://www.berlinersc-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-berliner-sc/-/spiel/031G0H6SQS000000VS5489BUVSJ4CRAP"
   }
 ]

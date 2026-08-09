@@ -11,6 +11,8 @@
     "finished": false,
     "venue": "",
     "venue_address": "",
+    "home_team_website": "https://www.herthabsc.com",
+    "away_team_website": "",
     "source": "openligadb"
   }
 ]

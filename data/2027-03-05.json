@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2027-03-05",
+    "time": null,
+    "home_team": "1. FC Wilmersdorf",
+    "away_team": "Viktoria Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Volksp. Wilmersdorf KR1",
+    "venue_address": "Straße am Schoelerpark 39, 10715 Berlin",
+    "home_team_website": "https://fcwilmersdorf.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/1-fc-wilmersdorf-viktoria-berlin/-/spiel/031G0H6TL8000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-03-05",
+    "time": null,
+    "home_team": "SC Charlottenburg",
+    "away_team": "VfB Fortuna Biesdorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Mommsenstadion NR1",
+    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
+    "home_team_website": "https://www.scc-berlin-fussball.de/",
+    "away_team_website": "https://www.fortuna-biesdorf.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sc-charlottenburg-vfb-fortuna-biesdorf/-/spiel/031G0H6TOG000000VS5489BUVSJ4CRAP"
+  }
+]

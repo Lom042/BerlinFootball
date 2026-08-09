@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-10-22",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf",
+    "away_team": "SFC Stern 1900",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://www.stern1900.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-sfc-stern-1900/-/spiel/031G0H6I5C000000VS5489BUVSJ4CRAP"
+  }
+]

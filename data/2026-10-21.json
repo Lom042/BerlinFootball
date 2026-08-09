@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-10-21",
+    "time": null,
+    "home_team": "Viktoria Berlin",
+    "away_team": "FC Internationale Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
+    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://www.inter-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-fc-internationale-berlin/-/spiel/031G0H6I30000000VS5489BUVSJ4CRAP"
+  }
+]

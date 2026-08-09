@@ -1,0 +1,36 @@
+[
+  {
+    "date": "2026-09-30",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "Viktoria Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-viktoria-berlin/-/spiel/031G0H6JAC000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-30",
+    "time": null,
+    "home_team": "Berlin Türkspor",
+    "away_team": "SF Johannisthal",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Heckerdamm NR1",
+    "venue_address": "Heckerdamm 204, 13627 Berlin",
+    "home_team_website": "",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-sf-johannisthal/-/spiel/031G0H6JHO000000VS5489BUVSJ4CRAP"
+  }
+]

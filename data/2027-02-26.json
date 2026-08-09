@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2027-02-26",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "SFC Stern 1900",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Heinz-Boock-Sportanlage KR1",
+    "venue_address": "Ungarnstraße 65, 13349 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "https://www.stern1900.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-sfc-stern-1900/-/spiel/031G0H6V3K000000VS5489BUVSJ4CRAP"
+  }
+]

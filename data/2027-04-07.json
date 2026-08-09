@@ -6,10 +6,13 @@
     "away_team": "Hallescher FC",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Preussen-Stadion NR1",
     "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "home_team_website": "https://bfc-preussen.de",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bfc-preussen-hallescher-fc/-/spiel/031DEICHMC000000VS5489BUVUR5FS5A"
   },
@@ -20,10 +23,13 @@
     "away_team": "1. FC Magdeburg II",
     "league": "REGIONALLIGA NORDOST",
     "league_tier": 4,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Spree-Arena",
     "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-1-fc-magdeburg-ii/-/spiel/031DEICI8O000000VS5489BUVUR5FS5A"
   }

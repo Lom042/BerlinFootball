@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-09-03",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf",
+    "away_team": "BFC Meteor 06",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://meteor06.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-bfc-meteor-06/-/spiel/031G0H6JN0000000VS5489BUVSJ4CRAP"
+  }
+]

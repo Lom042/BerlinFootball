@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2027-06-12",
+    "time": null,
+    "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "away_team": "VfB Fortuna Biesdorf",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Rathausstraße NR1",
+    "venue_address": "Rathausstr. 10 A, 12105 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://www.fortuna-biesdorf.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/spvg-blau-weiss-1890-berlin-vfb-fortuna-biesdorf/-/spiel/031G0H6LB4000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-06-12",
+    "time": null,
+    "home_team": "FC Internationale Berlin",
+    "away_team": "Frohnauer SC",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
+    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
+    "home_team_website": "https://www.inter-berlin.de/",
+    "away_team_website": "https://www.frohnauersc.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-frohnauer-sc/-/spiel/031G0H6LLC000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-06-12",
+    "time": null,
+    "home_team": "VSG Altglienicke II",
+    "away_team": "Spandauer FC Veritas",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Stadion Altglienicke KR1",
+    "venue_address": "Alter Schönefelder Weg 20, 12524 Berlin",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "https://www.sfcv96.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-ii-spandauer-fc-veritas/-/spiel/031G0GRR8C000000VS5489BTVVG7L386"
+  }
+]

@@ -6,10 +6,13 @@
     "away_team": "Berliner AK 07",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Kunstrasenplatz, Am Rosenhag KR",
     "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
+    "away_team_website": "https://www.bak07.de",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-berliner-ak-07/-/spiel/031AFMR4GG000000VS5489BUVV628VP4"
   }

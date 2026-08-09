@@ -6,10 +6,13 @@
     "away_team": "SV Siedenbollentin",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
     "venue_address": "Fischerstr. 15, 10317 Berlin",
+    "home_team_website": "https://sv-sparta.de/",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-sv-siedenbollentin/-/spiel/031AFMQSU4000000VS5489BUVV628VP4"
   },
@@ -20,10 +23,13 @@
     "away_team": "F.C. Hansa Rostock II",
     "league": "OBERLIGA NORDOST",
     "league_tier": 5,
+    "is_cup": false,
     "gender": "M",
     "matchday": "",
     "venue": "Rasenplatz, Am Rosenhag NR",
     "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
+    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
+    "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-fc-hansa-rostock-u23/-/spiel/031AFMQT4G000000VS5489BUVV628VP4"
   }
