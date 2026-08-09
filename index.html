@@ -196,6 +196,14 @@
   }
   .teams { font-size: 16px; font-weight: 500; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
   .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 2px; }
+  .club-link {
+    color: var(--chalk-dim);
+    text-decoration: none;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-left: -2px;
+  }
+  .club-link:hover { opacity: 1; text-decoration: underline; }
   .crest {
     display: inline-flex;
     align-items: center;
@@ -284,8 +292,8 @@
 // fixture.
 const DEMO_DATA = {
   "2026-08-08": [
-    { date: "2026-08-08", time: "15:30", home_team: "1. FC Union Berlin", away_team: "VfL Wolfsburg", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 1", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin" },
-    { date: "2026-08-08", time: "13:00", home_team: "Hertha BSC", away_team: "SV Elversberg", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 1", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin" },
+    { date: "2026-08-08", time: "15:30", home_team: "1. FC Union Berlin", away_team: "VfL Wolfsburg", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 1", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin", home_team_website: "https://www.fc-union-berlin.de" },
+    { date: "2026-08-08", time: "13:00", home_team: "Hertha BSC", away_team: "SV Elversberg", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 1", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin", home_team_website: "https://www.herthabsc.com" },
     { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportforum Berlin", venue_address: "Conrad-Blenkle-Straße 33, 13405 Berlin" },
     { date: "2026-08-08", time: "14:00", home_team: "VSG Altglienicke", away_team: "Tasmania Berlin", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportpark Altglienicke", venue_address: "Rudolf-Seiffert-Straße 30, 12524 Berlin" },
     { date: "2026-08-08", time: "14:00", home_team: "Berliner AK 07", away_team: "SV Lichtenberg 47", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Poststadion", venue_address: "Rathenower Str. 42, 10559 Berlin" },
@@ -329,6 +337,15 @@ function teamColor(name) {
 }
 function crestHtml(name) {
   return `<span class="crest" style="background:${teamColor(name)}">${teamInitials(name)}</span>`;
+}
+
+// Small "official club site" link next to a team name (ticket info etc.)
+// - not the fussball.de match page (that's source_url), the club's own
+// site. Blank/missing for clubs without one on file (e.g. lower amateur
+// tiers, or Berlin Türkspor which genuinely has no independent site).
+function clubLinkHtml(website) {
+  if (!website) return '';
+  return `<a href="${website}" target="_blank" rel="noopener noreferrer" class="club-link" title="Official club website" onclick="event.stopPropagation()">↗</a>`;
 }
 
 function fmtDateLabel(iso) {
@@ -494,7 +511,7 @@ function render() {
           <div class="match">
             <div class="match-time">${m.time || '—'}</div>
             <div>
-              <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
+              <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
               <div class="venue">${m.venue || ''}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
             </div>
             <div class="matchday">${m.matchday || ''}</div>
