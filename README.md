@@ -167,6 +167,27 @@ the calendar - fussball.de tends to confirm times closer to matchday.
 see the note in `scraper_fussballde.py` above the `LEAGUES` dict for
 why. Landesliga (tier 7) is the current floor.
 
+**Played fixtures / past months disappearing:** two layers, so this
+holds up even if a scrape run is delayed:
+- Both scrapers prune any date before today when they write `data/` -
+  `scraper_openligadb.py` always did this; `scraper_fussballde.py` had a
+  real gap here (found via user report - past fixtures just stayed in
+  the file forever) and now has the same `if d < today_iso` guard.
+- `index.html` also drops any past date client-side on load
+  (`dropPastDates()`), using the visitor's own local calendar day - a
+  safety net for the gap between a match's day ending and the next
+  twice-daily scrape actually removing it. A month with nothing left in
+  it after that filter just stops showing up in the month pills - no
+  separate "hide old months" logic needed, it falls out of the same fix.
+
+**Club name variants:** fussball.de doesn't always use the same name for
+a club that its `known_clubs` sanity list (or `CLUB_WEBSITES`/
+`VENUE_ADDRESSES_BY_CLUB`) expects - e.g. "Blau-Weiss 90 Berlin" shows up
+on some fixture pages under its full formal name, "Sp.Vg. Blau Weiß 1890
+Berlin". When a club's site link or venue fallback goes missing on a
+real fixture, check for exactly this before assuming something's broken
+- add the alternate name as another dict key pointing at the same value.
+
 ## Team badges
 
 Real club crests are trademarked, so the app doesn't display any actual
