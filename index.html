@@ -67,35 +67,127 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  .months, .dates {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 4px 2px;
+  /* Calendar: replaces the old two-row "month pills / date pills" nav -
+     same underlying data (allMonths() / allData), just presented as an
+     actual month grid instead of a growing horizontal list of buttons,
+     which used to run out of room and wrap awkwardly once a season's
+     worth of dates was in play. */
+  .calendar {
+    width: 280px;
+    max-width: 100%;
+    background: rgba(244,242,234,0.04);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px 16px;
   }
-  .nav-row {
+  .cal-header {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
     align-items: center;
-    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
-  .date-pill {
+  .cal-title {
     font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--chalk);
+  }
+  .cal-nav {
     background: transparent;
     border: 1px solid var(--line);
     color: var(--chalk-dim);
-    padding: 8px 16px;
-    border-radius: 999px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
-    letter-spacing: 0.5px;
+    font-size: 15px;
+    line-height: 1;
     transition: all 0.15s ease;
   }
-  .date-pill:hover { border-color: var(--gold); color: var(--chalk); }
-  .date-pill.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .cal-nav:hover:not(:disabled) { border-color: var(--gold); color: var(--chalk); }
+  .cal-nav:disabled { opacity: 0.25; cursor: default; }
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    color: var(--chalk-dim);
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--chalk-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: default;
+    position: relative;
+  }
+  .cal-cell.cal-blank { visibility: hidden; }
+  .cal-cell.has-matches {
+    color: var(--chalk);
+    border-color: var(--line);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .cal-cell.has-matches::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .cal-cell.has-matches:hover { border-color: var(--gold); }
+  .cal-cell.today:not(.active) { border-color: var(--chalk-dim); }
+  .cal-cell.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--pitch-dark);
+  }
+  .cal-cell.active::after { background: var(--pitch-dark); }
+  .cal-all-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+  .cal-all-btn:hover { border-color: var(--gold); color: var(--chalk); }
+  .cal-all-btn.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+  .reset-btn:hover { border-color: var(--gold); color: var(--chalk); }
 
   select {
     background: var(--pitch-dark);
@@ -258,10 +350,7 @@
 </header>
 
 <div class="controls">
-  <div class="nav-row">
-    <div class="months" id="months"></div>
-    <div class="dates" id="dates"></div>
-  </div>
+  <div class="calendar" id="calendar"></div>
   <select id="league-filter">
     <option value="">All divisions</option>
   </select>
@@ -269,6 +358,7 @@
 <div class="search-row">
   <input id="team-search" type="text" placeholder="Search team…" autocomplete="off" list="team-list">
   <datalist id="team-list"></datalist>
+  <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
 </div>
 
 <main id="main">
@@ -380,12 +470,13 @@ function isCup(m) {
   return Boolean(m.is_cup) || m.league === "DFB-POKAL" || m.league === "BERLIN-POKAL";
 }
 
-// Two-level nav: pick a MONTH first, then optionally narrow to one DATE
-// within it ("All" stays selected by default so you see every fixture
-// in the month before narrowing down). Both pill rows get rebuilt on
-// every click (not just the match list) - that's what keeps the
-// "active" highlight in sync with whatever's actually selected, instead
-// of freezing on the first thing you ever clicked.
+// Two-level nav: pick a MONTH first (via the ‹ › arrows), then
+// optionally narrow to one DATE within it by clicking a day that has a
+// gold dot on it ("show all fixtures this month" stays available below
+// the grid so you can see everything before narrowing down). The
+// calendar gets fully rebuilt on every click (not just the match list)
+// - that's what keeps the "active"/"today" highlighting in sync with
+// whatever's actually selected, instead of freezing on first render.
 function allMonths() {
   return [...new Set(Object.keys(allData).map(monthOf))].sort();
 }
@@ -393,40 +484,53 @@ function datesInCurrentMonth() {
   return Object.keys(allData).filter(d => monthOf(d) === currentMonth).sort();
 }
 
-function renderMonthPills() {
-  const el = document.getElementById('months');
-  el.innerHTML = '';
-  allMonths().forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = 'date-pill' + (m === currentMonth ? ' active' : '');
-    btn.textContent = fmtMonthLabel(m);
-    btn.onclick = () => { currentMonth = m; currentDate = null; renderAll(); };
-    el.appendChild(btn);
-  });
-}
+function renderCalendar() {
+  const el = document.getElementById('calendar');
+  const months = allMonths();
+  const idx = months.indexOf(currentMonth);
+  const prevMonth = idx > 0 ? months[idx - 1] : null;
+  const nextMonth = idx < months.length - 1 ? months[idx + 1] : null;
 
-function renderDatePills() {
-  const el = document.getElementById('dates');
-  el.innerHTML = '';
+  const [y, m] = currentMonth.split('-').map(Number);
+  const firstWeekday = (new Date(y, m - 1, 1).getDay() + 6) % 7; // Monday = 0
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const today = todayIso();
 
-  const allBtn = document.createElement('button');
-  allBtn.className = 'date-pill' + (currentDate === null ? ' active' : '');
-  allBtn.textContent = 'All dates';
-  allBtn.onclick = () => { currentDate = null; renderAll(); };
-  el.appendChild(allBtn);
+  let cells = '';
+  for (let i = 0; i < firstWeekday; i++) {
+    cells += `<div class="cal-cell cal-blank"></div>`;
+  }
+  for (let day = 1; day <= daysInMonth; day++) {
+    const iso = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const hasMatches = Boolean(allData[iso] && allData[iso].length);
+    const classes = ['cal-cell'];
+    if (hasMatches) classes.push('has-matches');
+    if (iso === today) classes.push('today');
+    if (iso === currentDate) classes.push('active');
+    cells += `<button type="button" class="${classes.join(' ')}"${hasMatches ? ` data-date="${iso}"` : ' disabled'}>${day}</button>`;
+  }
 
-  datesInCurrentMonth().forEach(d => {
-    const btn = document.createElement('button');
-    btn.className = 'date-pill' + (d === currentDate ? ' active' : '');
-    btn.textContent = fmtDateLabel(d);
-    btn.onclick = () => { currentDate = d; renderAll(); };
-    el.appendChild(btn);
+  el.innerHTML = `
+    <div class="cal-header">
+      <button type="button" class="cal-nav" id="cal-prev"${prevMonth ? '' : ' disabled'}>‹</button>
+      <span class="cal-title">${fmtMonthLabel(currentMonth)}</span>
+      <button type="button" class="cal-nav" id="cal-next"${nextMonth ? '' : ' disabled'}>›</button>
+    </div>
+    <div class="cal-weekdays">${['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(d => `<span>${d}</span>`).join('')}</div>
+    <div class="cal-grid">${cells}</div>
+    <button type="button" class="cal-all-btn${currentDate === null ? ' active' : ''}" id="cal-all">Show all fixtures this month</button>
+  `;
+
+  if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; currentDate = null; renderAll(); };
+  if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; currentDate = null; renderAll(); };
+  el.querySelector('#cal-all').onclick = () => { currentDate = null; renderAll(); };
+  el.querySelectorAll('.cal-cell.has-matches').forEach(btn => {
+    btn.onclick = () => { currentDate = btn.dataset.date; renderAll(); };
   });
 }
 
 function renderAll() {
-  renderMonthPills();
-  renderDatePills();
+  renderCalendar();
   render();
 }
 
@@ -538,6 +642,16 @@ function render() {
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('team-search').addEventListener('input', render);
+  // Clears the league dropdown and team search back to "everything," and
+  // drops back to viewing the whole current month rather than one single
+  // day - the calendar position itself (which month you're looking at)
+  // is left alone since that's browsing, not really a "filter."
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    document.getElementById('league-filter').value = '';
+    document.getElementById('team-search').value = '';
+    currentDate = null;
+    renderAll();
+  });
 
   try {
     const idxResp = await fetch('data/index.json');
