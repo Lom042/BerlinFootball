@@ -93,6 +93,28 @@ it's the reason gender is now explicit rather than assumed.)
   show zero fixtures for now - that's expected, not a bug, and fixtures
   should start appearing automatically once each draw is published.
 
+  **Also links each club's own official website** (`CLUB_WEBSITES`, same
+  file), separate from the fussball.de match page - so fans can find
+  ticket info straight from the club rather than the fixtures aggregator.
+  Scope: first-team Berlin clubs only, tiers 1–7 (Bundesliga down through
+  Landesliga), no reserve/II/U23 sides. Hand-researched and verified one
+  club at a time, same approach as `VENUE_ADDRESSES_BY_CLUB`. Two things
+  worth knowing about the data:
+  - **Berlin Türkspor** deliberately has no entry - confirmed to be a
+    real, distinct Berlin club (not the same as Türkiyemspor Berlin
+    below), but no genuine independent website could be found for it.
+    Fixtures involving it just show no club link rather than a guessed
+    URL.
+  - **Türkiyemspor Berlin** and **Türkiyemspor Berlin 1978** both point
+    at the same site (`tuerkiyemspor.com`) - confirmed via matching
+    fussball.de club ID that these are the same real club appearing under
+    two name strings in scraped data (likely first team vs. second team),
+    not two separate clubs.
+  `scraper_openligadb.py` carries its own small `CLUB_WEBSITES` (just
+  Hertha BSC and Union Berlin) using the same lookup pattern, since tiers
+  1–3 are a separate file. `index.html` renders it as a small "↗" link
+  next to each team name that has one on file.
+
 - **`.github/workflows/update-fixtures.yml`** — runs the OpenLigaDB
   scraper twice a day and commits fresh data automatically.
 
