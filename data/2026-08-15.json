@@ -9,8 +9,8 @@
     "gender": "M",
     "matchday": "2. Spieltag",
     "finished": false,
-    "venue": "",
-    "venue_address": "",
+    "venue": "Olympiastadion Berlin",
+    "venue_address": "Olympischer Platz 3, 14053 Berlin",
     "home_team_website": "https://www.herthabsc.com",
     "away_team_website": "",
     "source": "openligadb"
@@ -61,7 +61,7 @@
     "matchday": "",
     "venue": "Rasenplatz, Rathausstraße NR1",
     "venue_address": "Rathausstr. 10 A, 12105 Berlin",
-    "home_team_website": "",
+    "home_team_website": "https://www.blauweiss90berlin.de/",
     "away_team_website": "https://www.inter-berlin.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/spvg-blau-weiss-1890-berlin-fc-internationale-berlin/-/spiel/031G0H6H5G000000VS5489BUVSJ4CRAP"

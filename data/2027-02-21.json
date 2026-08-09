@@ -9,8 +9,8 @@
     "gender": "M",
     "matchday": "22. Spieltag",
     "finished": false,
-    "venue": "",
-    "venue_address": "",
+    "venue": "Olympiastadion Berlin",
+    "venue_address": "Olympischer Platz 3, 14053 Berlin",
     "home_team_website": "https://www.herthabsc.com",
     "away_team_website": "",
     "source": "openligadb"
@@ -113,7 +113,7 @@
     "venue": "Kunstrasenplatz, Sportpark Staaken KR1",
     "venue_address": "Eichholzbahn 116, 13591 Berlin",
     "home_team_website": "https://sc-staaken.de/",
-    "away_team_website": "",
+    "away_team_website": "https://www.blauweiss90berlin.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sc-staaken1919-spvg-blau-weiss-1890-berlin/-/spiel/031G0H70JG000000VS5489BUVSJ4CRAP"
   },

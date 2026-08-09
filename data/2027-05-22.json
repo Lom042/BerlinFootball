@@ -9,8 +9,8 @@
     "gender": "M",
     "matchday": "34. Spieltag",
     "finished": false,
-    "venue": "",
-    "venue_address": "",
+    "venue": "Stadion An der Alten Försterei",
+    "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
     "away_team_website": "",
     "source": "openligadb"

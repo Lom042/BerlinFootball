@@ -9,8 +9,8 @@
     "gender": "M",
     "matchday": "28. Spieltag",
     "finished": false,
-    "venue": "",
-    "venue_address": "",
+    "venue": "Stadion An der Alten Försterei",
+    "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
     "away_team_website": "",
     "source": "openligadb"
@@ -79,7 +79,7 @@
     "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
     "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
     "home_team_website": "",
-    "away_team_website": "",
+    "away_team_website": "https://www.blauweiss90berlin.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/viktoria-berlin-spvg-blau-weiss-1890-berlin/-/spiel/031G0H7980000000VS5489BUVSJ4CRAP"
   },
