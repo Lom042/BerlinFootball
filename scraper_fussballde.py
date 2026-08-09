@@ -260,6 +260,86 @@ VENUE_ADDRESSES_BY_CLUB = {
     "TSV Mariendorf 1897": ("Sportplatz Mariendorf", "Motzener Straße 20, 12277 Berlin"),
 }
 
+# Official club websites (NOT fussball.de) - so fans can find ticket
+# info, club news etc. straight from the source. First-team Berlin clubs
+# only, tiers 4-7 (matches the same "no reserve teams" scope decision as
+# everywhere else in this project) - hand-researched and verified one at
+# a time, same approach as VENUE_ADDRESSES_BY_CLUB above. Keyed by
+# substring match against the scraped team name, so e.g. "VSG
+# Altglienicke" here also matches a scraped "VSG Altglienicke II" - fine,
+# it's still the right club's site, just not a dedicated reserve-team page
+# (reserve teams don't get one).
+#
+# "Berlin Türkspor" is deliberately NOT in this dict - confirmed to be a
+# real, distinct Berlin club (not the same as Türkiyemspor Berlin below),
+# but no genuine independent website could be found for it. Leaving it
+# out means the frontend just shows no link for that club, rather than
+# guessing at a URL that might be wrong.
+#
+# "Türkiyemspor Berlin" and "Türkiyemspor Berlin 1978" both point at the
+# same site - confirmed via matching fussball.de club ID that these are
+# the same real-world club appearing under two different name strings in
+# scraped data (likely first team vs. second team), not two clubs.
+CLUB_WEBSITES = {
+    "BFC Dynamo": "https://bfc.com",
+    "VSG Altglienicke": "https://www.vsg-altglienicke.de",
+    "Tasmania Berlin": "https://www.sv-tasmania-berlin.de",
+    "BFC Preussen": "https://bfc-preussen.de",
+    "Berliner AK 07": "https://www.bak07.de",
+    "SV Lichtenberg 47": "https://www.lichtenberg47.de",
+    "Hertha 03 Zehlendorf": "https://www.h03.de",
+    "Tennis Borussia Berlin": "https://www.tebe.de",
+    "TuS Makkabi Berlin": "https://tus-makkabi.de",
+    "Eintracht Mahlsdorf": "https://bsv-eintracht-mahlsdorf.de",
+    "SC Staaken": "https://sc-staaken.de/",
+    "SV Sparta Lichtenberg": "https://sv-sparta.de/",
+    "Füchse Berlin Reinickendorf": "https://www.fuechse-berlin-reinickendorf.de/",
+    "Blau-Weiss 90 Berlin": "https://www.blauweiss90berlin.de/",
+    "1. FC Wilmersdorf": "https://fcwilmersdorf.de/",
+    "SC Charlottenburg": "https://www.scc-berlin-fussball.de/",
+    "Spandauer Kickers": "https://www.spaki-berlin.de/",
+    "SSC Südwest": "https://sscsuedwest.de/",
+    "Polar Pinguin": "https://www.polar-pinguin.berlin/",
+    "Fortuna Biesdorf": "https://www.fortuna-biesdorf.de/",
+    "SFC Stern 1900": "https://www.stern1900.de/",
+    "SV Empor Berlin": "https://www.empor-berlin.de/",
+    "Türkiyemspor Berlin 1978": "https://tuerkiyemspor.com/",
+    "Türkiyemspor Berlin": "https://tuerkiyemspor.com/",
+    "TSV Mariendorf 1897": "https://tsvmariendorf97.de/",
+    "Frohnauer SC": "https://www.frohnauersc.de/",
+    "Viktoria 1889 Berlin": "https://viktoria1889.berlin/",
+    "Berliner SC": "https://www.berlinersc-fussball.de/",
+    "Croatia Berlin": "http://sdcroatia.de/",
+    "BFC Meteor 06": "https://meteor06.de/",
+    "Friedenauer TSC": "https://www.friedenauertsc-berlin.de/",
+    "Spandauer FC Veritas": "https://www.sfcv96.de/",
+    "Charlottenburg-Wilmersdorf 03": "https://www.sfcw03.de/",
+    "Berliner Amateure": "https://www.berlineramateure.de/",
+    "FC Schöneberg": "https://1fcschoeneberg1913.de/",
+    "Steglitzer SC Südwest 1947": "https://www.ssc1947.de/",
+    "FC Internationale Berlin": "https://www.inter-berlin.de/",
+    "Delay Sports Berlin": "https://www.delaysports-berlin.de/",
+    "Köpenicker FC": "https://www.koepenickerfc.de/",
+    "Pfeffersport": "https://pfeffersport.de/",
+    "SSC Teutonia 99": "https://www.ssc-teutonia.de/",
+    "Berlin Hilalspor": "https://hilalspor-berlin.de/",
+    "Berolina Stralau": "https://www.berolina-stralau.de/",
+    "FSV Hansa 07": "https://www.hansa07.de/",
+    "Hürtürkel": "https://www.hurturkel.com/",
+    # Tiers 1-3 (also covered in scraper_openligadb.py, kept here too so
+    # any fixture that happens to route through this file still resolves).
+    "Hertha BSC": "https://www.herthabsc.com",
+    "Union Berlin": "https://www.fc-union-berlin.de",
+}
+
+
+def get_club_website(team_name):
+    for club, url in CLUB_WEBSITES.items():
+        if club in team_name:
+            return url
+    return ""
+
+
 MANNSCHAFT_RE = re.compile(r"/mannschaft/[^\"'/]+/-/saison/\d+/team-id/([A-Za-z0-9]+)")
 SPIEL_RE = re.compile(r"/spiel/[^\"'/]+/-/spiel/([A-Za-z0-9]+)")
 SPIELDATUM_RE = re.compile(r"/spieldatum/(\d{4}-\d{2}-\d{2})/")
@@ -467,6 +547,8 @@ def normalize_fixture(raw, detail, league_key, league_info):
         "matchday": "",
         "venue": venue,
         "venue_address": venue_address,
+        "home_team_website": get_club_website(raw["home_team"]),
+        "away_team_website": get_club_website(raw["away_team"]),
         "source": "fussballde",
         "source_url": raw["match_url"],
     }
