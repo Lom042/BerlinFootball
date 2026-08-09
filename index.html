@@ -551,6 +551,8 @@ async function init() {
     allData = DEMO_DATA;
   }
 
+  allData = dropPastDates(allData);
+
   const months = allMonths();
   if (!months.length) {
     document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
@@ -561,6 +563,29 @@ async function init() {
   populateLeagueFilter(Object.values(allData).flat());
   populateTeamList(Object.values(allData).flat());
   renderAll();
+}
+
+// Drop any date that's already in the past, using the VISITOR'S local
+// calendar day (not UTC - a "today" fixture shouldn't vanish for
+// someone west of Berlin just because it's already tomorrow in UTC).
+// This is a client-side safety net on top of the scrapers' own pruning
+// (both scrapers drop past dates when they write data/) - it covers the
+// gap between "a match's day ends" and "the next scheduled scrape run
+// actually removes it," and also means a stale cached page still looks
+// right. A whole month disappears from the month pills automatically
+// once every one of its dates has been filtered out here - no separate
+// "hide past months" logic needed, it falls out of this for free.
+function todayIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function dropPastDates(data) {
+  const today = todayIso();
+  const kept = {};
+  for (const [d, matches] of Object.entries(data)) {
+    if (d >= today) kept[d] = matches;
+  }
+  return kept;
 }
 
 init();
