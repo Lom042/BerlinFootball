@@ -191,7 +191,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
   }
-  #league-filter, #sort-mode { flex: 1 1 140px; max-width: 100%; }
+  #league-filter, #district-filter, #sort-mode { flex: 1 1 140px; max-width: 100%; }
   #team-search, #postcode-input {
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
@@ -345,6 +345,9 @@
     <div class="calendar" id="calendar"></div>
     <select id="league-filter">
       <option value="">All divisions</option>
+    </select>
+    <select id="district-filter">
+      <option value="">All districts</option>
     </select>
   </div>
   <div class="search-row">
@@ -568,6 +571,92 @@ const BERLIN_PLZ_COORDS = {
   "15569": [52.457, 13.751],
 };
 
+// District ("Bezirk") filter - Berlin's 12 official boroughs, mapped
+// from the same PLZ embedded in every venue_address. Sourced from the
+// 2001 Bezirk reform's Ortsteil boundaries (Wikipedia) cross-checked
+// PLZ-by-PLZ against Kaupert's Berlin PLZ/Ortsteil/Bezirk directory
+// wherever a code looked like it might straddle two boroughs. Berlin's
+// Bezirk borders don't always line up neatly with postal code borders,
+// so a handful of these are a documented "majority" call on a PLZ that
+// genuinely touches a second Bezirk too - two codes (12161, 13629) had
+// no clear majority at all in the source and are a best-guess rather
+// than a confirmed primary. None of that matters much for "roughly
+// which part of town is this club in," but it's not laboratory-precise.
+const BERLIN_PLZ_DISTRICT = {
+  "10115": "Mitte", "10117": "Mitte", "10119": "Mitte", "10178": "Mitte", "10179": "Mitte",
+  "10243": "Friedrichshain-Kreuzberg", "10245": "Friedrichshain-Kreuzberg",
+  "10247": "Friedrichshain-Kreuzberg", "10249": "Friedrichshain-Kreuzberg",
+  "10315": "Lichtenberg", "10317": "Lichtenberg", "10318": "Lichtenberg", "10319": "Lichtenberg",
+  "10365": "Lichtenberg", "10367": "Lichtenberg", "10369": "Lichtenberg",
+  "10405": "Pankow", "10407": "Pankow", "10409": "Pankow",
+  "10435": "Pankow", "10437": "Pankow", "10439": "Pankow",
+  "10551": "Mitte", "10553": "Mitte", "10555": "Mitte", "10557": "Mitte", "10559": "Mitte",
+  "10585": "Charlottenburg-Wilmersdorf", "10587": "Charlottenburg-Wilmersdorf", "10589": "Charlottenburg-Wilmersdorf",
+  "10623": "Charlottenburg-Wilmersdorf", "10625": "Charlottenburg-Wilmersdorf",
+  "10627": "Charlottenburg-Wilmersdorf", "10629": "Charlottenburg-Wilmersdorf",
+  "10707": "Charlottenburg-Wilmersdorf", "10709": "Charlottenburg-Wilmersdorf",
+  "10711": "Charlottenburg-Wilmersdorf", "10713": "Charlottenburg-Wilmersdorf",
+  "10715": "Charlottenburg-Wilmersdorf", "10717": "Charlottenburg-Wilmersdorf", "10719": "Charlottenburg-Wilmersdorf",
+  "10777": "Tempelhof-Schöneberg", "10779": "Tempelhof-Schöneberg",
+  "10781": "Tempelhof-Schöneberg", "10783": "Tempelhof-Schöneberg",
+  "10785": "Mitte", "10787": "Mitte", "10789": "Charlottenburg-Wilmersdorf",
+  "10823": "Tempelhof-Schöneberg", "10825": "Tempelhof-Schöneberg", "10827": "Tempelhof-Schöneberg", "10829": "Tempelhof-Schöneberg",
+  "10961": "Friedrichshain-Kreuzberg", "10963": "Friedrichshain-Kreuzberg", "10965": "Friedrichshain-Kreuzberg",
+  "10967": "Friedrichshain-Kreuzberg", "10969": "Friedrichshain-Kreuzberg", "10997": "Friedrichshain-Kreuzberg", "10999": "Friedrichshain-Kreuzberg",
+  "12043": "Neukölln", "12045": "Neukölln", "12047": "Neukölln", "12049": "Neukölln",
+  "12051": "Neukölln", "12053": "Neukölln", "12055": "Neukölln", "12057": "Neukölln", "12059": "Neukölln",
+  "12099": "Tempelhof-Schöneberg", "12101": "Tempelhof-Schöneberg", "12103": "Tempelhof-Schöneberg", "12105": "Tempelhof-Schöneberg",
+  "12107": "Tempelhof-Schöneberg", "12109": "Tempelhof-Schöneberg",
+  "12157": "Tempelhof-Schöneberg", "12159": "Tempelhof-Schöneberg", "12161": "Tempelhof-Schöneberg",
+  "12163": "Steglitz-Zehlendorf", "12165": "Steglitz-Zehlendorf", "12167": "Steglitz-Zehlendorf", "12169": "Steglitz-Zehlendorf",
+  "12203": "Steglitz-Zehlendorf", "12205": "Steglitz-Zehlendorf", "12207": "Steglitz-Zehlendorf", "12209": "Steglitz-Zehlendorf",
+  "12247": "Steglitz-Zehlendorf", "12249": "Steglitz-Zehlendorf",
+  "12277": "Tempelhof-Schöneberg", "12279": "Tempelhof-Schöneberg",
+  "12305": "Tempelhof-Schöneberg", "12307": "Tempelhof-Schöneberg", "12309": "Tempelhof-Schöneberg",
+  "12347": "Neukölln", "12349": "Neukölln", "12351": "Neukölln", "12353": "Neukölln",
+  "12355": "Neukölln", "12357": "Neukölln", "12359": "Neukölln",
+  "12435": "Treptow-Köpenick", "12437": "Treptow-Köpenick", "12439": "Treptow-Köpenick", "12459": "Treptow-Köpenick",
+  "12487": "Treptow-Köpenick", "12489": "Treptow-Köpenick",
+  "12524": "Treptow-Köpenick", "12526": "Treptow-Köpenick", "12527": "Treptow-Köpenick",
+  "12555": "Treptow-Köpenick", "12557": "Treptow-Köpenick", "12559": "Treptow-Köpenick",
+  "12587": "Treptow-Köpenick", "12589": "Treptow-Köpenick",
+  "12619": "Marzahn-Hellersdorf", "12621": "Marzahn-Hellersdorf", "12623": "Marzahn-Hellersdorf",
+  "12627": "Marzahn-Hellersdorf", "12629": "Marzahn-Hellersdorf",
+  "12679": "Marzahn-Hellersdorf", "12681": "Marzahn-Hellersdorf", "12683": "Marzahn-Hellersdorf",
+  "12685": "Marzahn-Hellersdorf", "12687": "Marzahn-Hellersdorf", "12689": "Marzahn-Hellersdorf",
+  "13051": "Lichtenberg", "13053": "Lichtenberg", "13055": "Lichtenberg", "13057": "Lichtenberg", "13059": "Lichtenberg",
+  "13086": "Pankow", "13088": "Pankow", "13089": "Pankow",
+  "13125": "Pankow", "13127": "Pankow", "13129": "Pankow",
+  "13156": "Pankow", "13158": "Pankow", "13159": "Pankow",
+  "13187": "Pankow", "13189": "Pankow",
+  "13347": "Mitte", "13349": "Mitte", "13351": "Mitte", "13353": "Mitte", "13355": "Mitte", "13357": "Mitte", "13359": "Mitte",
+  "13403": "Reinickendorf", "13405": "Reinickendorf", "13407": "Reinickendorf", "13409": "Reinickendorf",
+  "13435": "Reinickendorf", "13437": "Reinickendorf", "13439": "Reinickendorf",
+  "13465": "Reinickendorf", "13467": "Reinickendorf", "13469": "Reinickendorf",
+  "13503": "Reinickendorf", "13505": "Reinickendorf", "13507": "Reinickendorf", "13509": "Reinickendorf",
+  "13581": "Spandau", "13583": "Spandau", "13585": "Spandau", "13587": "Spandau", "13589": "Spandau",
+  "13591": "Spandau", "13593": "Spandau", "13595": "Spandau",
+  "13597": "Spandau", "13599": "Spandau",
+  "13627": "Charlottenburg-Wilmersdorf", "13629": "Spandau",
+  "14050": "Charlottenburg-Wilmersdorf", "14052": "Charlottenburg-Wilmersdorf", "14053": "Charlottenburg-Wilmersdorf",
+  "14055": "Charlottenburg-Wilmersdorf", "14057": "Charlottenburg-Wilmersdorf", "14059": "Charlottenburg-Wilmersdorf",
+  "14089": "Spandau",
+  "14109": "Steglitz-Zehlendorf", "14129": "Steglitz-Zehlendorf",
+  "14163": "Steglitz-Zehlendorf", "14165": "Steglitz-Zehlendorf", "14167": "Steglitz-Zehlendorf", "14169": "Steglitz-Zehlendorf",
+  "14193": "Charlottenburg-Wilmersdorf", "14195": "Steglitz-Zehlendorf",
+  "14197": "Charlottenburg-Wilmersdorf", "14199": "Charlottenburg-Wilmersdorf",
+  "15569": "Treptow-Köpenick",
+};
+const BERLIN_DISTRICTS = [
+  "Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf",
+  "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Neukölln",
+  "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf",
+];
+function districtForAddress(address) {
+  const plz = extractPlz(address);
+  return plz ? (BERLIN_PLZ_DISTRICT[plz] || null) : null;
+}
+
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -664,6 +753,15 @@ function populateLeagueFilter(matches) {
   sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
 }
 
+// Fixed list of Berlin's 12 boroughs, not derived from the data like
+// the league filter is - a district is a real, stable geographic thing
+// whether or not this week's data happens to have a fixture in it, so
+// it doesn't need to grow/shrink with whatever's currently loaded.
+function populateDistrictFilter() {
+  const sel = document.getElementById('district-filter');
+  sel.innerHTML = '<option value="">All districts</option>' + BERLIN_DISTRICTS.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
 // Native browser autocomplete for the team search box via <datalist> -
 // no custom dropdown UI needed, the browser renders the suggestion list
 // itself as you type. Only downside is it can't be restyled to match
@@ -732,6 +830,7 @@ function render() {
   const main = document.getElementById('main');
   const hint = document.getElementById('postcode-hint');
   const leagueFilter = document.getElementById('league-filter').value;
+  const districtFilter = document.getElementById('district-filter').value;
   const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
   const sortMode = document.getElementById('sort-mode').value; // "" | "distance" | "time"
   const postcodeValue = document.getElementById('postcode-input').value.trim();
@@ -752,6 +851,15 @@ function render() {
       : datesInCurrentMonth().flatMap(d => allData[d] || []);
 
   let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
+  if (districtFilter) {
+    // Venue's district is derived from its own address (via the PLZ
+    // embedded in venue_address), not the club's official district if
+    // those ever differ - a fixture only counts as "in Neukölln" if
+    // it's actually being PLAYED there. A fixture whose venue address
+    // doesn't resolve to a known Berlin PLZ at all is excluded here
+    // rather than guessed into a district.
+    filtered = filtered.filter(m => districtForAddress(m.venue_address) === districtFilter);
+  }
   if (searchTerm) {
     filtered = filtered.filter(m =>
       m.home_team.toLowerCase().includes(searchTerm) ||
@@ -760,7 +868,11 @@ function render() {
   }
 
   if (!filtered.length) {
-    const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this selection.';
+    const msg = searchTerm
+      ? `No fixtures found for "${document.getElementById('team-search').value}".`
+      : districtFilter
+        ? `No fixtures found in ${districtFilter} for this selection.`
+        : 'No fixtures found for this selection.';
     main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
     return;
   }
@@ -837,6 +949,7 @@ function render() {
 
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
+  document.getElementById('district-filter').addEventListener('change', render);
   document.getElementById('team-search').addEventListener('input', render);
   document.getElementById('sort-mode').addEventListener('change', render);
   // Postcode is only numbers - restrict input as you type rather than
@@ -855,6 +968,7 @@ async function init() {
   // make someone retype it just for resetting everything else.
   document.getElementById('reset-filters').addEventListener('click', () => {
     document.getElementById('league-filter').value = '';
+    document.getElementById('district-filter').value = '';
     document.getElementById('team-search').value = '';
     document.getElementById('sort-mode').value = '';
     currentDate = null;
@@ -891,6 +1005,7 @@ async function init() {
   currentMonth = months[0];
   currentDate = null; // start on "All dates" within the first month, per the ask to see everything before narrowing
   populateLeagueFilter(Object.values(allData).flat());
+  populateDistrictFilter();
   populateTeamList(Object.values(allData).flat());
   renderAll();
 }
