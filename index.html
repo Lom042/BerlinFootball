@@ -137,58 +137,35 @@
   }
   .cal-nav:hover:not(:disabled) { border-color: var(--gold); color: var(--chalk); }
   .cal-nav:disabled { opacity: 0.25; cursor: default; }
-  .cal-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    color: var(--chalk-dim);
-    font-size: 11px;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-  }
-  .cal-cell {
-    aspect-ratio: 1;
+  /* Deliberately NOT a full month grid with blank cells for every day
+     that has nothing on - a real month, most days have no fixture at
+     all, so a 31-cell grid was mostly dead space. This is just the
+     handful of dates that actually have something, as a wrapping row of
+     chips - same underlying data (datesInCurrentMonth()), just not
+     padded out to match a calendar's day-of-week columns anymore. */
+  .cal-chips {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     justify-content: center;
+  }
+  .cal-chip {
+    font-family: 'Oswald', sans-serif;
     background: transparent;
-    border: 1px solid transparent;
-    border-radius: 8px;
+    border: 1px solid var(--line);
     color: var(--chalk-dim);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    cursor: default;
-    position: relative;
-  }
-  .cal-cell.cal-blank { visibility: hidden; }
-  .cal-cell.has-matches {
-    color: var(--chalk);
-    border-color: var(--line);
+    padding: 7px 12px;
+    border-radius: 999px;
     cursor: pointer;
-    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: all 0.15s ease;
   }
-  .cal-cell.has-matches::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-  .cal-cell.has-matches:hover { border-color: var(--gold); }
-  .cal-cell.today:not(.active) { border-color: var(--chalk-dim); }
-  .cal-cell.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--pitch-dark);
-  }
-  .cal-cell.active::after { background: var(--pitch-dark); }
+  .cal-chip:hover { border-color: var(--gold); color: var(--chalk); }
+  .cal-chip.today:not(.active) { border-color: var(--chalk-dim); border-style: dashed; }
+  .cal-chip.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .cal-empty-note { color: var(--chalk-dim); font-size: 13px; padding: 6px 0; }
   .cal-all-btn {
     display: block;
     width: 100%;
@@ -647,31 +624,31 @@ function datesInCurrentMonth() {
   return Object.keys(allData).filter(d => monthOf(d) === currentMonth).sort();
 }
 
+// Short "Sat 15" style label for a chip - keeps the weekday visible
+// even without a full grid of day-of-week columns around it.
+function fmtDayLabel(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
+}
+
 function renderCalendar() {
   const el = document.getElementById('calendar');
   const months = allMonths();
   const idx = months.indexOf(currentMonth);
   const prevMonth = idx > 0 ? months[idx - 1] : null;
   const nextMonth = idx < months.length - 1 ? months[idx + 1] : null;
-
-  const [y, m] = currentMonth.split('-').map(Number);
-  const firstWeekday = (new Date(y, m - 1, 1).getDay() + 6) % 7; // Monday = 0
-  const daysInMonth = new Date(y, m, 0).getDate();
   const today = todayIso();
 
-  let cells = '';
-  for (let i = 0; i < firstWeekday; i++) {
-    cells += `<div class="cal-cell cal-blank"></div>`;
-  }
-  for (let day = 1; day <= daysInMonth; day++) {
-    const iso = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const hasMatches = Boolean(allData[iso] && allData[iso].length);
-    const classes = ['cal-cell'];
-    if (hasMatches) classes.push('has-matches');
+  // Real fixture dates only - a typical month has ~30 days but usually
+  // only a handful with anything on, so padding out to every day of the
+  // month (like an actual wall calendar would) was mostly empty cells.
+  const activeDates = datesInCurrentMonth();
+  const chips = activeDates.map(iso => {
+    const classes = ['cal-chip'];
     if (iso === today) classes.push('today');
     if (iso === currentDate) classes.push('active');
-    cells += `<button type="button" class="${classes.join(' ')}"${hasMatches ? ` data-date="${iso}"` : ' disabled'}>${day}</button>`;
-  }
+    return `<button type="button" class="${classes.join(' ')}" data-date="${iso}">${fmtDayLabel(iso)}</button>`;
+  }).join('');
 
   el.innerHTML = `
     <div class="cal-header">
@@ -679,15 +656,14 @@ function renderCalendar() {
       <span class="cal-title">${fmtMonthLabel(currentMonth)}</span>
       <button type="button" class="cal-nav" id="cal-next"${nextMonth ? '' : ' disabled'}>›</button>
     </div>
-    <div class="cal-weekdays">${['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(d => `<span>${d}</span>`).join('')}</div>
-    <div class="cal-grid">${cells}</div>
+    <div class="cal-chips">${chips || '<div class="cal-empty-note">No fixtures found this month.</div>'}</div>
     <button type="button" class="cal-all-btn${currentDate === null ? ' active' : ''}" id="cal-all">Show all fixtures this month</button>
   `;
 
   if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; currentDate = null; renderAll(); };
   if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; currentDate = null; renderAll(); };
   el.querySelector('#cal-all').onclick = () => { currentDate = null; renderAll(); };
-  el.querySelectorAll('.cal-cell.has-matches').forEach(btn => {
+  el.querySelectorAll('.cal-chip').forEach(btn => {
     btn.onclick = () => { currentDate = btn.dataset.date; renderAll(); };
   });
 }
