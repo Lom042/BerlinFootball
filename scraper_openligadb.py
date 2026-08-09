@@ -57,6 +57,20 @@ VENUE_ADDRESSES = {
     "Stadion An der Alten Försterei": "Hämmerlingstraße 61, 12559 Berlin",
 }
 
+# FALLBACK for when OpenLigaDB's own `location` field is empty entirely
+# (common for fixtures further out - the API just hasn't had a venue
+# entered yet), so VENUE_ADDRESSES above never even gets a stadium name
+# to look up. Real gap found via a live fixture (Hertha BSC vs 1. FC
+# Heidenheim showing no venue at all). Safe to hardcode here rather than
+# leave blank: unlike a cup tie or a ground-share situation, Hertha BSC
+# and 1. FC Union Berlin each play EVERY home league match at their own
+# fixed stadium - there's no real ambiguity about where either club
+# actually plays, so this isn't a guess. Keyed by home club name.
+VENUE_BY_HOME_CLUB = {
+    "Hertha BSC": ("Olympiastadion Berlin", "Olympischer Platz 3, 14053 Berlin"),
+    "1. FC Union Berlin": ("Stadion An der Alten Försterei", "Hämmerlingstraße 61, 12559 Berlin"),
+}
+
 # Official club websites (NOT the API, not a third-party site) - so fans
 # can find ticket info straight from the source. Same lookup approach as
 # scraper_fussballde.py, just the two clubs likely to actually appear
@@ -119,6 +133,12 @@ def normalize(match, league):
     kickoff = match.get("matchDateTime")  # ISO string
     location = match.get("location") or {}
     venue = location.get("locationStadium") or location.get("locationCity") or ""
+    venue_address = VENUE_ADDRESSES.get(venue, "")
+    if not venue_address:
+        for club, (v, addr) in VENUE_BY_HOME_CLUB.items():
+            if club in home:
+                venue, venue_address = v, addr
+                break
     group = match.get("group") or {}
     return {
         "date": kickoff.split("T")[0] if kickoff else None,
@@ -131,7 +151,7 @@ def normalize(match, league):
         "matchday": group.get("groupName", ""),
         "finished": bool(match.get("matchIsFinished")),
         "venue": venue,
-        "venue_address": VENUE_ADDRESSES.get(venue, ""),
+        "venue_address": venue_address,
         "home_team_website": get_club_website(home),
         "away_team_website": get_club_website(away),
         "source": "openligadb",
