@@ -255,6 +255,7 @@ VENUE_ADDRESSES_BY_CLUB = {
     "Füchse Berlin Reinickendorf": ("Stadion Reinickendorf", "Egellsstraße, 13407 Berlin"),
     "SC Staaken": ("Stadion Staaken", "Reimerweg 30, 13593 Berlin"),
     "Blau-Weiss 90 Berlin": ("Poststadion Nebenplatz", "Rathenower Str. 42, 10559 Berlin"),
+    "Blau Weiß 1890 Berlin": ("Poststadion Nebenplatz", "Rathenower Str. 42, 10559 Berlin"),
     "SC Charlottenburg": ("Mommsenstadion", "Waldschulallee 34, 14055 Berlin"),
     "Türkiyemspor Berlin": ("Stadion Rathenower Straße", "Rathenower Str. 42, 10559 Berlin"),
     "TSV Mariendorf 1897": ("Sportplatz Mariendorf", "Motzener Straße 20, 12277 Berlin"),
@@ -295,6 +296,13 @@ CLUB_WEBSITES = {
     "SV Sparta Lichtenberg": "https://sv-sparta.de/",
     "Füchse Berlin Reinickendorf": "https://www.fuechse-berlin-reinickendorf.de/",
     "Blau-Weiss 90 Berlin": "https://www.blauweiss90berlin.de/",
+    # Same club, fussball.de's own formal name for it - "Blau-Weiss 90"
+    # is the common/hand-typed name used in known_clubs above, but the
+    # scraper pulls team names straight off fussball.de, which lists
+    # this one under its full registered name instead. Real gap found
+    # via a live fixture ("Sp.Vg. Blau Weiß 1890 Berlin" showing no
+    # club link) - both keys point at the same site.
+    "Blau Weiß 1890 Berlin": "https://www.blauweiss90berlin.de/",
     "1. FC Wilmersdorf": "https://fcwilmersdorf.de/",
     "SC Charlottenburg": "https://www.scc-berlin-fussball.de/",
     "Spandauer Kickers": "https://www.spaki-berlin.de/",
@@ -603,9 +611,25 @@ def write_fixtures(all_fixtures):
     # filter) but no longer does never gets revisited, and its stale
     # fussballde entry sits in the file forever - same bug class as
     # scraper_openligadb.py had, fixed the same way here.
+    #
+    # REAL BUG FOUND (user report - "played games still show up"): this
+    # function was reconciling every candidate date except it never
+    # actually dropped ones already in the past - scraper_openligadb.py
+    # already had a `if d < today_iso: continue` guard for exactly this
+    # reason, this file just never got the same guard. Fixed by adding
+    # it here too, so a date that's already happened gets its file
+    # removed (via the `elif os.path.exists(path): os.remove(path)`
+    # branch below, since it's skipped before ever landing in `written`)
+    # on the next run after it passes, same as openligadb.
+    today_iso = date.today().isoformat()
     candidate_dates = sorted(set(existing_index) | set(by_date))
     written = []
     for d in candidate_dates:
+        if d < today_iso:
+            path = os.path.join(DATA_DIR, f"{d}.json")
+            if os.path.exists(path):
+                os.remove(path)
+            continue
         path = os.path.join(DATA_DIR, f"{d}.json")
         existing = []
         if os.path.exists(path):
