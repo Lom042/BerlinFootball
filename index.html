@@ -650,6 +650,14 @@ async function init() {
     document.getElementById('league-filter').value = '';
     document.getElementById('team-search').value = '';
     currentDate = null;
+    // Jump back to the CURRENT calendar month specifically, not just
+    // "whatever month you happened to be on" - a reset should feel like
+    // starting over, and starting over means today, not wherever you'd
+    // navigated to. Falls back to the earliest month with any fixtures
+    // if the current month itself has none (e.g. between seasons).
+    const months = allMonths();
+    const thisMonth = monthOf(todayIso());
+    currentMonth = months.includes(thisMonth) ? thisMonth : months[0];
     renderAll();
   });
 
