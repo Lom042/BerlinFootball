@@ -66,6 +66,12 @@
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
+    /* Without this, flexbox's default align-items: stretch forces the
+       <select> to match the calendar card's height next to it - which
+       is exactly what made it render as a huge oversized box instead of
+       a normal dropdown. Top-align everything at its own natural size
+       instead. */
+    align-items: flex-start;
   }
   /* Calendar: replaces the old two-row "month pills / date pills" nav -
      same underlying data (allMonths() / allData), just presented as an
