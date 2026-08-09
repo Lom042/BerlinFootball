@@ -66,19 +66,35 @@
     font-size: 12px;
     opacity: 0.75;
   }
-  .controls {
-    max-width: 900px;
-    margin: 20px auto 0;
-    padding: 0 20px;
+  /* Everything that controls WHAT you see (calendar, league, search,
+     postcode, sort) lives inside one bordered card now, instead of
+     several independent flex rows each centered on their own within a
+     900px-wide band. That old layout looked fine on a narrow phone
+     screen (where everything's forced into one column anyway by lack
+     of width), but on a real desktop window it left the calendar and
+     the league dropdown as two small, disconnected boxes floating a
+     long way apart in a lot of empty striped background - genuinely
+     sparse, not "spacious." One grounded panel reads as a single
+     deliberate thing at any screen width instead. */
+  .filters-card {
+    width: calc(100% - 40px);
+    max-width: 460px;
+    margin: 24px auto 0;
+    padding: 22px 22px 24px;
+    background: rgba(244,242,234,0.05);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .controls, .search-row {
+    width: 100%;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
-    /* Without this, flexbox's default align-items: stretch forces the
-       <select> to match the calendar card's height next to it - which
-       is exactly what made it render as a huge oversized box instead of
-       a normal dropdown. Top-align everything at its own natural size
-       instead. */
     align-items: flex-start;
   }
   /* Calendar: replaces the old two-row "month pills / date pills" nav -
@@ -89,7 +105,7 @@
   .calendar {
     width: 280px;
     max-width: 100%;
-    background: rgba(244,242,234,0.04);
+    background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 14px 16px 16px;
@@ -212,16 +228,8 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
   }
-  .search-row {
-    max-width: 900px;
-    margin: 16px auto 0;
-    padding: 0 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  #team-search {
+  #league-filter, #sort-mode { flex: 1 1 140px; max-width: 100%; }
+  #team-search, #postcode-input {
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     color: var(--chalk);
@@ -229,31 +237,18 @@
     border-radius: 999px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    width: 220px;
-    max-width: 60vw;
+    flex: 1 1 140px;
+    min-width: 0;
   }
-  #team-search::placeholder { color: var(--chalk-dim); }
+  #team-search::placeholder, #postcode-input::placeholder { color: var(--chalk-dim); }
   .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
-  #postcode-input {
-    background: rgba(244,242,234,0.06);
-    border: 1px solid var(--line);
-    color: var(--chalk);
-    padding: 9px 16px;
-    border-radius: 999px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    width: 180px;
-    max-width: 50vw;
-  }
-  #postcode-input::placeholder { color: var(--chalk-dim); }
   .postcode-hint {
-    max-width: 900px;
-    margin: 6px auto 0;
-    padding: 0 20px;
+    width: 100%;
     text-align: center;
     color: var(--gold);
     font-size: 12px;
     min-height: 14px;
+    margin: -4px 0 0;
   }
 
   main {
@@ -384,26 +379,28 @@
   <p class="scope">Men's league football only, for now — women's fixtures aren't covered yet.</p>
 </header>
 
-<div class="controls">
-  <div class="calendar" id="calendar"></div>
-  <select id="league-filter">
-    <option value="">All divisions</option>
-  </select>
+<div class="filters-card">
+  <div class="controls">
+    <div class="calendar" id="calendar"></div>
+    <select id="league-filter">
+      <option value="">All divisions</option>
+    </select>
+  </div>
+  <div class="search-row">
+    <input id="team-search" type="text" placeholder="Search team…" autocomplete="off" list="team-list">
+    <datalist id="team-list"></datalist>
+    <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
+  </div>
+  <div class="search-row">
+    <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
+    <select id="sort-mode">
+      <option value="">Sort: date</option>
+      <option value="distance">Sort: closest to me</option>
+      <option value="time">Sort: kick-off time</option>
+    </select>
+  </div>
+  <p class="postcode-hint" id="postcode-hint"></p>
 </div>
-<div class="search-row">
-  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off" list="team-list">
-  <datalist id="team-list"></datalist>
-  <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
-</div>
-<div class="search-row">
-  <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
-  <select id="sort-mode">
-    <option value="">Sort: date</option>
-    <option value="distance">Sort: closest to me</option>
-    <option value="time">Sort: kick-off time</option>
-  </select>
-</div>
-<p class="postcode-hint" id="postcode-hint"></p>
 
 <main id="main">
   <div class="empty">Loading fixtures…</div>
