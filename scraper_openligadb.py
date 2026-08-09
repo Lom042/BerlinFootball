@@ -57,6 +57,22 @@ VENUE_ADDRESSES = {
     "Stadion An der Alten Försterei": "Hämmerlingstraße 61, 12559 Berlin",
 }
 
+# Official club websites (NOT the API, not a third-party site) - so fans
+# can find ticket info straight from the source. Same lookup approach as
+# scraper_fussballde.py, just the two clubs likely to actually appear
+# here. Keyed by substring match against the API's team name.
+CLUB_WEBSITES = {
+    "Hertha BSC": "https://www.herthabsc.com",
+    "Union Berlin": "https://www.fc-union-berlin.de",
+}
+
+
+def get_club_website(team_name):
+    for club, url in CLUB_WEBSITES.items():
+        if club in team_name:
+            return url
+    return ""
+
 DEBUG = "--debug" in sys.argv
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
@@ -116,6 +132,8 @@ def normalize(match, league):
         "finished": bool(match.get("matchIsFinished")),
         "venue": venue,
         "venue_address": VENUE_ADDRESSES.get(venue, ""),
+        "home_team_website": get_club_website(home),
+        "away_team_website": get_club_website(away),
         "source": "openligadb",
     }
 
