@@ -52,16 +52,13 @@
     margin-top: 8px;
     font-size: 14px;
   }
-  /* Everything that controls WHAT you see (calendar, league, search,
-     postcode, sort) lives inside one bordered card now, instead of
-     several independent flex rows each centered on their own within a
-     900px-wide band. That old layout looked fine on a narrow phone
-     screen (where everything's forced into one column anyway by lack
-     of width), but on a real desktop window it left the calendar and
-     the league dropdown as two small, disconnected boxes floating a
-     long way apart in a lot of empty striped background - genuinely
-     sparse, not "spacious." One grounded panel reads as a single
-     deliberate thing at any screen width instead. */
+  /* Everything that controls WHAT you see (calendar, league, district,
+     team, postcode, sort) lives inside one bordered card, stacked as
+     full-width blocks rather than a cramped side-by-side row - once
+     league/district/team became multi-select chip groups (each capable
+     of wrapping onto several lines as you pick more than one), squeezing
+     them next to the calendar in one flex row got messy fast. Stacking
+     keeps every group readable at any screen width. */
   .filters-card {
     width: calc(100% - 40px);
     max-width: 460px;
@@ -75,7 +72,7 @@
     align-items: center;
     gap: 14px;
   }
-  .controls, .search-row {
+  .search-row {
     width: 100%;
     display: flex;
     gap: 10px;
@@ -83,14 +80,18 @@
     justify-content: center;
     align-items: flex-start;
   }
-  /* Calendar: replaces the old two-row "month pills / date pills" nav -
-     same underlying data (allMonths() / allData), just presented as an
-     actual month grid instead of a growing horizontal list of buttons,
-     which used to run out of room and wrap awkwardly once a season's
-     worth of dates was in play. */
-  .calendar {
-    width: 280px;
-    max-width: 100%;
+  /* Calendar, and the league/district/team filter groups below it, all
+     share the same "bordered box, wrapping row of chips" shape - .chip-
+     group is basically the same box as .calendar, minus the month-nav
+     header. Chips themselves (.chip) are shared by all four filters:
+     dates, leagues, districts, and teams all look and behave the same
+     way - click a chip to toggle it on or off. Every one of these is
+     MULTI-select now (you can pick more than one date, league, district,
+     or team at once), and each one narrows what the OTHERS offer - see
+     matchesFilters() in the script below for how that mutual narrowing
+     actually works. */
+  .calendar, .chip-group {
+    width: 100%;
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     border-radius: 12px;
@@ -123,19 +124,27 @@
   }
   .cal-nav:hover:not(:disabled) { border-color: var(--gold); color: var(--chalk); }
   .cal-nav:disabled { opacity: 0.25; cursor: default; }
+  .filter-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    margin-bottom: 10px;
+  }
   /* Deliberately NOT a full month grid with blank cells for every day
      that has nothing on - a real month, most days have no fixture at
      all, so a 31-cell grid was mostly dead space. This is just the
-     handful of dates that actually have something, as a wrapping row of
-     chips - same underlying data (datesInCurrentMonth()), just not
-     padded out to match a calendar's day-of-week columns anymore. */
-  .cal-chips {
+     handful of dates that actually have something AND are still
+     consistent with whatever league/district/team is currently
+     selected, as a wrapping row of chips. */
+  .chip-row {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     justify-content: center;
   }
-  .cal-chip {
+  .chip {
     font-family: 'Oswald', sans-serif;
     background: transparent;
     border: 1px solid var(--line);
@@ -148,11 +157,11 @@
     letter-spacing: 0.5px;
     transition: all 0.15s ease;
   }
-  .cal-chip:hover { border-color: var(--gold); color: var(--chalk); }
-  .cal-chip.today:not(.active) { border-color: var(--chalk-dim); border-style: dashed; }
-  .cal-chip.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
-  .cal-empty-note { color: var(--chalk-dim); font-size: 13px; padding: 6px 0; }
-  .cal-all-btn {
+  .chip:hover { border-color: var(--gold); color: var(--chalk); }
+  .chip.today:not(.active) { border-color: var(--chalk-dim); border-style: dashed; }
+  .chip.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .chip-empty-note { color: var(--chalk-dim); font-size: 13px; padding: 6px 0; }
+  .chip-clear-btn {
     display: block;
     width: 100%;
     margin-top: 12px;
@@ -166,8 +175,8 @@
     font-size: 13px;
     transition: all 0.15s ease;
   }
-  .cal-all-btn:hover { border-color: var(--gold); color: var(--chalk); }
-  .cal-all-btn.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .chip-clear-btn:hover { border-color: var(--gold); color: var(--chalk); }
+  .chip-clear-btn.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
 
   .reset-btn {
     background: transparent;
@@ -191,8 +200,8 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
   }
-  #league-filter, #district-filter, #sort-mode { flex: 1 1 140px; max-width: 100%; }
-  #team-search, #postcode-input {
+  #sort-mode { flex: 1 1 140px; max-width: 100%; }
+  #team-search-input, #postcode-input {
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     color: var(--chalk);
@@ -203,7 +212,8 @@
     flex: 1 1 140px;
     min-width: 0;
   }
-  #team-search::placeholder, #postcode-input::placeholder { color: var(--chalk-dim); }
+  #team-search-input { width: 100%; margin-top: 4px; }
+  #team-search-input::placeholder, #postcode-input::placeholder { color: var(--chalk-dim); }
   .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
   .postcode-hint {
     width: 100%;
@@ -224,12 +234,13 @@
      the league identity travels WITH its matches (label right above the
      team rows it belongs to) rather than as a separate badge floating
      off to the side, disconnected from the teams it describes. */
-  /* When multiple dates are shown together (the "All dates" pill, or a
-     team search - which can match fixtures on any date), fixtures are
-     grouped under a date heading first, then by league within that date
-     - so the sort hierarchy is genuinely date > league > team, not
-     league-across-all-dates. A single selected date has only one date
-     in play already, so it skips straight to the league groups below. */
+  /* When multiple dates end up in view at once (no single date picked,
+     or more than one date picked, or a league/district/team filter that
+     matches fixtures spanning several dates), fixtures are grouped under
+     a date heading first, then by league within that date - so the sort
+     hierarchy is genuinely date > league > team, not league-across-all-
+     dates. Results that land on exactly one date skip straight to the
+     league groups below, no redundant single date heading. */
   .date-heading {
     font-family: 'Oswald', sans-serif;
     font-size: 15px;
@@ -341,20 +352,10 @@
 </header>
 
 <div class="filters-card">
-  <div class="controls">
-    <div class="calendar" id="calendar"></div>
-    <select id="league-filter">
-      <option value="">All divisions</option>
-    </select>
-    <select id="district-filter">
-      <option value="">All districts</option>
-    </select>
-  </div>
-  <div class="search-row">
-    <input id="team-search" type="text" placeholder="Search team…" autocomplete="off" list="team-list">
-    <datalist id="team-list"></datalist>
-    <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
-  </div>
+  <div class="calendar" id="calendar"></div>
+  <div class="chip-group" id="league-filter"></div>
+  <div class="chip-group" id="district-filter"></div>
+  <div class="chip-group" id="team-filter"></div>
   <div class="search-row">
     <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
     <select id="sort-mode">
@@ -363,6 +364,7 @@
       <option value="time">Sort: kick-off time</option>
     </select>
   </div>
+  <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
   <p class="postcode-hint" id="postcode-hint"></p>
 </div>
 
@@ -414,8 +416,14 @@ const DEMO_DATA = {
 };
 
 let allData = {};
-let currentMonth = null;   // "YYYY-MM"
-let currentDate = null;    // "YYYY-MM-DD", or null meaning "every date in currentMonth"
+let currentMonth = null;        // "YYYY-MM" - which month's dates the calendar box is currently showing
+let selectedDates = new Set();  // "YYYY-MM-DD" - zero or more specific dates picked
+let selectedLeagues = new Set();
+let selectedDistricts = new Set();
+let selectedTeams = new Set();
+let teamSearchText = '';        // text currently typed into the "search team to add" box - only
+                                 // narrows the SUGGESTION chips shown, doesn't filter fixtures
+                                 // itself until you actually click a suggestion to add it
 
 // No real club crests are used here (they're trademarked) — instead we
 // generate a simple colored monogram per team from its initials.
@@ -683,18 +691,36 @@ function distanceFromPostcode(postcodeValue, venueAddress) {
   return haversineKm(from[0], from[1], to[0], to[1]);
 }
 
-// Two-level nav: pick a MONTH first (via the ‹ › arrows), then
-// optionally narrow to one DATE within it by clicking a day that has a
-// gold dot on it ("show all fixtures this month" stays available below
-// the grid so you can see everything before narrowing down). The
-// calendar gets fully rebuilt on every click (not just the match list)
-// - that's what keeps the "active"/"today" highlighting in sync with
-// whatever's actually selected, instead of freezing on first render.
 function allMonths() {
   return [...new Set(Object.keys(allData).map(monthOf))].sort();
 }
 function datesInCurrentMonth() {
   return Object.keys(allData).filter(d => monthOf(d) === currentMonth).sort();
+}
+function allMatches() {
+  return Object.values(allData).flat();
+}
+
+// Every filter control (date calendar, league, district, team) can now
+// have MULTIPLE values selected at once, and each one narrows what the
+// OTHER controls offer: picking a date only shows leagues/districts/
+// teams that actually have a fixture on that date; picking a league
+// only shows dates/districts/teams with a fixture in that league; and
+// so on. This is the single source of truth for "does this fixture
+// satisfy everything currently selected" - every chip-rendering
+// function below calls it with ONE dimension excluded (its own), so it
+// can work out "what would still match if I ignore my own filter" to
+// decide which of its own options to offer, while every OTHER active
+// filter still narrows it.
+function matchesFilters(m, exclude = {}) {
+  if (!exclude.date && selectedDates.size && !selectedDates.has(m.date)) return false;
+  if (!exclude.league && selectedLeagues.size && !selectedLeagues.has(m.league)) return false;
+  if (!exclude.district && selectedDistricts.size) {
+    const d = districtForAddress(m.venue_address);
+    if (!d || !selectedDistricts.has(d)) return false;
+  }
+  if (!exclude.team && selectedTeams.size && !selectedTeams.has(m.home_team) && !selectedTeams.has(m.away_team)) return false;
+  return true;
 }
 
 // Short "Sat 15" style label for a chip - keeps the weekday visible
@@ -712,14 +738,23 @@ function renderCalendar() {
   const nextMonth = idx < months.length - 1 ? months[idx + 1] : null;
   const today = todayIso();
 
-  // Real fixture dates only - a typical month has ~30 days but usually
-  // only a handful with anything on, so padding out to every day of the
-  // month (like an actual wall calendar would) was mostly empty cells.
-  const activeDates = datesInCurrentMonth();
+  // Only dates that (a) fall in the month currently being browsed AND
+  // (b) still have a fixture matching whatever league/district/team is
+  // currently selected - narrowed by the OTHER filters, per the note
+  // above matchesFilters(). Any date already picked stays visible and
+  // removable even if a later filter choice would otherwise hide it -
+  // so you're never left with a selected chip you can't get back to in
+  // order to deselect it.
+  const matchingThisMonth = new Set(
+    allMatches().filter(m => monthOf(m.date) === currentMonth && matchesFilters(m, { date: true })).map(m => m.date)
+  );
+  const keptSelected = datesInCurrentMonth().filter(d => selectedDates.has(d));
+  const activeDates = [...new Set([...matchingThisMonth, ...keptSelected])].sort();
+
   const chips = activeDates.map(iso => {
-    const classes = ['cal-chip'];
+    const classes = ['chip'];
     if (iso === today) classes.push('today');
-    if (iso === currentDate) classes.push('active');
+    if (selectedDates.has(iso)) classes.push('active');
     return `<button type="button" class="${classes.join(' ')}" data-date="${iso}">${fmtDayLabel(iso)}</button>`;
   }).join('');
 
@@ -729,47 +764,152 @@ function renderCalendar() {
       <span class="cal-title">${fmtMonthLabel(currentMonth)}</span>
       <button type="button" class="cal-nav" id="cal-next"${nextMonth ? '' : ' disabled'}>›</button>
     </div>
-    <div class="cal-chips">${chips || '<div class="cal-empty-note">No fixtures found this month.</div>'}</div>
-    <button type="button" class="cal-all-btn${currentDate === null ? ' active' : ''}" id="cal-all">Show all fixtures this month</button>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No fixtures match your other filters this month.</div>'}</div>
+    <button type="button" class="chip-clear-btn${selectedDates.size === 0 ? ' active' : ''}" id="cal-all">Clear date selection</button>
   `;
 
-  if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; currentDate = null; renderAll(); };
-  if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; currentDate = null; renderAll(); };
-  el.querySelector('#cal-all').onclick = () => { currentDate = null; renderAll(); };
-  el.querySelectorAll('.cal-chip').forEach(btn => {
-    btn.onclick = () => { currentDate = btn.dataset.date; renderAll(); };
+  if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; renderAll(); };
+  if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; renderAll(); };
+  el.querySelector('#cal-all').onclick = () => { selectedDates.clear(); renderAll(); };
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const d = btn.dataset.date;
+      if (selectedDates.has(d)) selectedDates.delete(d); else selectedDates.add(d);
+      renderAll();
+    };
   });
+}
+
+// League chip group - same multi-select/mutual-narrowing pattern as the
+// calendar above, just for league instead of date. Options are drawn
+// from the data itself (whatever leagues actually appear), sorted by
+// real tier rather than alphabetically, same as the old dropdown was.
+function renderLeagueChips() {
+  const el = document.getElementById('league-filter');
+  const matching = new Set(allMatches().filter(m => matchesFilters(m, { league: true })).map(m => m.league));
+  const leagues = [...new Set([...matching, ...selectedLeagues])]
+    .sort((a, b) => tierOf({ league: a }) - tierOf({ league: b }));
+  const chips = leagues.map(l => {
+    const classes = ['chip'];
+    if (selectedLeagues.has(l)) classes.push('active');
+    return `<button type="button" class="${classes.join(' ')}" data-league="${l}">${l}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="filter-label">League</div>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No leagues match your other filters.</div>'}</div>
+  `;
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const l = btn.dataset.league;
+      if (selectedLeagues.has(l)) selectedLeagues.delete(l); else selectedLeagues.add(l);
+      renderAll();
+    };
+  });
+}
+
+// District chip group - the universe of possible options is the fixed
+// 12-borough list (BERLIN_DISTRICTS), not derived from the data like
+// league is, since a district is a real stable place whether or not
+// this week's data happens to have a fixture in it. Narrowing still
+// applies on top: only districts that currently have a matching
+// fixture (or are already selected) get a chip at all.
+function renderDistrictChips() {
+  const el = document.getElementById('district-filter');
+  const matching = new Set(
+    allMatches().filter(m => matchesFilters(m, { district: true }))
+      .map(m => districtForAddress(m.venue_address))
+      .filter(Boolean)
+  );
+  const districts = BERLIN_DISTRICTS.filter(d => matching.has(d) || selectedDistricts.has(d));
+  const chips = districts.map(d => {
+    const classes = ['chip'];
+    if (selectedDistricts.has(d)) classes.push('active');
+    return `<button type="button" class="${classes.join(' ')}" data-district="${d}">${d}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="filter-label">District</div>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No districts match your other filters.</div>'}</div>
+  `;
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const d = btn.dataset.district;
+      if (selectedDistricts.has(d)) selectedDistricts.delete(d); else selectedDistricts.add(d);
+      renderAll();
+    };
+  });
+}
+
+// Team chip group - unlike league/district (small, near-fixed lists),
+// there are potentially hundreds of clubs across all seven tiers, so
+// showing every eligible team as a chip all the time would be a wall
+// of buttons. Instead: already-selected teams always show as removable
+// chips up top; below that, a plain text box narrows a short suggestion
+// list (max 8) as you type, and clicking a suggestion adds it to the
+// selection. Typing itself never filters the fixture list directly -
+// only an actual click (an exact team added to selectedTeams) does -
+// that's what makes "two teams at once" possible in the first place.
+function renderTeamChips() {
+  const el = document.getElementById('team-filter');
+  const typed = teamSearchText.trim().toLowerCase();
+
+  const matchingTeams = new Set(
+    allMatches().filter(m => matchesFilters(m, { team: true })).flatMap(m => [m.home_team, m.away_team])
+  );
+
+  const selectedChips = [...selectedTeams].sort().map(t =>
+    `<button type="button" class="chip active" data-team="${t}">${t} ×</button>`
+  ).join('');
+
+  let suggestionsHtml = '';
+  if (typed) {
+    const suggestions = [...matchingTeams]
+      .filter(t => !selectedTeams.has(t) && t.toLowerCase().includes(typed))
+      .sort()
+      .slice(0, 8);
+    suggestionsHtml = `<div class="chip-row">${
+      suggestions.length
+        ? suggestions.map(t => `<button type="button" class="chip" data-team="${t}">${t}</button>`).join('')
+        : '<div class="chip-empty-note">No matching teams.</div>'
+    }</div>`;
+  }
+
+  el.innerHTML = `
+    <div class="filter-label">Team</div>
+    ${selectedChips ? `<div class="chip-row">${selectedChips}</div>` : ''}
+    <input id="team-search-input" type="text" placeholder="Search team to add…" autocomplete="off" value="${teamSearchText.replace(/"/g, '&quot;')}">
+    ${suggestionsHtml}
+  `;
+
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const t = btn.dataset.team;
+      if (selectedTeams.has(t)) selectedTeams.delete(t); else selectedTeams.add(t);
+      teamSearchText = '';
+      renderAll();
+    };
+  });
+
+  const input = el.querySelector('#team-search-input');
+  input.addEventListener('input', (e) => {
+    teamSearchText = e.target.value;
+    // Only this widget needs to redraw for a keystroke - typing narrows
+    // suggestions, it doesn't change any actual selection, so the
+    // calendar/league/district chips and the match list below are
+    // untouched until a suggestion is actually clicked.
+    renderTeamChips();
+  });
+  if (teamSearchText) {
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
 }
 
 function renderAll() {
   renderCalendar();
+  renderLeagueChips();
+  renderDistrictChips();
+  renderTeamChips();
   render();
-}
-
-function populateLeagueFilter(matches) {
-  const sel = document.getElementById('league-filter');
-  const leagues = [...new Set(matches.map(m => m.league))]
-    .sort((a, b) => tierOf({ league: a }) - tierOf({ league: b }));
-  sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
-}
-
-// Fixed list of Berlin's 12 boroughs, not derived from the data like
-// the league filter is - a district is a real, stable geographic thing
-// whether or not this week's data happens to have a fixture in it, so
-// it doesn't need to grow/shrink with whatever's currently loaded.
-function populateDistrictFilter() {
-  const sel = document.getElementById('district-filter');
-  sel.innerHTML = '<option value="">All districts</option>' + BERLIN_DISTRICTS.map(d => `<option value="${d}">${d}</option>`).join('');
-}
-
-// Native browser autocomplete for the team search box via <datalist> -
-// no custom dropdown UI needed, the browser renders the suggestion list
-// itself as you type. Only downside is it can't be restyled to match
-// the pitch theme, but it's free, accessible, and works on mobile too.
-function populateTeamList(matches) {
-  const dl = document.getElementById('team-list');
-  const teams = [...new Set(matches.flatMap(m => [m.home_team, m.away_team]))].sort();
-  dl.innerHTML = teams.map(t => `<option value="${t}"></option>`).join('');
 }
 
 // Flat ranked list for "closest to me" / "kick-off time" sort modes -
@@ -826,79 +966,54 @@ function renderFlatSorted(matches, mode, postcodeValue, hint) {
   }).join('');
 }
 
+// Everything currently selected across ALL FOUR filters (date, league,
+// district, team) at once - matchesFilters() (above) is the single
+// place that combines them, the same helper the chip-rendering
+// functions use to narrow each other. "Scope" below is a separate,
+// smaller decision: with nothing at all selected, keep the existing
+// "browse one month at a time" behaviour rather than dumping the whole
+// dataset; but the moment ANY filter is active (a date, a league, a
+// district, or a team), search across everything, so a choice on (say)
+// a team doesn't silently miss fixtures outside whatever month happens
+// to be currently browsed.
+function currentlyVisibleMatches() {
+  const anyFilterActive = selectedDates.size || selectedLeagues.size || selectedDistricts.size || selectedTeams.size;
+  const scope = anyFilterActive ? allMatches() : datesInCurrentMonth().flatMap(d => allData[d] || []);
+  return scope.filter(m => matchesFilters(m));
+}
+
 function render() {
   const main = document.getElementById('main');
   const hint = document.getElementById('postcode-hint');
-  const leagueFilter = document.getElementById('league-filter').value;
-  const districtFilter = document.getElementById('district-filter').value;
-  const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
   const sortMode = document.getElementById('sort-mode').value; // "" | "distance" | "time"
   const postcodeValue = document.getElementById('postcode-input').value.trim();
   hint.textContent = '';
 
-  // If searching by team, look across ALL dates, not just the selected
-  // month/date - otherwise a search would silently show nothing outside
-  // whatever's currently picked. Otherwise: a specific date if one's
-  // selected, or every date in the current month if "All dates" is picked.
-  // A distance/time sort (below) reuses whichever of those pools is
-  // already in play - it doesn't widen or narrow the date range itself,
-  // it just changes how the result gets grouped/ordered afterwards.
-  const showingMultipleDates = Boolean(searchTerm) || currentDate === null;
-  const pool = searchTerm
-    ? Object.values(allData).flat()
-    : currentDate
-      ? (allData[currentDate] || [])
-      : datesInCurrentMonth().flatMap(d => allData[d] || []);
-
-  let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
-  if (districtFilter) {
-    // Venue's district is derived from its own address (via the PLZ
-    // embedded in venue_address), not the club's official district if
-    // those ever differ - a fixture only counts as "in Neukölln" if
-    // it's actually being PLAYED there. A fixture whose venue address
-    // doesn't resolve to a known Berlin PLZ at all is excluded here
-    // rather than guessed into a district.
-    filtered = filtered.filter(m => districtForAddress(m.venue_address) === districtFilter);
-  }
-  if (searchTerm) {
-    filtered = filtered.filter(m =>
-      m.home_team.toLowerCase().includes(searchTerm) ||
-      m.away_team.toLowerCase().includes(searchTerm)
-    );
-  }
+  const filtered = currentlyVisibleMatches();
 
   if (!filtered.length) {
-    const msg = searchTerm
-      ? `No fixtures found for "${document.getElementById('team-search').value}".`
-      : districtFilter
-        ? `No fixtures found in ${districtFilter} for this selection.`
-        : 'No fixtures found for this selection.';
-    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
+    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixtures found for this combination of filters.</div>`;
     return;
   }
 
   // "Closest to me" / "kick-off time" are flat ranked lists across
-  // whatever's currently in view (the month/date + league/search
-  // filters above still apply) - deliberately NOT grouped by date or
-  // league on top of that, since a genuine distance or time ranking
-  // spanning several dates wouldn't make sense chopped up by date
-  // headings first. Plain "date" mode below keeps the existing
-  // date > league > team grouping untouched.
+  // whatever's currently in view (every filter above still applies) -
+  // deliberately NOT grouped by date or league on top of that, since a
+  // genuine distance or time ranking spanning several dates wouldn't
+  // make sense chopped up by date headings first. Plain "date" mode
+  // below keeps the existing date > league > team grouping.
   if (sortMode === 'distance' || sortMode === 'time') {
     main.innerHTML = renderFlatSorted(filtered, sortMode, postcodeValue, hint);
     return;
   }
 
   // Sort hierarchy: date > league (by real tier order, not
-  // alphabetically) > team. When only one date is in view (a specific
-  // date pill selected), that outer "date" level is a no-op - there's
-  // only one - so it goes straight to league groups. When several
-  // dates are in view (the "All dates" pill, or any team search, which
-  // can match fixtures on any date), matches are grouped under a date
-  // heading FIRST and league groups sit inside each date, rather than
-  // grouping by league across every date at once (which used to bury
-  // "what's on which day" inside a date printed on every single match
-  // row instead of leading with it).
+  // alphabetically) > team. When only one distinct date is left in the
+  // filtered results (e.g. a single date picked, or filters happen to
+  // narrow everything down to one specific day), that outer "date"
+  // level is a no-op - there's only one - so it goes straight to league
+  // groups. When several dates remain in view, matches are grouped
+  // under a date heading FIRST and league groups sit inside each date.
   function renderLeagueGroups(matches) {
     const byLeague = {};
     matches.forEach(m => {
@@ -934,7 +1049,8 @@ function render() {
     }).join('');
   }
 
-  if (showingMultipleDates) {
+  const distinctDates = new Set(filtered.map(m => m.date));
+  if (distinctDates.size > 1) {
     const byDate = {};
     filtered.forEach(m => { (byDate[m.date] = byDate[m.date] || []).push(m); });
     const orderedDates = Object.keys(byDate).sort();
@@ -948,9 +1064,6 @@ function render() {
 }
 
 async function init() {
-  document.getElementById('league-filter').addEventListener('change', render);
-  document.getElementById('district-filter').addEventListener('change', render);
-  document.getElementById('team-search').addEventListener('input', render);
   document.getElementById('sort-mode').addEventListener('change', render);
   // Postcode is only numbers - restrict input as you type rather than
   // waiting to reject it on submit, and re-render on every keystroke so
@@ -959,19 +1072,21 @@ async function init() {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
     render();
   });
-  // Clears the league dropdown, team search, and sort mode back to
-  // "everything," and drops back to viewing the whole current month
-  // rather than one single day - the calendar position itself (which
-  // month you're looking at) is left alone since that's browsing, not
-  // really a "filter." The postcode itself is deliberately NOT cleared -
-  // it's more like "who you are" than a transient filter, no reason to
-  // make someone retype it just for resetting everything else.
+  // Clears every filter dimension (dates, leagues, districts, teams,
+  // sort mode) back to "everything," and drops back to viewing the
+  // whole current month rather than any specific selection - the
+  // calendar's month position is reset to the real current month too
+  // (see the note further down), same as before. The postcode itself
+  // is deliberately NOT cleared - it's more like "who you are" than a
+  // transient filter, no reason to make someone retype it just for
+  // resetting everything else.
   document.getElementById('reset-filters').addEventListener('click', () => {
-    document.getElementById('league-filter').value = '';
-    document.getElementById('district-filter').value = '';
-    document.getElementById('team-search').value = '';
+    selectedDates.clear();
+    selectedLeagues.clear();
+    selectedDistricts.clear();
+    selectedTeams.clear();
+    teamSearchText = '';
     document.getElementById('sort-mode').value = '';
-    currentDate = null;
     // Jump back to the CURRENT calendar month specifically, not just
     // "whatever month you happened to be on" - a reset should feel like
     // starting over, and starting over means today, not wherever you'd
@@ -1003,10 +1118,6 @@ async function init() {
     return;
   }
   currentMonth = months[0];
-  currentDate = null; // start on "All dates" within the first month, per the ask to see everything before narrowing
-  populateLeagueFilter(Object.values(allData).flat());
-  populateDistrictFilter();
-  populateTeamList(Object.values(allData).flat());
   renderAll();
 }
 
