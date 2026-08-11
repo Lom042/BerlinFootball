@@ -22,12 +22,30 @@ it's the reason gender is now explicit rather than assumed.)
   once `data/index.json` exists next to it.
 
   Sort/display hierarchy: **date → league (by real tier, not
-  alphabetically) → team.** Pick a date from the pills up top; underneath
-  it, each league's fixtures sit together as one block with the league
-  name and tier directly above its own matches — not as a separate badge
-  floating off to the side, disconnected from the teams it belongs to.
-  Each fixture also shows its venue plus the venue's street address where
-  known, and a matchday tag where the source provides one.
+  alphabetically) → team.** Each fixture also shows its venue plus the
+  venue's street address where known, and a matchday tag where the
+  source provides one.
+
+  **Filters are all multi-select and mutually narrowing.** Date,
+  league, district, and team each behave like the others: click a chip
+  to toggle it on or off, and pick as many as you like in each category
+  (e.g. two dates to cover a whole weekend, or two teams at once). Every
+  filter narrows what the OTHER filters offer — pick a date and the
+  league/district/team chips shrink to only what's actually on that
+  day; pick a league and the calendar shrinks to only dates with a
+  fixture in that league; same for district and team. A control never
+  hides an option you've already selected, even if a later choice would
+  otherwise rule it out, so you can always find your own picks again to
+  deselect them. `matchesFilters()` in `index.html` is the single place
+  all four filters get combined — every chip-rendering function calls
+  it with its own dimension excluded to work out what to offer.
+
+  Team search deliberately does NOT filter fixtures by substring as you
+  type anymore (typing "hertha" alone won't narrow the list) — it only
+  narrows a short suggestion list; you click a suggestion to add that
+  exact team as a removable chip. That's what makes selecting more than
+  one team possible, at the cost of the old "just start typing" instant
+  filter feel.
 
 - **`scraper_openligadb.py`** — pulls from `api.openligadb.de`, a free,
   open JSON API covering Bundesliga, 2. Bundesliga, and 3. Liga (tiers
