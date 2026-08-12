@@ -3,1528 +3,1149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Berlin Cinema Programme</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#121319">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Kino Berlin">
+<title>Berlin Football — Fixtures</title>
+<!-- No favicon was ever set, so browser tabs/bookmarks were showing a
+     generic blank-page icon - that's the "website version looks worse"
+     gap, separate from "Add to Home Screen," which had nothing set
+     either but falls back to auto-screenshotting the page instead (why
+     that one already looked fine). A small inline SVG data URI needs no
+     separate image file to host - a gold pitch center-circle mark on
+     the same dark green as the rest of the theme. -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSIjMGYzZDJlIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YTczZCIgc3Ryb2tlLXdpZHRoPSI3Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTEiIGZpbGw9IiNkNGE3M2QiLz48L3N2Zz4K">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#121319;
-    --panel:#1B1D26;
-    --panel-raised:#22242F;
-    --amber:#FFB627;
-    --amber-dim:#8a6a1f;
-    --teal:#4ECDC4;
-    --red:#E4572E;
-    --text:#F2F0E9;
-    --muted:#8A8D99;
-    --muted-light:#A9ACB8; /* slightly brighter than --muted — used for small caption text that needs to stay readable, not just decorative */
-    --hairline:#2C2E3A;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Inter', sans-serif;
+  :root {
+    --pitch: #0f3d2e;
+    --pitch-dark: #0a2b20;
+    --chalk: #f4f2ea;
+    --chalk-dim: #b9c9c0;
+    --gold: #d4a73d;
+    --red-card: #c1443a;
+    --line: rgba(244,242,234,0.14);
   }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-    /* Safety net: if any single row ever overflows its width again (like
-       the reset-row bug this fixes), this stops it from silently
-       widening the entire page and dragging every other row's visible
-       position sideways with it — worst case, just that one element
-       clips, instead of the whole layout shifting. */
-    overflow-x:hidden;
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--pitch-dark);
+    background-image:
+      repeating-linear-gradient(0deg, var(--pitch) 0px, var(--pitch) 60px, var(--pitch-dark) 60px, var(--pitch-dark) 120px);
+    color: var(--chalk);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
   }
-  .wrap{max-width:920px;margin:0 auto;padding:28px 20px 80px;}
+  header {
+    padding: 32px 20px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--line);
+  }
+  header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 6vw, 48px);
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  header p.sub {
+    color: var(--chalk-dim);
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  /* Everything that controls WHAT you see (calendar, league, district,
+     team, postcode, sort) lives inside one bordered card, stacked as
+     full-width blocks rather than a cramped side-by-side row - once
+     league/district/team became multi-select chip groups (each capable
+     of wrapping onto several lines as you pick more than one), squeezing
+     them next to the calendar in one flex row got messy fast. Stacking
+     keeps every group readable at any screen width. */
+  .filters-card {
+    width: calc(100% - 40px);
+    max-width: 460px;
+    margin: 24px auto 0;
+    padding: 22px 22px 24px;
+    background: rgba(244,242,234,0.05);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .search-row {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  /* Calendar, and the league/district/team filter groups below it, all
+     share the same "bordered box, wrapping row of chips" shape - .chip-
+     group is basically the same box as .calendar, minus the month-nav
+     header. Chips themselves (.chip) are shared by all four filters:
+     dates, leagues, districts, and teams all look and behave the same
+     way - click a chip to toggle it on or off. Every one of these is
+     MULTI-select now (you can pick more than one date, league, district,
+     or team at once), and each one narrows what the OTHERS offer - see
+     matchesFilters() in the script below for how that mutual narrowing
+     actually works. */
+  .calendar, .chip-group {
+    width: 100%;
+    background: rgba(244,242,234,0.06);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px 16px;
+  }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .cal-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--chalk);
+  }
+  .cal-nav {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    transition: all 0.15s ease;
+  }
+  .cal-nav:hover:not(:disabled) { border-color: var(--gold); color: var(--chalk); }
+  .cal-nav:disabled { opacity: 0.25; cursor: default; }
+  .filter-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    margin-bottom: 10px;
+  }
+  /* Deliberately NOT a full month grid with blank cells for every day
+     that has nothing on - a real month, most days have no fixture at
+     all, so a 31-cell grid was mostly dead space. This is just the
+     handful of dates that actually have something AND are still
+     consistent with whatever league/district/team is currently
+     selected, as a wrapping row of chips. */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .chip {
+    font-family: 'Oswald', sans-serif;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: all 0.15s ease;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--chalk); }
+  .chip.today:not(.active) { border-color: var(--chalk-dim); border-style: dashed; }
+  .chip.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .chip-empty-note { color: var(--chalk-dim); font-size: 13px; padding: 6px 0; }
+  .chip-clear-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+  .chip-clear-btn:hover { border-color: var(--gold); color: var(--chalk); }
+  .chip-clear-btn.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
 
-  /* ---- Header : departure-board header plate ---- */
-  header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    gap:16px;
-    margin-bottom:22px;
-    padding-bottom:18px;
-    border-bottom:1px solid var(--hairline);
-    flex-wrap:wrap;
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk-dim);
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s ease;
   }
-  .brand{display:flex; flex-direction:column; gap:2px;}
-  .brand .kicker{
-    font-family:var(--sans);
-    font-size:11px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--amber);
-  }
-  .brand h1{
-    margin:0;
-    font-size:28px;
-    font-weight:700;
-    letter-spacing:-0.01em;
-  }
-  .status{
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--muted);
-    text-align:right;
-  }
-  .status .dot{
-    display:inline-block;width:7px;height:7px;border-radius:50%;
-    background:var(--teal); margin-right:6px;
-    box-shadow:0 0 8px var(--teal);
-  }
+  .reset-btn:hover { border-color: var(--gold); color: var(--chalk); }
 
-  /* ---- Reset / copy-link buttons ---- */
-  /* flex-wrap is the key fix here: on a narrow phone screen, "Copy link"
-     and "Reset filters" together are wider than the row, and without
-     this they'd overflow off the right edge instead of dropping to a
-     second line — which was also silently widening the whole page and
-     making other unrelated rows further down look clipped too. */
-  .reset-row{ display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
-  .reset-btn{
-    font-family:var(--mono);
-    font-size:11.5px;
-    color:var(--muted);
-    background:none;
-    border:1px solid var(--hairline);
-    border-radius:8px;
-    padding:6px 12px;
-    cursor:pointer;
-    transition:all .15s ease;
+  select {
+    background: var(--pitch-dark);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
   }
-  .reset-btn:hover{ border-color:var(--amber-dim); color:var(--text); }
-
-  /* ---- Date picker ---- */
-  .dates{
-    display:flex; gap:8px; overflow-x:auto;
-    margin-bottom:16px; padding-bottom:4px;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+  #sort-mode { flex: 1 1 140px; max-width: 100%; }
+  #team-search-input, #postcode-input {
+    background: rgba(244,242,234,0.06);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    flex: 1 1 140px;
+    min-width: 0;
   }
-  .dates::-webkit-scrollbar{display:none;}
-  .date-chip{
-    flex:0 0 auto;
-    font-family:var(--mono);
-    font-size:12.5px;
-    padding:10px 14px;
-    border-radius:9px;
-    border:1px solid var(--hairline);
-    background:var(--panel);
-    color:var(--muted);
-    cursor:pointer;
-    text-align:center;
-    line-height:1.3;
-    user-select:none;
-    transition:all .15s ease;
-  }
-  .date-chip .top{display:block; font-size:10px; text-transform:uppercase; letter-spacing:.06em;}
-  .date-chip .bottom{display:block; font-weight:700; color:var(--text); font-size:13px;}
-  .date-chip:hover{border-color:var(--amber-dim);}
-  .date-chip.active{background:var(--amber); border-color:var(--amber);}
-  .date-chip.active .top, .date-chip.active .bottom{color:#161616;}
-
-  /* ---- Controls ---- */
-  .controls{
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    margin-bottom:24px;
-  }
-  .search{
-    flex:1 1 220px;
-    background:var(--panel);
-    border:1px solid var(--hairline);
-    border-radius:8px;
-    padding:11px 14px;
-    color:var(--text);
-    font-family:var(--sans);
-    font-size:14px;
-    outline:none;
-  }
-  .search::placeholder{color:var(--muted);}
-  .search:focus{border-color:var(--amber-dim);}
-
-  /* ---- Film search suggestions dropdown ---- */
-  .search-wrap{ position:relative; flex:1 1 220px; }
-  .search-wrap .search{ width:100%; }
-  .film-suggestions{
-    display:none;
-    position:absolute;
-    top:calc(100% + 4px);
-    left:0;
-    right:0;
-    background:var(--panel-raised);
-    border:1px solid var(--hairline);
-    border-radius:8px;
-    max-height:260px;
-    overflow-y:auto;
-    z-index:20;
-  }
-  .film-suggestions.open{ display:block; }
-  .film-suggestion{
-    padding:9px 14px;
-    font-family:var(--sans);
-    font-size:13.5px;
-    color:var(--text);
-    cursor:pointer;
-    border-bottom:1px solid var(--hairline);
-  }
-  .film-suggestion:last-child{ border-bottom:none; }
-  .film-suggestion:hover{ background:var(--amber); color:#161616; font-weight:600; }
-  .suggestion-tag{
-    font-family:var(--mono);
-    font-size:9px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.05em;
-  }
-  .film-suggestion:hover .suggestion-tag{ color:#161616; opacity:.7; }
-  .chips{display:flex; gap:6px; flex-wrap:wrap;}
-  .chip{
-    font-family:var(--mono);
-    font-size:12px;
-    padding:9px 13px;
-    border-radius:8px;
-    border:1px solid var(--hairline);
-    background:var(--panel);
-    color:var(--muted);
-    cursor:pointer;
-    transition:all .15s ease;
-    user-select:none;
-  }
-  .chip:hover{border-color:var(--amber-dim); color:var(--text);}
-  .chip.active{
-    background:var(--amber);
-    border-color:var(--amber);
-    color:#161616;
-    font-weight:700;
-  }
-
-  /* ---- Film group ---- */
-  .film-group{
-    margin-bottom:26px;
-    background:var(--panel);
-    border:1px solid var(--hairline);
-    border-radius:10px;
-    overflow:hidden;
-  }
-  .film-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    padding:14px 18px;
-    background:var(--panel-raised);
-    border-bottom:1px solid var(--hairline);
-  }
-  .film-head h2{
-    margin:0; font-size:16px; font-weight:700; letter-spacing:-0.01em;
-  }
-  .film-head .count{
-    font-family:var(--mono); font-size:11px; color:var(--muted);
+  #team-search-input { width: 100%; margin-top: 4px; }
+  #team-search-input::placeholder, #postcode-input::placeholder { color: var(--chalk-dim); }
+  .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
+  .postcode-hint {
+    width: 100%;
+    text-align: center;
+    color: var(--gold);
+    font-size: 12px;
+    min-height: 14px;
+    margin: -4px 0 0;
   }
 
-  .cinema-row{
-    display:flex; justify-content:space-between; gap:14px;
-    padding:13px 18px;
-    border-bottom:1px solid var(--hairline);
-    flex-wrap:wrap;
-    align-items:center;
+  main {
+    max-width: 900px;
+    margin: 28px auto 60px;
+    padding: 0 20px;
   }
-  .cinema-row:last-child{border-bottom:none;}
-  .cinema-info{min-width:180px;}
-  .cinema-name{font-size:14px; font-weight:600;}
-  .cinema-addr{font-size:11.5px; color:var(--muted); margin-top:1px;}
-
-  /* ---- Cinema website link ---- */
-  .cinema-link{
-    display:inline-flex; align-items:center; gap:3px;
-    font-family:var(--mono);
-    font-size:10.5px;
-    font-weight:500;
-    color:var(--teal);
-    text-decoration:none;
-    margin-top:4px;
-    opacity:.9;
+  /* Sort/display hierarchy: date (the pills above) > league (tier order) >
+     team. Each league-group sits directly under the selected date, and
+     the league identity travels WITH its matches (label right above the
+     team rows it belongs to) rather than as a separate badge floating
+     off to the side, disconnected from the teams it describes. */
+  /* When multiple dates end up in view at once (no single date picked,
+     or more than one date picked, or a league/district/team filter that
+     matches fixtures spanning several dates), fixtures are grouped under
+     a date heading first, then by league within that date - so the sort
+     hierarchy is genuinely date > league > team, not league-across-all-
+     dates. Results that land on exactly one date skip straight to the
+     league groups below, no redundant single date heading. */
+  .date-heading {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk);
+    margin: 26px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--gold);
   }
-  .cinema-link:hover{ text-decoration:underline; opacity:1; }
-  .film-head .cinema-link{ margin-top:0; margin-left:8px; font-size:10.5px; font-weight:700; }
-
-  /* ---- Distance (postcode) feature ---- */
-  .postcode-input{ max-width:230px; flex:0 1 230px; }
-  .chip.disabled{ opacity:.35; cursor:not-allowed; }
-  .chip.disabled:hover{ border-color:var(--hairline); color:var(--muted); }
-  .distance-hint{
-    font-family:var(--mono); font-size:11px; color:var(--red);
-    flex-basis:100%;
+  .date-heading:first-of-type { margin-top: 0; }
+  .league-group { margin-bottom: 28px; }
+  .league-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
   }
-  .distance-tag{
-    font-family:var(--mono);
-    font-size:10px;
-    font-weight:700;
-    color:var(--amber);
-    background:rgba(255,182,39,.14);
-    padding:2px 6px;
-    border-radius:4px;
-    white-space:nowrap;
+  .league-label .tier-tag {
+    color: var(--chalk-dim);
+    font-weight: 400;
+    letter-spacing: 1px;
   }
-  .film-head .distance-tag{ margin-left:6px; }
-
-  /* ---- Posters + ratings (TMDb) ---- */
-  .poster{
-    border-radius:5px;
-    object-fit:cover;
-    background:var(--bg);
-    flex:0 0 auto;
-    display:block;
+  .match {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    background: rgba(244,242,234,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
   }
-  .poster-sm{ width:36px; height:54px; }
-  .poster-xs{ width:30px; height:45px; }
-  .poster-fallback{
-    border-radius:5px;
-    background:var(--bg);
-    border:1px solid var(--hairline);
-    flex:0 0 auto;
+  .match-time {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+    text-align: center;
   }
-  .rating-tag{
-    font-family:var(--mono);
-    font-size:10px;
-    font-weight:700;
-    color:var(--amber);
-    background:rgba(255,182,39,.14);
-    padding:2px 6px;
-    border-radius:4px;
-    white-space:nowrap;
-    display:inline-block;
-    margin-top:3px;
+  .teams { font-size: 16px; font-weight: 500; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 2px; }
+  .club-link {
+    color: var(--chalk-dim);
+    text-decoration: none;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-left: -2px;
   }
-  .tmdb-link{
-    font-family:var(--mono);
-    font-size:10px;
-    font-weight:600;
-    color:var(--teal);
-    text-decoration:none;
-    margin-left:5px;
+  .club-link:hover { opacity: 1; text-decoration: underline; }
+  .crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--pitch-dark);
+    flex-shrink: 0;
   }
-  .tmdb-link:hover{ text-decoration:underline; }
-  .film-head-main{ display:flex; align-items:center; gap:10px; }
-  .film-head-text{ display:flex; flex-direction:column; gap:2px; }
-  .cinema-row-main{ display:flex; align-items:center; gap:10px; }
-  .flat-row .poster, .flat-row .poster-fallback{ margin-right:-2px; }
-
-  /* ---- Loading skeleton ---- */
-  .skeleton-group{
-    margin-bottom:16px;
-    background:var(--panel);
-    border:1px solid var(--hairline);
-    border-radius:10px;
-    overflow:hidden;
+  .venue { color: var(--chalk-dim); font-size: 12px; margin-top: 3px; }
+  .venue .addr { opacity: 0.8; }
+  .venue .addr::before { content: " · "; }
+  .matchday {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--pitch-dark);
+    background: var(--chalk-dim);
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-align: center;
   }
-  .skeleton-head{ padding:14px 18px; background:var(--panel-raised); }
-  .skeleton-row{ padding:13px 18px; border-top:1px solid var(--hairline); }
-  .skel-bar{
-    height:14px;
-    border-radius:4px;
-    background:linear-gradient(90deg, var(--hairline) 25%, var(--panel-raised) 37%, var(--hairline) 63%);
-    background-size:400% 100%;
-    animation: skel-shimmer 1.4s ease infinite;
+  .empty {
+    text-align: center;
+    color: var(--chalk-dim);
+    padding: 60px 20px;
+    font-size: 15px;
   }
-  @keyframes skel-shimmer{
-    0%{ background-position:100% 0; }
-    100%{ background-position:0 0; }
-  }
-
-  .lang-caption{
-    font-family:var(--mono);
-    font-size:11px;
-    color:var(--muted-light);
-    margin:8px 0 22px;
-    line-height:1.5;
-  }
-
-  .view-caption{
-    font-family:var(--mono);
-    font-size:11px;
-    color:var(--muted-light);
-    margin:-2px 0 20px;
-    line-height:1.5;
-  }
-
-  .times{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
-  .time-chip{
-    font-family:var(--mono);
-    font-size:13px;
-    padding:6px 10px;
-    background:var(--bg);
-    border:1px solid var(--hairline);
-    border-radius:6px;
-    display:flex; align-items:center; gap:7px;
-    overflow:hidden;
-  }
-  .time-chip .digits{
-    display:inline-block;
-    animation: flip-in .5s cubic-bezier(.2,.9,.3,1) both;
-  }
-  @keyframes flip-in{
-    0%{ transform: rotateX(90deg); opacity:0; }
-    60%{ transform: rotateX(-8deg); opacity:1; }
-    100%{ transform: rotateX(0); }
-  }
-  .lang-tag{
-    font-family:var(--mono);
-    font-size:9.5px;
-    letter-spacing:.04em;
-    padding:2px 5px;
-    border-radius:4px;
-    text-transform:uppercase;
-    font-weight:700;
-  }
-  .lang-tag.ov, .lang-tag.omu{ background:rgba(78,205,196,.18); color:var(--teal); }
-  .lang-tag.de{ background:rgba(138,141,153,.18); color:var(--muted); }
-  .lang-tag.other{ background:rgba(228,87,46,.18); color:var(--red); }
-
-  .empty{
-    text-align:center; color:var(--muted); padding:60px 20px;
-    font-family:var(--mono); font-size:13px;
-  }
-  .empty-reset-btn{ margin-top:16px; }
-
-  /* ---- Flat 'by time' rows ---- */
-  .flat-row{
-    display:flex; align-items:center; gap:14px;
-    padding:12px 16px;
-    background:var(--panel);
-    border:1px solid var(--hairline);
-    border-radius:8px;
-    margin-bottom:8px;
-  }
-  .flat-row .time-chip{ flex:0 0 auto; }
-  .flat-row .flat-info{ flex:1 1 auto; min-width:0; }
-  .flat-row .flat-film{ font-size:14px; font-weight:600; }
-  .flat-row .flat-cinema{ font-size:11.5px; color:var(--muted); margin-top:1px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-  .copy-screening-btn{
-    flex:0 0 auto;
-    font-family:var(--mono);
-    font-size:10.5px;
-    font-weight:600;
-    color:var(--teal);
-    background:none;
-    border:1px solid var(--hairline);
-    border-radius:6px;
-    padding:6px 10px;
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .copy-screening-btn:hover{ border-color:var(--amber-dim); color:var(--text); }
-
-  footer{
-    margin-top:40px; padding-top:18px; border-top:1px solid var(--hairline);
-    font-size:11.5px; color:var(--muted); font-family:var(--mono);
-    line-height:1.6;
-  }
-  footer a{color:var(--teal); text-decoration:none;}
-
-  @media (max-width:520px){
-    .cinema-row{flex-direction:column; align-items:flex-start;}
-    .times{justify-content:flex-start;}
-    /* Slightly bigger tap targets for thumbs — fine on a trackpad at the
-       smaller size, fiddlier on a phone. */
-    .chip{ padding:11px 15px; font-size:12.5px; }
-    .reset-btn{ padding:9px 14px; }
-    .film-suggestion{ padding:12px 14px; }
+  .empty .ball { font-size: 32px; display: block; margin-bottom: 10px; }
+  footer {
+    text-align: center;
+    color: var(--chalk-dim);
+    font-size: 12px;
+    padding: 20px;
+    opacity: 0.7;
   }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="brand">
-      <span class="kicker">Cinema Programme · Berlin</span>
-      <h1>What's on, where, and in which language</h1>
-    </div>
-    <div class="status" id="status">
-      <span class="dot"></span>Loading…
-    </div>
-  </header>
+<header>
+  <h1>Berlin Football</h1>
+  <p class="sub">Every club, every level — Bundesliga to the local Sportplatz.</p>
+</header>
 
-  <div class="reset-row">
-    <button class="reset-btn" id="copy-link-btn" type="button">Copy link</button>
-    <button class="reset-btn" id="reset-btn" type="button">Reset filters</button>
+<div class="filters-card">
+  <div class="calendar" id="calendar"></div>
+  <div class="chip-group" id="league-filter"></div>
+  <div class="chip-group" id="district-filter"></div>
+  <div class="chip-group" id="team-filter"></div>
+  <div class="search-row">
+    <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
+    <select id="sort-mode">
+      <option value="">Sort: date</option>
+      <option value="distance">Sort: closest to me</option>
+      <option value="time">Sort: kick-off time</option>
+    </select>
   </div>
-
-  <div class="dates" id="date-chips"></div>
-
-  <div class="controls">
-    <div class="search-wrap">
-      <input class="search" id="search" type="text" autocomplete="off" placeholder="Search for a film…">
-      <div class="film-suggestions" id="film-suggestions"></div>
-    </div>
-    <input class="search postcode-input" id="postcode" type="text" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="Your postcode (optional) — e.g. 10115">
-    <div class="chips" id="group-sort-chips">
-      <div class="chip active" data-groupsort="name">A&ndash;Z</div>
-      <div class="chip" data-groupsort="rating">Top rated first</div>
-    </div>
-    <span class="distance-hint" id="distance-hint"></span>
-  </div>
-
-  <div class="chips" id="lang-chips">
-    <div class="chip active" data-lang="all">All</div>
-    <div class="chip" data-lang="ov">OV</div>
-    <div class="chip" data-lang="omu">OmU</div>
-    <div class="chip" data-lang="de">German dub</div>
-  </div>
-  <div class="lang-caption">OV = original language, no subtitles &middot; OmU = original language, German subtitles &middot; German dub = dubbed into German</div>
-
-  <div class="chips" id="view-chips" style="margin-bottom:12px;">
-    <div class="chip active" data-view="film">By film</div>
-    <div class="chip" data-view="cinema">By cinema</div>
-    <div class="chip" data-view="time">By time</div>
-  </div>
-
-  <div class="chips" id="time-sort-chips" style="display:none; margin-bottom:20px;">
-    <div class="chip active" data-sort="soonest">Soonest</div>
-    <div class="chip" data-sort="nearest">Nearest</div>
-    <div class="chip" data-sort="rating">Top rated</div>
-    <div class="chip" data-sort="bestofboth">Best of both</div>
-  </div>
-
-  <div class="view-caption" id="view-caption"></div>
-
-  <div id="results"></div>
-
-  <footer>
-    Source: automatically compiled from kino.veranstaltungen-in-berlin.de and yorck.de · non-commercial, no ads<br>
-    Cinema links go to each venue's own website — we don't sell tickets or handle any booking ourselves<br>
-    This product uses the TMDb API but is not endorsed or certified by TMDb<br>
-    Data last updated: <span id="generated-at">—</span> · <span id="data-source-note"></span>
-  </footer>
-
+  <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
+  <p class="postcode-hint" id="postcode-hint"></p>
 </div>
 
+<main id="main">
+  <div class="empty">Loading fixtures…</div>
+</main>
+
+<footer>Free & ad-free. Data refreshed automatically. Covers Bundesliga down through Landesliga — see README.</footer>
+
 <script>
-// ---- Real demo data: Spider-Man: Brand New Day, Berlin, Sat 01.08.2026 ----
-// (pulled live for this build — see scraper.py for how a full daily feed,
-// covering every film, is generated automatically)
+// Placeholder fixtures only — not real games. Shown until the live
+// scrapers (scraper_openligadb.py / scraper_fussballde.py) have run and
+// produced real data/index.json + data/<date>.json files.
+//
+// Every fixture below is internally consistent with real current
+// divisions: Hertha BSC (BL2, tier 2) and 1. FC Union Berlin (BL1, tier
+// 1) are shown against other clubs in THEIR OWN tier, never against
+// each other, because that pairing can't happen in real league play
+// while they sit in different divisions. Each fixture also carries an
+// explicit `gender` and `league_tier` so the schema itself rules out
+// the kind of mixup that produced the old demo data's Hertha-vs-Union
+// fixture.
 const DEMO_DATA = {
-  date: "2026-08-01",
-  generated_at: "2026-08-01T09:00:00",
-  screenings: [
-    { cinema: "Zoo Palast", address: "Hardenbergstr. 29a, 10623 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["13:00","14:15","16:45","17:30","20:45"] },
-    { cinema: "Zoo Palast", address: "Hardenbergstr. 29a, 10623 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["16:15"] },
-    { cinema: "Kino in der Kulturbrauerei", address: "Schönhauser Allee 36, 10435 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OmU"], times: ["11:30","14:00","16:45","19:30","22:20"] },
-    { cinema: "CineStar CUBIX Filmpalast Alexanderplatz", address: "Rathausstr. 1, 10178 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["11:00","13:15","22:45"] },
-    { cinema: "CineStar CUBIX Filmpalast Alexanderplatz", address: "Rathausstr. 1, 10178 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["11:15","13:30","16:50","19:00","22:20"] },
-    { cinema: "CineStar CUBIX Filmpalast Alexanderplatz", address: "Rathausstr. 1, 10178 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["3D","OV"], times: ["20:30"] },
-    { cinema: "Cineplex Titania Palast", address: "Schloßstr. 5-6, 12163 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["10:00","13:10","14:00","16:30","19:50","23:20"] },
-    { cinema: "Cineplex Titania Palast", address: "Schloßstr. 5-6, 12163 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["16:00","20:15","23:00"] },
-    { cinema: "Cineplex Titania Palast", address: "Schloßstr. 5-6, 12163 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["3D"], times: ["10:30","16:10","19:30"] },
-    { cinema: "Cineplex Spandau", address: "Havelstr. 20, 13597 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["10:00","11:55","13:05","14:45","16:30","19:50","23:05"] },
-    { cinema: "Cineplex Neukölln Arcaden", address: "Karl-Marx-Str. 66, 12043 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["12:15","14:00","16:30","19:50"] },
-    { cinema: "Cineplex Neukölln Arcaden", address: "Karl-Marx-Str. 66, 12043 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["12:00","14:30","17:00","20:15"] },
-    { cinema: "Cineplex Alhambra", address: "Seestr. 94, 13353 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["13:50","17:00","20:15"] },
-    { cinema: "UCI East Side Gallery", address: "Mildred-Harnack-Str. 13, 10243 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["14:00","16:30"] },
-    { cinema: "UCI East Side Gallery", address: "Mildred-Harnack-Str. 13, 10243 Berlin", film: "Spider-Man: Brand New Day", format_tags: ["OV"], times: ["15:30"] },
-    { cinema: "UCI Kinowelt am Eastgate", address: "Märkische Allee 176-178, 12679 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["14:00","20:10"] },
-    { cinema: "CineStar Hellersdorf", address: "Stendaler Str. 25, 12627 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["11:05","14:00","16:55","20:00"] },
-    { cinema: "CineStar Tegel", address: "Am Borsigturm 2, 13507 Berlin", film: "Spider-Man: Brand New Day", format_tags: [], times: ["11:30","14:00","16:00","19:30","22:30"] },
+  "2026-08-08": [
+    { date: "2026-08-08", time: "15:30", home_team: "1. FC Union Berlin", away_team: "VfL Wolfsburg", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 1", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin", home_team_website: "https://www.fc-union-berlin.de" },
+    { date: "2026-08-08", time: "13:00", home_team: "Hertha BSC", away_team: "SV Elversberg", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 1", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin", home_team_website: "https://www.herthabsc.com" },
+    { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportforum Berlin", venue_address: "Conrad-Blenkle-Straße 33, 13405 Berlin" },
+    { date: "2026-08-08", time: "14:00", home_team: "VSG Altglienicke", away_team: "Tasmania Berlin", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportpark Altglienicke", venue_address: "Rudolf-Seiffert-Straße 30, 12524 Berlin" },
+    { date: "2026-08-08", time: "14:00", home_team: "Berliner AK 07", away_team: "SV Lichtenberg 47", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Poststadion", venue_address: "Rathenower Str. 42, 10559 Berlin" },
+    { date: "2026-08-08", time: "15:00", home_team: "Tennis Borussia Berlin", away_team: "TuS Makkabi Berlin", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14055 Berlin" }
+  ],
+  "2026-08-09": [
+    { date: "2026-08-09", time: "14:00", home_team: "Hertha 03 Zehlendorf", away_team: "Eintracht Mahlsdorf", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Rehwiese", venue_address: "Potsdamer Chaussee 4, 14109 Berlin" },
+    { date: "2026-08-09", time: "14:00", home_team: "Füchse Berlin Reinickendorf", away_team: "SV Sparta Lichtenberg", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Stadion Reinickendorf", venue_address: "Egellsstraße, 13407 Berlin" },
+    { date: "2026-08-09", time: "13:00", home_team: "SC Staaken", away_team: "TSG Neustrelitz", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Stadion Staaken", venue_address: "Reimerweg 30, 13593 Berlin" }
+  ],
+  "2026-08-15": [
+    { date: "2026-08-15", time: "15:30", home_team: "Hertha BSC", away_team: "Karlsruher SC", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 2", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin" },
+    { date: "2026-08-15", time: "14:00", home_team: "Tasmania Berlin", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Werner-Seelenbinder-Sportpark", venue_address: "Oderstraße 182, 12049 Berlin" },
+    { date: "2026-08-16", time: "14:00", home_team: "Blau-Weiss 90 Berlin", away_team: "1. FC Wilmersdorf", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Poststadion Nebenplatz", venue_address: "Rathenower Str. 42, 10559 Berlin" },
+    { date: "2026-08-16", time: "14:00", home_team: "SC Charlottenburg", away_team: "Spandauer Kickers", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14055 Berlin" }
+  ],
+  "2026-08-22": [
+    { date: "2026-08-22", time: "15:30", home_team: "1. FC Union Berlin", away_team: "Bayer Leverkusen", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 2", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin" },
+    { date: "2026-08-22", time: "13:00", home_team: "SSC Südwest", away_team: "Fortuna Biesdorf", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Poststadion", venue_address: "Rathenower Str. 42, 10559 Berlin" },
+    { date: "2026-08-22", time: "14:00", home_team: "Türkiyemspor Berlin", away_team: "SV Empor Berlin", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Stadion Rathenower Straße", venue_address: "Rathenower Str. 42, 10559 Berlin" },
+    { date: "2026-08-22", time: "14:00", home_team: "TSV Mariendorf 1897", away_team: "Frohnauer SC", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Sportplatz Mariendorf", venue_address: "Motzener Straße 20, 12277 Berlin" }
   ]
 };
 
-let DATA = null;
-let activeLang = "all";
-let activeView = "film";
-let filmExplicitlySelected = false; // true only after picking a dropdown suggestion, not just typing
-let activeDate = null; // ISO string, set once index.json (or fallback) is known
-let availableDates = [];
-// The most recently rendered By-time flat list, kept around so the
-// delegated "Copy" button click handler (attached once, not re-attached
-// on every render) can look up which exact showing was clicked.
-let lastRenderedFlatItems = [];
-// Raw (unfiltered) screenings for TODAY_ISO specifically, cached the
-// moment they're fetched — kept around even after the user switches to
-// viewing a different date, so "has today actually run out of showings
-// yet?" can still be answered without needing to be on today's tab.
-let todayScreeningsCache = null;
-function getBerlinDateISO(){
-  const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Europe/Berlin', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date());
-  const y = parts.find(p=>p.type==='year').value;
-  const m = parts.find(p=>p.type==='month').value;
-  const d = parts.find(p=>p.type==='day').value;
-  return `${y}-${m}-${d}`;
-}
-function getBerlinNowMinutes(){
-  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Berlin', hour:'2-digit', minute:'2-digit', hour12:false}).formatToParts(new Date());
-  const h = parseInt(parts.find(p=>p.type==='hour').value, 10);
-  const mi = parseInt(parts.find(p=>p.type==='minute').value, 10);
-  return h*60 + mi;
-}
-// Not a const: needs to roll over automatically at Berlin midnight for
-// anyone who leaves the tab open (see refreshTodayIfNeeded below), rather
-// than only updating on a manual page reload.
-let TODAY_ISO = getBerlinDateISO();
-const WEEKDAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let allData = {};
+let currentMonth = null;        // "YYYY-MM" - which month's dates the calendar box is currently showing
+let selectedDates = new Set();  // "YYYY-MM-DD" - zero or more specific dates picked
+let selectedLeagues = new Set();
+let selectedDistricts = new Set();
+let selectedTeams = new Set();
+let teamSearchText = '';        // text currently typed into the "search team to add" box - only
+                                 // narrows the SUGGESTION chips shown, doesn't filter fixtures
+                                 // itself until you actually click a suggestion to add it
 
-function formatDateChip(iso){
+// No real club crests are used here (they're trademarked) — instead we
+// generate a simple colored monogram per team from its initials.
+const CREST_COLORS = ['#d4a73d', '#c1443a', '#6f9c73', '#8891c4', '#c48fa0', '#5fa8a0'];
+function teamInitials(name) {
+  const words = name.replace(/^\d+\.\s*/, '').split(/\s+/).filter(w => w.length > 1 || /[A-ZÄÖÜ]/.test(w));
+  const letters = words.slice(0, 2).map(w => w[0]).join('');
+  return (letters || name.slice(0, 2)).toUpperCase();
+}
+function teamColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return CREST_COLORS[Math.abs(hash) % CREST_COLORS.length];
+}
+function crestHtml(name) {
+  return `<span class="crest" style="background:${teamColor(name)}">${teamInitials(name)}</span>`;
+}
+
+// Small "official club site" link next to a team name (ticket info etc.)
+// - not the fussball.de match page (that's source_url), the club's own
+// site. Blank/missing for clubs without one on file (e.g. lower amateur
+// tiers, or Berlin Türkspor which genuinely has no independent site).
+function clubLinkHtml(website) {
+  if (!website) return '';
+  return `<a href="${website}" target="_blank" rel="noopener noreferrer" class="club-link" title="Official club website" onclick="event.stopPropagation()">↗</a>`;
+}
+
+function fmtDateLabel(iso) {
   const d = new Date(iso + "T00:00:00");
-  const diffDays = Math.round((d - new Date(TODAY_ISO + "T00:00:00")) / 86400000);
-  const top = diffDays === 0 ? "Today" : diffDays === 1 ? "Tomorrow" : WEEKDAY_NAMES[d.getDay()];
-  const bottom = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
-  return { top, bottom };
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
+}
+function fmtMonthLabel(ym) {
+  const [y, m] = ym.split('-');
+  const d = new Date(Number(y), Number(m) - 1, 1);
+  return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+function monthOf(iso) {
+  return iso.slice(0, 7); // "YYYY-MM-DD" -> "YYYY-MM"
 }
 
-// Whether today still has at least one screening left to come. Returns
-// true (don't hide today) until we've actually loaded today's real
-// screening times at least once — an unknown state should never cause
-// today to disappear incorrectly.
-function todayHasUpcomingScreenings(){
-  if (!todayScreeningsCache) return true;
-  const nowMinutes = getBerlinNowMinutes();
-  return todayScreeningsCache.some(s => s.times.some(t => {
-    const [h, m] = t.split(':').map(Number);
-    return (h*60 + m) >= nowMinutes;
-  }));
+// Fallback tier lookup for older/incoming data that might not carry an
+// explicit league_tier yet. Keep in sync with both scrapers' tier maps.
+const TIER_BY_LEAGUE = {
+  "DFB-POKAL": 0, "BERLIN-POKAL": 0.5,
+  "BL1": 1, "BL2": 2, "BL3": 3,
+  "REGIONALLIGA NORDOST": 4, "OBERLIGA NORDOST": 5, "BERLIN-LIGA": 6,
+  "LANDESLIGA STAFFEL 1": 7, "LANDESLIGA STAFFEL 2": 7,
+};
+function tierOf(m) {
+  return typeof m.league_tier === "number" ? m.league_tier : (TIER_BY_LEAGUE[m.league] ?? 99);
+}
+// Cups aren't part of the league pyramid, so "Tier 0" would be
+// meaningless to show - this decides whether a match belongs to a cup
+// competition (explicit `is_cup` flag from live data, or a name-based
+// fallback for older/demo data that predates the flag).
+function isCup(m) {
+  return Boolean(m.is_cup) || m.league === "DFB-POKAL" || m.league === "BERLIN-POKAL";
 }
 
-function renderDateChips(){
-  const wrap = document.getElementById('date-chips');
-  wrap.innerHTML = "";
-  for (const iso of availableDates){
-    if (iso < TODAY_ISO) continue; // never show a day that's already over
-    if (iso === TODAY_ISO && !todayHasUpcomingScreenings()) continue; // today's very last showing has already passed
-    const { top, bottom } = formatDateChip(iso);
-    const chip = document.createElement('div');
-    chip.className = 'date-chip' + (iso === activeDate ? ' active' : '');
-    chip.innerHTML = `<span class="top">${top}</span><span class="bottom">${bottom}</span>`;
-    chip.addEventListener('click', () => {
-      if (iso === activeDate) return;
-      activeDate = iso;
-      renderDateChips();
-      loadDateData(iso);
-      syncStateToUrl();
-    });
-    wrap.appendChild(chip);
+// "Closest to me" postcode feature - entirely client-side, no backend,
+// no live geocoding API. One shared lookup table covers BOTH sides of
+// the distance calc: the postcode a visitor types in, and the postcode
+// already embedded in every fixture's own venue_address (e.g. "...,
+// 14055 Berlin"). All 191 real Berlin postal codes, centroid lat/lon,
+// rounded to 3 decimal places (~100m of rounding error - plenty for
+// "which stadium is roughly closer," not meant for turn-by-turn).
+// Sourced from OpenPLZ (which PLZs are real, current Berlin codes - not
+// just numeric range guessing, which would wrongly sweep in Brandenburg
+// towns like Schönefeld/Potsdam that share Berlin's 10000-14999 block)
+// cross-checked against the WZB Berlin Social Science Center's
+// plz_geocoord dataset (geocoded from the official Destatis postal code
+// registry) for the actual coordinates.
+// One flagged exception: "15569" straddles Berlin-Rahnsdorf and
+// Woltersdorf, Brandenburg - the source's single centroid for that PLZ
+// may skew slightly toward the Brandenburg side since it treats the
+// whole postal area as one shape. Worth keeping in mind if a venue ever
+// resolves to it, but not worth a special case for one edge PLZ.
+const BERLIN_PLZ_COORDS = {
+  "10115": [52.533, 13.378], "10117": [52.516, 13.385], "10119": [52.531, 13.406],
+  "10178": [52.522, 13.409], "10179": [52.512, 13.414], "10243": [52.515, 13.439],
+  "10245": [52.502, 13.455], "10247": [52.517, 13.463], "10249": [52.524, 13.441],
+  "10315": [52.515, 13.514], "10317": [52.499, 13.485], "10318": [52.481, 13.519],
+  "10319": [52.496, 13.514], "10365": [52.519, 13.495], "10367": [52.521, 13.480],
+  "10369": [52.529, 13.467],
+  "10405": [52.534, 13.423], "10407": [52.534, 13.456], "10409": [52.543, 13.441],
+  "10435": [52.538, 13.410], "10437": [52.546, 13.407], "10439": [52.552, 13.412],
+  "10551": [52.532, 13.339], "10553": [52.528, 13.321], "10555": [52.522, 13.336],
+  "10557": [52.523, 13.365], "10559": [52.532, 13.348], "10585": [52.515, 13.305],
+  "10587": [52.517, 13.324], "10589": [52.530, 13.307],
+  "10623": [52.507, 13.328], "10625": [52.509, 13.314], "10627": [52.507, 13.302],
+  "10629": [52.502, 13.303],
+  "10707": [52.495, 13.315], "10709": [52.492, 13.304], "10711": [52.499, 13.292],
+  "10713": [52.487, 13.314], "10715": [52.484, 13.330], "10717": [52.491, 13.328],
+  "10719": [52.499, 13.325],
+  "10777": [52.497, 13.343], "10779": [52.492, 13.340], "10781": [52.493, 13.353],
+  "10783": [52.498, 13.362], "10785": [52.507, 13.365], "10787": [52.509, 13.343],
+  "10789": [52.501, 13.338],
+  "10823": [52.486, 13.349], "10825": [52.484, 13.340], "10827": [52.483, 13.354],
+  "10829": [52.480, 13.360],
+  "10961": [52.493, 13.397], "10963": [52.499, 13.378], "10965": [52.485, 13.399],
+  "10967": [52.491, 13.416], "10969": [52.503, 13.402], "10997": [52.500, 13.433],
+  "10999": [52.496, 13.427],
+  "12043": [52.478, 13.442], "12045": [52.487, 13.434], "12047": [52.490, 13.428],
+  "12049": [52.477, 13.422], "12051": [52.467, 13.430], "12053": [52.476, 13.433],
+  "12055": [52.471, 13.450], "12057": [52.469, 13.462], "12059": [52.481, 13.453],
+  "12099": [52.459, 13.403], "12101": [52.476, 13.396], "12103": [52.464, 13.373],
+  "12105": [52.445, 13.379], "12107": [52.433, 13.391], "12109": [52.447, 13.402],
+  "12157": [52.466, 13.345], "12159": [52.474, 13.335], "12161": [52.469, 13.325],
+  "12163": [52.463, 13.320], "12165": [52.457, 13.312], "12167": [52.450, 13.329],
+  "12169": [52.456, 13.340], "12203": [52.443, 13.310], "12205": [52.433, 13.298],
+  "12207": [52.421, 13.308], "12209": [52.418, 13.329],
+  "12247": [52.440, 13.343], "12249": [52.427, 13.349],
+  "12277": [52.411, 13.376], "12279": [52.411, 13.349], "12305": [52.405, 13.400],
+  "12307": [52.382, 13.399], "12309": [52.390, 13.417],
+  "12347": [52.451, 13.430], "12349": [52.428, 13.415], "12351": [52.434, 13.456],
+  "12353": [52.423, 13.457], "12355": [52.408, 13.498], "12357": [52.428, 13.488],
+  "12359": [52.448, 13.452],
+  "12435": [52.484, 13.470], "12437": [52.461, 13.482], "12439": [52.450, 13.524],
+  "12459": [52.461, 13.528], "12487": [52.438, 13.513], "12489": [52.437, 13.547],
+  "12524": [52.413, 13.547], "12526": [52.400, 13.575], "12527": [52.392, 13.629],
+  "12555": [52.462, 13.587], "12557": [52.427, 13.588], "12559": [52.417, 13.649],
+  "12587": [52.461, 13.641], "12589": [52.448, 13.704],
+  "12619": [52.524, 13.591], "12621": [52.505, 13.588], "12623": [52.503, 13.607],
+  "12627": [52.538, 13.613], "12629": [52.540, 13.592], "12679": [52.548, 13.562],
+  "12681": [52.555, 13.540], "12683": [52.498, 13.558], "12685": [52.538, 13.566],
+  "12687": [52.556, 13.564], "12689": [52.564, 13.572],
+  "13051": [52.582, 13.491], "13053": [52.556, 13.506], "13055": [52.538, 13.499],
+  "13057": [52.573, 13.545], "13059": [52.579, 13.521],
+  "13086": [52.555, 13.447], "13088": [52.559, 13.476], "13089": [52.569, 13.442],
+  "13125": [52.633, 13.478], "13127": [52.611, 13.428], "13129": [52.593, 13.458],
+  "13156": [52.582, 13.398], "13158": [52.592, 13.384], "13159": [52.625, 13.404],
+  "13187": [52.572, 13.413], "13189": [52.560, 13.422],
+  "13347": [52.550, 13.364], "13349": [52.559, 13.344], "13351": [52.550, 13.339],
+  "13353": [52.541, 13.351], "13355": [52.542, 13.390], "13357": [52.550, 13.379],
+  "13359": [52.559, 13.383],
+  "13403": [52.574, 13.319], "13405": [52.558, 13.310], "13407": [52.574, 13.351],
+  "13409": [52.569, 13.371], "13435": [52.602, 13.342], "13437": [52.588, 13.335],
+  "13439": [52.595, 13.354],
+  "13465": [52.632, 13.288], "13467": [52.614, 13.306], "13469": [52.613, 13.340],
+  "13503": [52.611, 13.242], "13505": [52.588, 13.246], "13507": [52.575, 13.271],
+  "13509": [52.589, 13.303],
+  "13581": [52.530, 13.187], "13583": [52.542, 13.183], "13585": [52.547, 13.207],
+  "13587": [52.573, 13.192], "13589": [52.566, 13.158], "13591": [52.535, 13.143],
+  "13593": [52.519, 13.170], "13595": [52.508, 13.192], "13597": [52.530, 13.214],
+  "13599": [52.549, 13.239], "13627": [52.541, 13.304], "13629": [52.540, 13.265],
+  "14050": [52.520, 13.273], "14052": [52.513, 13.260], "14053": [52.521, 13.227],
+  "14055": [52.503, 13.236], "14057": [52.506, 13.286], "14059": [52.521, 13.287],
+  "14089": [52.474, 13.152], "14109": [52.415, 13.147], "14129": [52.431, 13.201],
+  "14163": [52.448, 13.240], "14165": [52.416, 13.259], "14167": [52.419, 13.276],
+  "14169": [52.442, 13.265],
+  "14193": [52.468, 13.211], "14195": [52.453, 13.289], "14197": [52.472, 13.314],
+  "14199": [52.477, 13.296],
+  "15569": [52.457, 13.751],
+};
+
+// District ("Bezirk") filter - Berlin's 12 official boroughs, mapped
+// from the same PLZ embedded in every venue_address. Sourced from the
+// 2001 Bezirk reform's Ortsteil boundaries (Wikipedia) cross-checked
+// PLZ-by-PLZ against Kaupert's Berlin PLZ/Ortsteil/Bezirk directory
+// wherever a code looked like it might straddle two boroughs. Berlin's
+// Bezirk borders don't always line up neatly with postal code borders,
+// so a handful of these are a documented "majority" call on a PLZ that
+// genuinely touches a second Bezirk too - two codes (12161, 13629) had
+// no clear majority at all in the source and are a best-guess rather
+// than a confirmed primary. None of that matters much for "roughly
+// which part of town is this club in," but it's not laboratory-precise.
+const BERLIN_PLZ_DISTRICT = {
+  "10115": "Mitte", "10117": "Mitte", "10119": "Mitte", "10178": "Mitte", "10179": "Mitte",
+  "10243": "Friedrichshain-Kreuzberg", "10245": "Friedrichshain-Kreuzberg",
+  "10247": "Friedrichshain-Kreuzberg", "10249": "Friedrichshain-Kreuzberg",
+  "10315": "Lichtenberg", "10317": "Lichtenberg", "10318": "Lichtenberg", "10319": "Lichtenberg",
+  "10365": "Lichtenberg", "10367": "Lichtenberg", "10369": "Lichtenberg",
+  "10405": "Pankow", "10407": "Pankow", "10409": "Pankow",
+  "10435": "Pankow", "10437": "Pankow", "10439": "Pankow",
+  "10551": "Mitte", "10553": "Mitte", "10555": "Mitte", "10557": "Mitte", "10559": "Mitte",
+  "10585": "Charlottenburg-Wilmersdorf", "10587": "Charlottenburg-Wilmersdorf", "10589": "Charlottenburg-Wilmersdorf",
+  "10623": "Charlottenburg-Wilmersdorf", "10625": "Charlottenburg-Wilmersdorf",
+  "10627": "Charlottenburg-Wilmersdorf", "10629": "Charlottenburg-Wilmersdorf",
+  "10707": "Charlottenburg-Wilmersdorf", "10709": "Charlottenburg-Wilmersdorf",
+  "10711": "Charlottenburg-Wilmersdorf", "10713": "Charlottenburg-Wilmersdorf",
+  "10715": "Charlottenburg-Wilmersdorf", "10717": "Charlottenburg-Wilmersdorf", "10719": "Charlottenburg-Wilmersdorf",
+  "10777": "Tempelhof-Schöneberg", "10779": "Tempelhof-Schöneberg",
+  "10781": "Tempelhof-Schöneberg", "10783": "Tempelhof-Schöneberg",
+  "10785": "Mitte", "10787": "Mitte", "10789": "Charlottenburg-Wilmersdorf",
+  "10823": "Tempelhof-Schöneberg", "10825": "Tempelhof-Schöneberg", "10827": "Tempelhof-Schöneberg", "10829": "Tempelhof-Schöneberg",
+  "10961": "Friedrichshain-Kreuzberg", "10963": "Friedrichshain-Kreuzberg", "10965": "Friedrichshain-Kreuzberg",
+  "10967": "Friedrichshain-Kreuzberg", "10969": "Friedrichshain-Kreuzberg", "10997": "Friedrichshain-Kreuzberg", "10999": "Friedrichshain-Kreuzberg",
+  "12043": "Neukölln", "12045": "Neukölln", "12047": "Neukölln", "12049": "Neukölln",
+  "12051": "Neukölln", "12053": "Neukölln", "12055": "Neukölln", "12057": "Neukölln", "12059": "Neukölln",
+  "12099": "Tempelhof-Schöneberg", "12101": "Tempelhof-Schöneberg", "12103": "Tempelhof-Schöneberg", "12105": "Tempelhof-Schöneberg",
+  "12107": "Tempelhof-Schöneberg", "12109": "Tempelhof-Schöneberg",
+  "12157": "Tempelhof-Schöneberg", "12159": "Tempelhof-Schöneberg", "12161": "Tempelhof-Schöneberg",
+  "12163": "Steglitz-Zehlendorf", "12165": "Steglitz-Zehlendorf", "12167": "Steglitz-Zehlendorf", "12169": "Steglitz-Zehlendorf",
+  "12203": "Steglitz-Zehlendorf", "12205": "Steglitz-Zehlendorf", "12207": "Steglitz-Zehlendorf", "12209": "Steglitz-Zehlendorf",
+  "12247": "Steglitz-Zehlendorf", "12249": "Steglitz-Zehlendorf",
+  "12277": "Tempelhof-Schöneberg", "12279": "Tempelhof-Schöneberg",
+  "12305": "Tempelhof-Schöneberg", "12307": "Tempelhof-Schöneberg", "12309": "Tempelhof-Schöneberg",
+  "12347": "Neukölln", "12349": "Neukölln", "12351": "Neukölln", "12353": "Neukölln",
+  "12355": "Neukölln", "12357": "Neukölln", "12359": "Neukölln",
+  "12435": "Treptow-Köpenick", "12437": "Treptow-Köpenick", "12439": "Treptow-Köpenick", "12459": "Treptow-Köpenick",
+  "12487": "Treptow-Köpenick", "12489": "Treptow-Köpenick",
+  "12524": "Treptow-Köpenick", "12526": "Treptow-Köpenick", "12527": "Treptow-Köpenick",
+  "12555": "Treptow-Köpenick", "12557": "Treptow-Köpenick", "12559": "Treptow-Köpenick",
+  "12587": "Treptow-Köpenick", "12589": "Treptow-Köpenick",
+  "12619": "Marzahn-Hellersdorf", "12621": "Marzahn-Hellersdorf", "12623": "Marzahn-Hellersdorf",
+  "12627": "Marzahn-Hellersdorf", "12629": "Marzahn-Hellersdorf",
+  "12679": "Marzahn-Hellersdorf", "12681": "Marzahn-Hellersdorf", "12683": "Marzahn-Hellersdorf",
+  "12685": "Marzahn-Hellersdorf", "12687": "Marzahn-Hellersdorf", "12689": "Marzahn-Hellersdorf",
+  "13051": "Lichtenberg", "13053": "Lichtenberg", "13055": "Lichtenberg", "13057": "Lichtenberg", "13059": "Lichtenberg",
+  "13086": "Pankow", "13088": "Pankow", "13089": "Pankow",
+  "13125": "Pankow", "13127": "Pankow", "13129": "Pankow",
+  "13156": "Pankow", "13158": "Pankow", "13159": "Pankow",
+  "13187": "Pankow", "13189": "Pankow",
+  "13347": "Mitte", "13349": "Mitte", "13351": "Mitte", "13353": "Mitte", "13355": "Mitte", "13357": "Mitte", "13359": "Mitte",
+  "13403": "Reinickendorf", "13405": "Reinickendorf", "13407": "Reinickendorf", "13409": "Reinickendorf",
+  "13435": "Reinickendorf", "13437": "Reinickendorf", "13439": "Reinickendorf",
+  "13465": "Reinickendorf", "13467": "Reinickendorf", "13469": "Reinickendorf",
+  "13503": "Reinickendorf", "13505": "Reinickendorf", "13507": "Reinickendorf", "13509": "Reinickendorf",
+  "13581": "Spandau", "13583": "Spandau", "13585": "Spandau", "13587": "Spandau", "13589": "Spandau",
+  "13591": "Spandau", "13593": "Spandau", "13595": "Spandau",
+  "13597": "Spandau", "13599": "Spandau",
+  "13627": "Charlottenburg-Wilmersdorf", "13629": "Spandau",
+  "14050": "Charlottenburg-Wilmersdorf", "14052": "Charlottenburg-Wilmersdorf", "14053": "Charlottenburg-Wilmersdorf",
+  "14055": "Charlottenburg-Wilmersdorf", "14057": "Charlottenburg-Wilmersdorf", "14059": "Charlottenburg-Wilmersdorf",
+  "14089": "Spandau",
+  "14109": "Steglitz-Zehlendorf", "14129": "Steglitz-Zehlendorf",
+  "14163": "Steglitz-Zehlendorf", "14165": "Steglitz-Zehlendorf", "14167": "Steglitz-Zehlendorf", "14169": "Steglitz-Zehlendorf",
+  "14193": "Charlottenburg-Wilmersdorf", "14195": "Steglitz-Zehlendorf",
+  "14197": "Charlottenburg-Wilmersdorf", "14199": "Charlottenburg-Wilmersdorf",
+  "15569": "Treptow-Köpenick",
+};
+const BERLIN_DISTRICTS = [
+  "Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf",
+  "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Neukölln",
+  "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf",
+];
+function districtForAddress(address) {
+  const plz = extractPlz(address);
+  return plz ? (BERLIN_PLZ_DISTRICT[plz] || null) : null;
+}
+
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+function extractPlz(address) {
+  const m = (address || '').match(/\b(\d{5})\b/);
+  return m ? m[1] : null;
+}
+function coordsForPlz(plz) {
+  return BERLIN_PLZ_COORDS[plz] || null;
+}
+// Returns null (rather than a distance) whenever either side can't be
+// resolved - an unrecognized/incomplete postcode typed in, or a fixture
+// whose venue_address doesn't carry a Berlin PLZ we have on file. The
+// render code below is responsible for showing those as "distance
+// unknown" rather than silently sorting them to the top as if 0km away.
+function distanceFromPostcode(postcodeValue, venueAddress) {
+  const from = coordsForPlz((postcodeValue || '').trim());
+  const to = coordsForPlz(extractPlz(venueAddress));
+  if (!from || !to) return null;
+  return haversineKm(from[0], from[1], to[0], to[1]);
+}
+
+function allMonths() {
+  return [...new Set(Object.keys(allData).map(monthOf))].sort();
+}
+function datesInCurrentMonth() {
+  return Object.keys(allData).filter(d => monthOf(d) === currentMonth).sort();
+}
+function allMatches() {
+  return Object.values(allData).flat();
+}
+
+// Every filter control (date calendar, league, district, team) can now
+// have MULTIPLE values selected at once, and each one narrows what the
+// OTHER controls offer: picking a date only shows leagues/districts/
+// teams that actually have a fixture on that date; picking a league
+// only shows dates/districts/teams with a fixture in that league; and
+// so on. This is the single source of truth for "does this fixture
+// satisfy everything currently selected" - every chip-rendering
+// function below calls it with ONE dimension excluded (its own), so it
+// can work out "what would still match if I ignore my own filter" to
+// decide which of its own options to offer, while every OTHER active
+// filter still narrows it.
+function matchesFilters(m, exclude = {}) {
+  if (!exclude.date && selectedDates.size && !selectedDates.has(m.date)) return false;
+  if (!exclude.league && selectedLeagues.size && !selectedLeagues.has(m.league)) return false;
+  if (!exclude.district && selectedDistricts.size) {
+    const d = districtForAddress(m.venue_address);
+    if (!d || !selectedDistricts.has(d)) return false;
   }
-}
-
-// Placeholder blocks shaped like real film-group content, shown while a
-// date's JSON is being fetched — replaces the blank "Loading…" gap so the
-// page feels like it's already assembling itself rather than sitting idle.
-function renderSkeleton(){
-  const container = document.getElementById('results');
-  let html = '';
-  for (let i = 0; i < 3; i++){
-    html += `
-      <div class="skeleton-group">
-        <div class="skeleton-head"><div class="skel-bar" style="width:${40 + i*8}%;"></div></div>
-        <div class="skeleton-row"><div class="skel-bar" style="width:70%;"></div></div>
-        <div class="skeleton-row"><div class="skel-bar" style="width:55%;"></div></div>
-      </div>
-    `;
-  }
-  container.innerHTML = html;
-}
-
-async function loadDateData(iso){
-  const statusEl = document.getElementById('status');
-  const noteEl = document.getElementById('data-source-note');
-  statusEl.innerHTML = `<span class="dot"></span>Loading…`;
-  renderSkeleton();
-  try{
-    const res = await fetch(`data/${iso}.json`, {cache:"no-store"});
-    if (!res.ok) throw new Error("no data for this date");
-    DATA = await res.json();
-    statusEl.innerHTML = `<span class="dot"></span>Live data loaded`;
-    noteEl.textContent = `Source: data/${iso}.json (generated by the scraper)`;
-  }catch(e){
-    if (iso === TODAY_ISO){
-      DATA = DEMO_DATA;
-      statusEl.innerHTML = `<span class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber);"></span>Demo data (no live feed connected yet)`;
-      noteEl.textContent = "Demo data for Spider-Man: Brand New Day, 01.08.2026 — run scraper.py to load every film live";
-    } else {
-      DATA = { date: iso, generated_at: null, screenings: [] };
-      statusEl.innerHTML = `<span class="dot" style="background:var(--red);box-shadow:0 0 8px var(--red);"></span>No data yet for this date`;
-      noteEl.textContent = "The scraper hasn't produced a file for this date yet";
-    }
-  }
-  document.getElementById('generated-at').textContent = DATA.generated_at || DATA.date || "—";
-
-  if (iso === TODAY_ISO){
-    todayScreeningsCache = DATA.screenings;
-    // If today's very last showing has already happened, don't leave the
-    // user looking at an empty "today" — move straight to tomorrow (if
-    // it's available) instead. That call renders on its own, so skip the
-    // redundant render() below.
-    if (maybeAdvanceIfTodayFinished()) return;
-  }
-  render();
-}
-
-// Only does anything if we're currently sat on today's tab and today has
-// genuinely run out of screenings — moves to the next available date
-// instead of showing an empty list. Returns true if it moved.
-function maybeAdvanceIfTodayFinished(){
-  if (activeDate !== TODAY_ISO || todayHasUpcomingScreenings()) return false;
-  const idx = availableDates.indexOf(TODAY_ISO);
-  const nextDate = idx >= 0 ? availableDates[idx + 1] : null;
-  if (!nextDate) return false; // nothing published yet to advance to — today's chip still hides itself either way
-  activeDate = nextDate;
-  renderDateChips();
-  loadDateData(nextDate);
+  if (!exclude.team && selectedTeams.size && !selectedTeams.has(m.home_team) && !selectedTeams.has(m.away_team)) return false;
   return true;
 }
 
-// ---- Shareable links ----
-// Filters that describe "what to show a friend" (film search, date,
-// language, view) get synced into the URL, so a link can be copied and
-// sent as-is. Deliberately excludes postcode and sort mode — those are
-// how *you* personally want things arranged, not content worth sharing,
-// and a postcode is the one piece of real personal data in this app, so
-// it never ends up in a URL that could get pasted into a group chat.
-function syncStateToUrl(){
-  const params = new URLSearchParams();
-  const q = document.getElementById('search').value.trim();
-  if (q) params.set('film', q);
-  if (activeDate && activeDate !== TODAY_ISO) params.set('date', activeDate);
-  if (activeLang !== 'all') params.set('lang', activeLang);
-  if (activeView !== 'film') params.set('view', activeView);
-  const qs = params.toString();
-  const newUrl = window.location.pathname + (qs ? `?${qs}` : '');
-  history.replaceState(null, '', newUrl);
-}
-
-async function loadData(){
-  // Apply any shareable-link state from the URL before the first render.
-  const urlParams = new URLSearchParams(window.location.search);
-  const urlFilm = urlParams.get('film');
-  const urlDate = urlParams.get('date');
-  const urlLang = urlParams.get('lang');
-  const urlView = urlParams.get('view');
-  if (urlFilm) document.getElementById('search').value = urlFilm;
-  if (urlLang && ['ov','omu','de'].includes(urlLang)){
-    activeLang = urlLang;
-    document.querySelectorAll('#lang-chips .chip').forEach(c => c.classList.remove('active'));
-    document.querySelector(`#lang-chips [data-lang="${urlLang}"]`).classList.add('active');
-  }
-  if (urlView && ['cinema','time'].includes(urlView)){
-    activeView = urlView;
-    document.querySelectorAll('#view-chips .chip').forEach(c => c.classList.remove('active'));
-    document.querySelector(`#view-chips [data-view="${urlView}"]`).classList.add('active');
-    updateViewSpecificControls();
-  }
-  updateRatingSortAvailability();
-
-  try{
-    const res = await fetch('data/index.json', {cache:"no-store"});
-    if (!res.ok) throw new Error("no index");
-    const index = await res.json();
-    availableDates = index.dates;
-  }catch(e){
-    // No live index yet — fall back to just today, backed by demo data.
-    availableDates = [TODAY_ISO];
-  }
-  activeDate = (urlDate && availableDates.includes(urlDate))
-    ? urlDate
-    : (availableDates.includes(TODAY_ISO) ? TODAY_ISO : availableDates[0]);
-  renderDateChips();
-  loadDateData(activeDate);
-}
-
-function classifyLang(tags){
-  const t = tags.map(x => x.toLowerCase());
-  if (t.includes("ov")) return "ov";
-  if (t.includes("omu")) return "omu";
-  if (t.length === 0) return "de";
-  return "other"; // UkrF, etc — shown but not filterable into OV/OmU/DE
-}
-
-function langLabel(tags){
-  if (tags.length === 0) return { cls:"de", text:"DE" };
-  const cls = classifyLang(tags);
-  return { cls, text: tags.join(" · ") };
-}
-
-function normalizeForSearch(s){
-  return s.toLowerCase().replace(/[^a-z0-9À-ÿ]/g, "");
-}
-
-// ---- Cinema website links ----
-// Verified real domains (checked directly, not guessed) for the big chains.
-// A wrong guessed URL is worse than no link at all, so anything not
-// confidently matched below falls back to a plain Google search instead
-// of a made-up address.
-const CHAIN_WEBSITES = [
-  { test: n => n.startsWith("CineStar"), url: "https://www.cinestar.de" },
-  { test: n => n.startsWith("Cineplex"), url: "https://www.cineplex.de" },
-  { test: n => n.startsWith("UCI"),      url: "https://www.uci-kinowelt.de" },
-  { test: n => n.startsWith("CinemaxX"), url: "https://www.cinemaxx.de" },
-  { test: n => n.includes("Zoo Palast"), url: "https://zoopalast.premiumkino.de" },
-];
-
-// Yorck Kinogruppe venues — only names we can match unambiguously to one
-// of their known cinema-page slugs (see scraper_yorck.py's YORCK_CINEMAS
-// list, same source of truth). Anything not listed here (e.g. a bare
-// "Capitol" with no "Dahlem", which could be a different cinema entirely)
-// deliberately falls through to the search fallback rather than guess.
-const YORCK_WEBSITES = [
-  { test: n => /babylon\s*kreuzberg/i.test(n),              slug: "babylon-kreuzberg" },
-  { test: n => /blauer\s*stern/i.test(n),                    slug: "blauer-stern" },
-  { test: n => /capitol\s*dahlem/i.test(n),                  slug: "capitol-dahlem" },
-  { test: n => /^cinema\s*paris$/i.test(n) || /cinema paris/i.test(n), slug: "cinema-paris" },
-  { test: n => /delphi\s*filmpalast/i.test(n),               slug: "delphi-filmpalast" },
-  { test: n => /delphi\s*lux/i.test(n),                      slug: "delphi-lux" },
-  { test: n => /filmtheater\s*am\s*friedrichshain/i.test(n), slug: "filmtheater-am-friedrichshain" },
-  { test: n => /kant\s*kino/i.test(n),                       slug: "kant-kino" },
-  { test: n => /neues\s*off/i.test(n),                       slug: "neues-off" },
-  { test: n => /\bodeon\b/i.test(n),                         slug: "odeon" },
-  { test: n => /\bpassage\b/i.test(n),                       slug: "passage" },
-  { test: n => /\brollberg\b/i.test(n),                      slug: "rollberg" },
-  { test: n => /kino\s*international|^international$/i.test(n) && !/uci/i.test(n), slug: "international" },
-];
-
-function getCinemaWebsite(name){
-  for (const c of CHAIN_WEBSITES){
-    if (c.test(name)) return c.url;
-  }
-  for (const y of YORCK_WEBSITES){
-    if (y.test(name)) return `https://www.yorck.de/en/cinemas/${y.slug}`;
-  }
-  // Independent cinema we haven't verified a real URL for — a search is
-  // safer than a guessed domain.
-  return `https://www.google.com/search?q=${encodeURIComponent(name + " Kino Berlin")}`;
-}
-
-function cinemaLinkHtml(name, extraClass){
-  const url = getCinemaWebsite(name);
-  const cls = extraClass ? `cinema-link ${extraClass}` : "cinema-link";
-  return `<a class="${cls}" href="${url}" target="_blank" rel="noopener noreferrer">Website ↗</a>`;
-}
-
-// ---- "Nearest first" (postcode-based distance) ----
-// Real Berlin postcode centre-points, not guessed — sourced from a public
-// German-postcode geocoordinate dataset (WZB Social Science Center,
-// geocoded via Google's geocoding API), filtered to Berlin's real postcode
-// range (10115-14199) and trimmed to 4 decimal places (~11m precision,
-// plenty for "which cinema is nearest" — this was never meant to be
-// exact-to-the-metre). Three entries that dataset had wildly wrong
-// (a duplicated failed-geocode value ~400km away, for postcodes that are
-// non-geographic institutional codes) were dropped rather than kept wrong.
-const BERLIN_PLZ_COORDS = {
-  "10115":[52.5326,13.3777],"10117":[52.5155,13.3848],"10119":[52.5307,13.4058],"10178":[52.5222,13.4093],"10179":[52.5121,13.4140],"10243":[52.5147,13.4386],"10245":[52.5019,13.4554],"10247":[52.5173,13.4631],"10249":[52.5239,13.4412],"10315":[52.5155,13.5145],"10317":[52.4985,13.4847],"10318":[52.4810,13.5186],"10319":[52.4958,13.5137],"10365":[52.5191,13.4950],"10367":[52.5205,13.4800],"10369":[52.5285,13.4668],"10405":[52.5342,13.4230],"10407":[52.5345,13.4561],"10409":[52.5434,13.4414],"10435":[52.5385,13.4096],"10437":[52.5455,13.4073],"10439":[52.5517,13.4123],"10551":[52.5317,13.3386],"10553":[52.5282,13.3214],"10555":[52.5225,13.3360],"10557":[52.5232,13.3653],"10559":[52.5319,13.3483],"10585":[52.5151,13.3053],"10587":[52.5171,13.3237],"10589":[52.5299,13.3067],"10623":[52.5070,13.3284],"10625":[52.5087,13.3138],"10627":[52.5074,13.3015],"10629":[52.5018,13.3027],"10707":[52.4950,13.3148],"10709":[52.4922,13.3037],"10711":[52.4990,13.2916],"10713":[52.4869,13.3137],"10715":[52.4837,13.3305],"10717":[52.4908,13.3281],"10719":[52.4993,13.3246],"10777":[52.4972,13.3429],"10779":[52.4921,13.3404],"10781":[52.4934,13.3526],"10783":[52.4977,13.3625],"10785":[52.5069,13.3651],"10787":[52.5094,13.3431],"10789":[52.5012,13.3381],"10823":[52.4857,13.3488],"10825":[52.4840,13.3403],"10827":[52.4830,13.3543],"10829":[52.4804,13.3597],"10961":[52.4931,13.3969],"10963":[52.4986,13.3784],"10965":[52.4854,13.3989],"10967":[52.4909,13.4161],"10969":[52.5027,13.4017],"10997":[52.5004,13.4334],"10999":[52.4957,13.4272],"12043":[52.4777,13.4415],"12045":[52.4867,13.4344],"12047":[52.4901,13.4283],"12049":[52.4773,13.4220],"12051":[52.4668,13.4303],"12053":[52.4760,13.4330],"12055":[52.4713,13.4500],"12057":[52.4686,13.4621],"12059":[52.4805,13.4526],"12099":[52.4591,13.4033],"12101":[52.4762,13.3963],"12103":[52.4639,13.3729],"12105":[52.4453,13.3795],"12107":[52.4334,13.3907],"12109":[52.4467,13.4020],"12157":[52.4658,13.3448],"12159":[52.4737,13.3352],"12161":[52.4694,13.3254],"12163":[52.4632,13.3204],"12165":[52.4574,13.3118],"12167":[52.4500,13.3285],"12169":[52.4555,13.3398],"12203":[52.4426,13.3103],"12205":[52.4332,13.2980],"12207":[52.4212,13.3076],"12209":[52.4182,13.3288],"12247":[52.4395,13.3434],"12249":[52.4273,13.3491],"12277":[52.4107,13.3757],"12279":[52.4111,13.3488],"12305":[52.4052,13.3999],"12307":[52.3825,13.3994],"12309":[52.3901,13.4166],"12347":[52.4506,13.4300],"12349":[52.4279,13.4150],"12351":[52.4342,13.4561],"12353":[52.4228,13.4574],"12355":[52.4075,13.4976],"12357":[52.4276,13.4882],"12359":[52.4480,13.4520],"12435":[52.4840,13.4698],"12437":[52.4609,13.4815],"12439":[52.4496,13.5241],"12459":[52.4609,13.5280],"12487":[52.4383,13.5129],"12489":[52.4370,13.5471],"12524":[52.4127,13.5465],"12526":[52.3997,13.5747],"12527":[52.3922,13.6291],"12529":[52.3691,13.5016],"12555":[52.4622,13.5868],"12557":[52.4268,13.5884],"12559":[52.4169,13.6493],"12587":[52.4614,13.6406],"12589":[52.4485,13.7040],"12619":[52.5243,13.5906],"12621":[52.5051,13.5884],"12623":[52.5033,13.6073],"12627":[52.5379,13.6130],"12629":[52.5404,13.5918],"12679":[52.5480,13.5617],"12681":[52.5546,13.5398],"12683":[52.4982,13.5582],"12685":[52.5380,13.5664],"12687":[52.5564,13.5640],"12689":[52.5645,13.5719],"13051":[52.5820,13.4913],"13053":[52.5559,13.5055],"13055":[52.5383,13.4986],"13057":[52.5731,13.5451],"13059":[52.5786,13.5207],"13086":[52.5546,13.4466],"13088":[52.5593,13.4761],"13089":[52.5687,13.4420],"13125":[52.6326,13.4776],"13127":[52.6111,13.4281],"13129":[52.5933,13.4583],"13156":[52.5819,13.3981],"13158":[52.5917,13.3836],"13159":[52.6247,13.4038],"13187":[52.5721,13.4127],"13189":[52.5601,13.4222],"13347":[52.5497,13.3643],"13349":[52.5588,13.3437],"13351":[52.5503,13.3391],"13353":[52.5411,13.3509],"13355":[52.5421,13.3901],"13357":[52.5505,13.3787],"13359":[52.5592,13.3830],"13403":[52.5741,13.3186],"13405":[52.5583,13.3098],"13407":[52.5737,13.3514],"13409":[52.5693,13.3715],"13435":[52.6019,13.3421],"13437":[52.5875,13.3346],"13439":[52.5951,13.3542],"13465":[52.6324,13.2881],"13467":[52.6142,13.3055],"13469":[52.6130,13.3398],"13503":[52.6106,13.2418],"13505":[52.5884,13.2464],"13507":[52.5747,13.2707],"13509":[52.5891,13.3033],"13581":[52.5299,13.1871],"13583":[52.5416,13.1834],"13585":[52.5467,13.2068],"13587":[52.5727,13.1924],"13589":[52.5658,13.1581],"13591":[52.5349,13.1432],"13593":[52.5186,13.1696],"13595":[52.5077,13.1917],"13597":[52.5296,13.2139],"13599":[52.5485,13.2386],"13627":[52.5410,13.3045],"13629":[52.5400,13.2653],"14050":[52.5195,13.2727],"14052":[52.5127,13.2595],"14053":[52.5206,13.2275],"14055":[52.5027,13.2355],"14057":[52.5065,13.2856],"14059":[52.5213,13.2871],"14089":[52.4741,13.1523],"14109":[52.4151,13.1469],"14129":[52.4307,13.2006],"14163":[52.4480,13.2397],"14165":[52.4160,13.2588],"14167":[52.4194,13.2759],"14169":[52.4422,13.2653],"14193":[52.4675,13.2107],"14195":[52.4533,13.2885],"14197":[52.4721,13.3144],"14199":[52.4768,13.2962]
-};
-
-let userPostcodeCoord = null; // [lat, lon] once a recognized postcode is entered, else null
-let groupSortMode = "name";      // "name" | "nearest" | "rating" — used by By film / By cinema
-let timeSortMode = "soonest";    // "soonest" | "nearest" | "rating" | "bestofboth" — By time's own sort choice
-                                  // ("cinema" was dropped as an option here — By cinema already
-                                  // does that job, having it twice was just confusing)
-
-function haversineKm(a, b){
-  const R = 6371;
-  const dLat = (b[0]-a[0]) * Math.PI/180;
-  const dLon = (b[1]-a[1]) * Math.PI/180;
-  const lat1 = a[0] * Math.PI/180;
-  const lat2 = b[0] * Math.PI/180;
-  const x = Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
-}
-
-function extractPostcode(address){
-  const m = address && address.match(/\b(\d{5})\b/);
-  return m ? m[1] : null;
-}
-
-// Distance in km, or null if we can't work it out (no user postcode set,
-// or this cinema's address doesn't resolve to a known Berlin postcode).
-function cinemaDistanceKm(address){
-  if (!userPostcodeCoord) return null;
-  const plz = extractPostcode(address);
-  if (!plz || !BERLIN_PLZ_COORDS[plz]) return null;
-  return haversineKm(userPostcodeCoord, BERLIN_PLZ_COORDS[plz]);
-}
-
-// For sorting: unresolvable distances go last, never first.
-function distanceSortValue(address){
-  const km = cinemaDistanceKm(address);
-  return km === null ? Infinity : km;
-}
-
-function distanceBadgeHtml(address){
-  if (groupSortMode !== 'nearest' || !userPostcodeCoord) return '';
-  const km = cinemaDistanceKm(address);
-  return km === null
-    ? `<span class="distance-tag">—</span>`
-    : `<span class="distance-tag">${km < 10 ? km.toFixed(1) : Math.round(km)} km</span>`;
-}
-
-// Same as above but not gated behind the sort mode — used in By time,
-// where distance is just useful context regardless of which sort is
-// currently chosen there.
-function distanceBadgeHtmlAlways(address){
-  if (!userPostcodeCoord) return '';
-  const km = cinemaDistanceKm(address);
-  return km === null
-    ? `<span class="distance-tag">—</span>`
-    : `<span class="distance-tag">${km < 10 ? km.toFixed(1) : Math.round(km)} km</span>`;
-}
-
-// ---- Posters + ratings (TMDb) ----
-// poster_url / rating are added by enrich_tmdb.py at scrape time — both
-// are optional per screening (some titles won't have a confident TMDb
-// match), so every usage here degrades gracefully to a plain fallback
-// box / no badge rather than showing anything guessed or broken.
-function posterHtml(url, size){
-  return url
-    ? `<img class="poster poster-${size}" src="${url}" alt="" loading="lazy">`
-    : `<div class="poster-fallback poster-${size}"></div>`;
-}
-
-function ratingBadgeHtml(rating){
-  return (typeof rating === "number")
-    ? `<span class="rating-tag">★ ${rating.toFixed(1)}</span>`
-    : '';
-}
-
-// Links through to the film's own TMDb page — synopsis, cast, etc. —
-// for anyone curious enough to want more than a poster and a number.
-function tmdbInfoLinkHtml(tmdbId){
-  return (typeof tmdbId === "number")
-    ? `<a class="tmdb-link" href="https://www.themoviedb.org/movie/${tmdbId}" target="_blank" rel="noopener noreferrer">More info ↗</a>`
-    : '';
-}
-
-// For sorting by rating: no TMDb match sorts last, same principle as
-// unresolvable distances.
-function ratingSortValue(rating){
-  return (typeof rating === "number") ? rating : -Infinity;
-}
-
-// Postcode-dependent sort options in By time (Nearest / Best of both)
-// only make sense once we actually have somewhere to measure distance
-// from — rather than showing them greyed-out all the time, they're not
-// shown at all until a valid postcode is entered, at which point they
-// appear right away as real, clickable choices (the actual switch to a
-// postcode-aware default happens in updatePostcode(), the moment the
-// postcode first becomes valid — this function just keeps their
-// visibility in sync). (By film / By cinema's own postcode-driven
-// behaviour is handled separately, in updateGroupSortForPostcode —
-// there, distance is so obviously the better default that it's applied
-// automatically instead of being offered as a choice; see that function
-// for why that's different from here, where Soonest/Nearest/Best of
-// both remain genuinely different, useful choices even with a postcode.)
-function updatePostcodeDependentChips(){
-  const isTime = activeView === 'time';
-  const has = userPostcodeCoord !== null;
-  document.querySelector('#time-sort-chips [data-sort="nearest"]').style.display = has ? '' : 'none';
-  document.querySelector('#time-sort-chips [data-sort="bestofboth"]').style.display = has ? '' : 'none';
-  document.getElementById('time-sort-chips').style.display = isTime ? 'flex' : 'none';
-  updateSoonestChipVisibility();
-}
-
-// "Soonest" is the default the moment you land on By time (it's already
-// sorted chronologically without clicking anything), so it's only worth
-// showing as an explicit option when there's actually something else
-// visible to switch to instead — otherwise it's a chip that does
-// nothing when clicked. Checks the other chips' own current visibility
-// rather than re-deriving the same conditions a third time.
-function updateSoonestChipVisibility(){
-  const soonestChip = document.querySelector('#time-sort-chips [data-sort="soonest"]');
-  const others = document.querySelectorAll('#time-sort-chips .chip:not([data-sort="soonest"])');
-  const hasAlternative = Array.from(others).some(c => c.style.display !== 'none');
-  soonestChip.style.display = hasAlternative ? '' : 'none';
-}
-
-// By film / By cinema only ever had two real reasons to sort a
-// different way than alphabetical: distance and rating. Once a postcode
-// is entered, distance isn't really a "preference" any more — of course
-// you want the cinema showing up first to be the closest one, so this
-// applies that automatically and hides the (now pointless) choice
-// entirely, rather than making the user pick "Nearest first" themselves.
-// It also combines with the By-time-view visibility rule (this row is
-// only relevant outside of By time anyway), so both conditions are
-// checked in one place instead of two separate toggles fighting over the
-// same style.display.
-// By film / By cinema's sort row only earns its place on screen when
-// there are genuinely two different things to choose between. Distance
-// auto-applies the moment a postcode exists (see below), so the row
-// hides outright then. Otherwise, "A-Z" is only worth showing next to
-// "Top rated first" — once that's hidden too (film searched, or a
-// language filter picked), A-Z would be sitting there alone doing
-// nothing when clicked, so the whole row hides in that case as well.
-function updateGroupSortForPostcode(){
-  const container = document.getElementById('group-sort-chips');
-  const isTime = activeView === 'time';
-  const hasPostcode = userPostcodeCoord !== null;
-  const ratingChip = document.querySelector('#group-sort-chips [data-groupsort="rating"]');
-  const hasAlternativeToAZ = ratingChip.style.display !== 'none';
-  container.style.display = (isTime || hasPostcode || !hasAlternativeToAZ) ? 'none' : '';
-
-  if (hasPostcode){
-    groupSortMode = 'nearest';
-  } else if (groupSortMode === 'nearest'){
-    // Postcode was cleared while distance-sorting was in effect — fall
-    // back to the default alphabetical order.
-    groupSortMode = 'name';
-    document.querySelectorAll('#group-sort-chips .chip').forEach(c => c.classList.remove('active'));
-    document.querySelector('#group-sort-chips [data-groupsort="name"]').classList.add('active');
-  }
-}
-
-function updatePostcode(){
-  const raw = document.getElementById('postcode').value.trim();
-  const hint = document.getElementById('distance-hint');
-  const hadPostcode = userPostcodeCoord !== null;
-  if (/^\d{5}$/.test(raw) && BERLIN_PLZ_COORDS[raw]){
-    userPostcodeCoord = BERLIN_PLZ_COORDS[raw];
-    hint.textContent = '';
-    // The moment a postcode first becomes valid, default By time's sort
-    // straight to "Best of both" (it already balances soonest and
-    // nearest) rather than leaving it on plain chronological order and
-    // waiting for the user to notice and click Nearest/Best of both
-    // themselves — but only if they haven't already picked something
-    // else, so a deliberate choice never gets silently overridden.
-    if (!hadPostcode && timeSortMode === 'soonest'){
-      timeSortMode = 'bestofboth';
-      document.querySelectorAll('#time-sort-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('#time-sort-chips [data-sort="bestofboth"]').classList.add('active');
-    }
-  } else {
-    userPostcodeCoord = null;
-    if (timeSortMode === 'nearest' || timeSortMode === 'bestofboth'){
-      timeSortMode = 'soonest';
-      document.querySelectorAll('#time-sort-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('#time-sort-chips [data-sort="soonest"]').classList.add('active');
-    }
-    hint.textContent = raw ? 'Postcode not recognized (Berlin postcodes only)' : '';
-  }
-  updatePostcodeDependentChips();
-  updateGroupSortForPostcode();
-  updateRatingSortAvailability();
-  render();
-}
-
-function getFilteredScreenings(){
-  const qRaw = document.getElementById('search').value.trim();
-  const q = normalizeForSearch(qRaw);
-  const out = [];
-  for (const s of DATA.screenings){
-    // Matches either the film title or the cinema name — so "Zoo Palast"
-    // in the search box works just as well as a film title does.
-    if (q && !normalizeForSearch(s.film).includes(q) && !normalizeForSearch(s.cinema).includes(q)) continue;
-    const lang = classifyLang(s.format_tags);
-    if (activeLang !== "all" && lang !== activeLang) continue;
-    out.push(s);
-  }
-  return hidePastTimesIfToday(out);
-}
-
-function hidePastTimesIfToday(screenings){
-  if (activeDate !== TODAY_ISO) return screenings;
-  const nowMinutes = getBerlinNowMinutes();
-  const out = [];
-  for (const s of screenings){
-    const upcoming = s.times.filter(t => {
-      const [h, m] = t.split(':').map(Number);
-      return (h*60 + m) >= nowMinutes;
-    });
-    if (upcoming.length > 0){
-      out.push({...s, times: upcoming});
-    }
-  }
-  return out;
-}
-
-function renderTimeChips(times, tags){
-  const {cls, text} = langLabel(tags);
-  return times.map(t =>
-    `<span class="time-chip"><span class="digits">${t}</span><span class="lang-tag ${cls}">${text}</span></span>`
-  ).join("");
-}
-
-function render(){
-  const container = document.getElementById('results');
-  container.innerHTML = "";
-  const filtered = getFilteredScreenings();
-
-  if (filtered.length === 0){
-    container.innerHTML = `
-      <div class="empty">
-        No screenings found — try a different film title or language filter.<br>
-        <button class="reset-btn empty-reset-btn" id="empty-reset-btn" type="button">Reset filters</button>
-      </div>
-    `;
-    document.getElementById('empty-reset-btn').addEventListener('click', resetAllFilters);
-    return;
-  }
-
-  if (activeView === "film") renderByFilm(filtered, container);
-  else if (activeView === "cinema") renderByCinema(filtered, container);
-  else renderByTime(filtered, container);
-}
-
-function renderByFilm(filtered, container){
-  const byFilm = new Map();
-  for (const s of filtered){
-    if (!byFilm.has(s.film)) byFilm.set(s.film, []);
-    byFilm.get(s.film).push(s);
-  }
-  const nearest = groupSortMode === 'nearest' && userPostcodeCoord;
-  const byRating = groupSortMode === 'rating';
-  const filmEntries = [...byFilm.entries()];
-  filmEntries.sort((a,b) => {
-    if (nearest) return Math.min(...a[1].map(r=>distanceSortValue(r.address))) - Math.min(...b[1].map(r=>distanceSortValue(r.address)));
-    if (byRating) return ratingSortValue(b[1][0].rating) - ratingSortValue(a[1][0].rating);
-    return a[0].localeCompare(b[0]);
-  });
-  for (const [film, rows] of filmEntries){
-    const group = document.createElement('div');
-    group.className = 'film-group';
-    const head = document.createElement('div');
-    head.className = 'film-head';
-    head.innerHTML = `
-      <div class="film-head-main">
-        ${posterHtml(rows[0].poster_url, 'sm')}
-        <div class="film-head-text">
-          <h2>${film}</h2>
-          ${ratingBadgeHtml(rows[0].rating)}${tmdbInfoLinkHtml(rows[0].tmdb_id)}
-        </div>
-      </div>
-      <span class="count">${rows.length} cinema${rows.length===1?'':'s'}</span>
-    `;
-    group.appendChild(head);
-    const sortedRows = rows.sort((a,b) => nearest
-      ? distanceSortValue(a.address) - distanceSortValue(b.address)
-      : a.cinema.localeCompare(b.cinema));
-    for (const row of sortedRows){
-      const r = document.createElement('div');
-      r.className = 'cinema-row';
-      r.innerHTML = `
-        <div class="cinema-info">
-          <div class="cinema-name">${row.cinema} ${distanceBadgeHtml(row.address)}</div>
-          <div class="cinema-addr">${row.address}</div>
-          ${cinemaLinkHtml(row.cinema)}
-        </div>
-        <div class="times">${renderTimeChips(row.times, row.format_tags)}</div>
-      `;
-      group.appendChild(r);
-    }
-    container.appendChild(group);
-  }
-}
-
-function renderByCinema(filtered, container){
-  const byCinema = new Map();
-  for (const s of filtered){
-    if (!byCinema.has(s.cinema)) byCinema.set(s.cinema, {address: s.address, rows: []});
-    byCinema.get(s.cinema).rows.push(s);
-  }
-  const nearest = groupSortMode === 'nearest' && userPostcodeCoord;
-  // "Top rated first" doesn't reorder which cinema comes first (a cinema
-  // itself doesn't have one rating) — instead it reorders the films
-  // listed inside each cinema, highest-rated first.
-  const byRating = groupSortMode === 'rating';
-  const cinemaEntries = [...byCinema.entries()];
-  cinemaEntries.sort((a,b) => nearest
-    ? distanceSortValue(a[1].address) - distanceSortValue(b[1].address)
-    : a[0].localeCompare(b[0]));
-  for (const [cinema, data] of cinemaEntries){
-    const group = document.createElement('div');
-    group.className = 'film-group';
-    const head = document.createElement('div');
-    head.className = 'film-head';
-    head.innerHTML = `<h2>${cinema}${cinemaLinkHtml(cinema)}${distanceBadgeHtml(data.address)}</h2><span class="count">${data.address}</span>`;
-    group.appendChild(head);
-    const sortedRows = data.rows.sort((a,b) => byRating
-      ? ratingSortValue(b.rating) - ratingSortValue(a.rating)
-      : a.film.localeCompare(b.film));
-    for (const row of sortedRows){
-      const r = document.createElement('div');
-      r.className = 'cinema-row';
-      r.innerHTML = `
-        <div class="cinema-info">
-          <div class="cinema-row-main">
-            ${posterHtml(row.poster_url, 'xs')}
-            <div>
-              <div class="cinema-name">${row.film}</div>
-              ${ratingBadgeHtml(row.rating)}${tmdbInfoLinkHtml(row.tmdb_id)}
-            </div>
-          </div>
-        </div>
-        <div class="times">${renderTimeChips(row.times, row.format_tags)}</div>
-      `;
-      group.appendChild(r);
-    }
-    container.appendChild(group);
-  }
-}
-
-function renderByTime(filtered, container){
-  const flat = [];
-  for (const s of filtered){
-    for (const t of s.times){
-      flat.push({time: t, film: s.film, cinema: s.cinema, address: s.address, tags: s.format_tags, poster_url: s.poster_url, rating: s.rating, tmdb_id: s.tmdb_id});
-    }
-  }
-
-  if (timeSortMode === "rating"){
-    flat.sort((a,b) => ratingSortValue(b.rating) - ratingSortValue(a.rating) || a.time.localeCompare(b.time));
-  } else if (timeSortMode === "bestofboth" && userPostcodeCoord){
-    // Rank every showing twice — once by time, once by distance — and add
-    // the two ranks together. Best of both wins; extreme-on-one-axis
-    // showings (very soon but very far, or very near but very late) get
-    // pulled down even though they'd top a single-axis sort.
-    const byTime = [...flat].sort((a,b)=>a.time.localeCompare(b.time) || a.film.localeCompare(b.film));
-    const timeRank = new Map(byTime.map((item,i)=>[item,i]));
-    const byDist = [...flat].sort((a,b)=>distanceSortValue(a.address)-distanceSortValue(b.address));
-    const distRank = new Map(byDist.map((item,i)=>[item,i]));
-    flat.forEach(item => { item._combinedRank = timeRank.get(item) + distRank.get(item); });
-    flat.sort((a,b) => a._combinedRank - b._combinedRank);
-  } else if (timeSortMode === "nearest" && userPostcodeCoord){
-    flat.sort((a,b) => distanceSortValue(a.address) - distanceSortValue(b.address) || a.time.localeCompare(b.time));
-  } else {
-    flat.sort((a,b) => a.time.localeCompare(b.time) || a.film.localeCompare(b.film));
-  }
-
-  lastRenderedFlatItems = flat;
-  flat.forEach((item, idx) => {
-    const {cls, text} = langLabel(item.tags);
-    const row = document.createElement('div');
-    row.className = 'flat-row';
-    row.innerHTML = `
-      <span class="time-chip"><span class="digits">${item.time}</span><span class="lang-tag ${cls}">${text}</span></span>
-      ${posterHtml(item.poster_url, 'xs')}
-      <div class="flat-info">
-        <div class="flat-film">${item.film} ${ratingBadgeHtml(item.rating)}${tmdbInfoLinkHtml(item.tmdb_id)}</div>
-        <div class="flat-cinema">${item.cinema} · ${item.address} · ${cinemaLinkHtml(item.cinema)} ${distanceBadgeHtmlAlways(item.address)}</div>
-      </div>
-      <button class="copy-screening-btn" data-index="${idx}" type="button">Copy</button>
-    `;
-    container.appendChild(row);
-  });
-}
-
-// ---- Film search suggestions ----
-// Built live from whatever's actually in DATA for the currently selected
-// date — not a hardcoded list — so it stays correct automatically as the
-// programme changes week to week with no extra maintenance.
-// Suggests both film titles and cinema names — a match is a
-// {text, type} pair so the dropdown (and the click handler) can tell
-// which kind it is without guessing from the text itself.
-function getFilmSuggestions(query){
-  if (!DATA || !query) return [];
-  const q = normalizeForSearch(query);
-  const seen = new Set();
-  const out = [];
-  for (const s of DATA.screenings){
-    if (!seen.has(s.film) && normalizeForSearch(s.film).includes(q)){
-      seen.add(s.film);
-      out.push({ text: s.film, type: 'film' });
-    }
-  }
-  for (const s of DATA.screenings){
-    if (!seen.has(s.cinema) && normalizeForSearch(s.cinema).includes(q)){
-      seen.add(s.cinema);
-      out.push({ text: s.cinema, type: 'cinema' });
-    }
-  }
-  return out.sort((a, b) => a.text.localeCompare(b.text)).slice(0, 8);
-}
-
-function renderFilmSuggestions(){
-  const box = document.getElementById('film-suggestions');
-  const query = document.getElementById('search').value.trim();
-  const matches = getFilmSuggestions(query);
-  // Nothing useful to suggest — empty box, or the one match is already
-  // exactly what's typed.
-  if (!query || matches.length === 0 ||
-      (matches.length === 1 && normalizeForSearch(matches[0].text) === normalizeForSearch(query))){
-    box.classList.remove('open');
-    box.innerHTML = '';
-    return;
-  }
-  box.innerHTML = matches.map(m =>
-    `<div class="film-suggestion" data-value="${m.text.replace(/"/g, '&quot;')}" data-type="${m.type}">${m.text}${m.type === 'cinema' ? ' <span class="suggestion-tag">cinema</span>' : ''}</div>`
-  ).join('');
-  box.classList.add('open');
-}
-
-document.getElementById('search').addEventListener('input', () => {
-  if (filmExplicitlySelected){
-    filmExplicitlySelected = false;
-    updateFilmChipVisibility();
-  }
-  updateRatingSortAvailability();
-  syncStateToUrl();
-  render();
-  renderFilmSuggestions();
-});
-document.getElementById('search').addEventListener('focus', renderFilmSuggestions);
-document.getElementById('search').addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') document.getElementById('film-suggestions').classList.remove('open');
-});
-document.getElementById('film-suggestions').addEventListener('click', (e) => {
-  const item = e.target.closest('.film-suggestion');
-  if (!item) return;
-  document.getElementById('search').value = item.dataset.value;
-  document.getElementById('film-suggestions').classList.remove('open');
-  // Only an actual film pick means "you've decided what to watch" — a
-  // cinema pick narrows by location instead, so "By film" still makes
-  // sense to keep around.
-  filmExplicitlySelected = (item.dataset.type === 'film');
-  updateFilmChipVisibility();
-  updateRatingSortAvailability();
-  syncStateToUrl();
-  render();
-});
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrap')){
-    document.getElementById('film-suggestions').classList.remove('open');
-  }
-});
-
-document.querySelectorAll('#lang-chips .chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('#lang-chips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeLang = chip.dataset.lang;
-    updateRatingSortAvailability();
-    syncStateToUrl();
-    render();
-  });
-});
-
-// By film / By cinema sort automatically by distance once a postcode is
-// entered (see updateGroupSortForPostcode) — no toggle needed there. By
-// time has its own richer sort choice instead, so the two chip rows
-// swap visibility depending on which view is active, rather than
-// showing two different distance controls at once.
-// By film / By cinema group things by name (or distance, automatically,
-// once a postcode is entered) — they were never meant to be
-// chronological, only By time is. That distinction wasn't obvious from
-// the UI alone, so a caption spells it out whenever one of those two
-// views is active.
-const VIEW_CAPTIONS = {
-  film: 'Grouped by film — cinemas sorted by name, or automatically by distance once you enter a postcode. For a single chronological list, switch to By time.',
-  cinema: 'Grouped by cinema — sorted by name, or automatically by distance once you enter a postcode. For a single chronological list, switch to By time.',
-};
-
-function updateFilmChipVisibility(){
-  const filmChip = document.querySelector('#view-chips [data-view="film"]');
-  if (filmExplicitlySelected){
-    filmChip.style.display = 'none';
-    if (activeView === 'film'){
-      // Was grouping by film with only one film ever going to show —
-      // switch to the next most useful view rather than leave an active
-      // chip hidden with no way to tell which mode is even selected.
-      activeView = 'cinema';
-      document.querySelectorAll('#view-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('#view-chips [data-view="cinema"]').classList.add('active');
-      updateViewSpecificControls();
-    }
-  } else {
-    filmChip.style.display = '';
-  }
-}
-
-// "Top rated" (in both the group-sort-chips and time-sort-chips) is a
-// discovery aid — useful while browsing the full, unfiltered list to
-// help pick something good. The moment the user has named a film,
-// entered a postcode, or picked a language filter, they've already
-// narrowed down what they want, and ranking by rating stops being
-// useful clutter rather than help — so it's removed entirely at that
-// point, not just greyed out, and reset back to a sensible default if
-// it was the active sort when that happened.
-function updateRatingSortAvailability(){
-  const searched = document.getElementById('search').value.trim() !== '';
-  const narrowed = searched || userPostcodeCoord !== null || activeLang !== 'all';
-
-  const groupRatingChip = document.querySelector('#group-sort-chips [data-groupsort="rating"]');
-  const timeRatingChip = document.querySelector('#time-sort-chips [data-sort="rating"]');
-  groupRatingChip.style.display = narrowed ? 'none' : '';
-  timeRatingChip.style.display = narrowed ? 'none' : '';
-
-  if (narrowed){
-    if (groupSortMode === 'rating'){
-      groupSortMode = 'name';
-      document.querySelectorAll('#group-sort-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('#group-sort-chips [data-groupsort="name"]').classList.add('active');
-    }
-    if (timeSortMode === 'rating'){
-      timeSortMode = 'soonest';
-      document.querySelectorAll('#time-sort-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector('#time-sort-chips [data-sort="soonest"]').classList.add('active');
-    }
-  }
-  updateSoonestChipVisibility();
-  updateGroupSortForPostcode(); // re-check now that the rating chip's own visibility may have just changed
-}
-
-function updateViewSpecificControls(){
-  updatePostcodeDependentChips(); // accounts for both By-time and postcode state
-  updateGroupSortForPostcode(); // also accounts for whether we're on By time
-
-  const caption = document.getElementById('view-caption');
-  const text = VIEW_CAPTIONS[activeView] || '';
-  caption.textContent = text;
-  caption.style.display = text ? '' : 'none';
-}
-
-document.querySelectorAll('#view-chips .chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('#view-chips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeView = chip.dataset.view;
-    updateViewSpecificControls();
-    syncStateToUrl();
-    render();
-  });
-});
-
-updateViewSpecificControls(); // set the correct caption/controls for the default view on first load (also calls updateGroupSortForPostcode + updatePostcodeDependentChips)
-updateRatingSortAvailability(); // nothing's narrowed yet on first load, so both "Top rated" options start visible
-
-// Clears every filter/search/sort control back to its default state in
-// one go — deliberately leaves the selected date alone, since browsing a
-// different day is a deliberate choice, not really a "filter" to reset.
-function resetAllFilters(){
-  document.getElementById('search').value = '';
-  document.getElementById('postcode').value = '';
-  document.getElementById('film-suggestions').classList.remove('open');
-  document.getElementById('film-suggestions').innerHTML = '';
-
-  activeLang = 'all';
-  document.querySelectorAll('#lang-chips .chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('#lang-chips [data-lang="all"]').classList.add('active');
-
-  activeView = 'film';
-  filmExplicitlySelected = false;
-  document.querySelectorAll('#view-chips .chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('#view-chips [data-view="film"]').classList.add('active');
-  updateFilmChipVisibility(); // re-shows "By film" in case it had been hidden
-
-  timeSortMode = 'soonest';
-  document.querySelectorAll('#time-sort-chips .chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('#time-sort-chips [data-sort="soonest"]').classList.add('active');
-
-  userPostcodeCoord = null;
-  document.getElementById('distance-hint').textContent = '';
-
-  updatePostcodeDependentChips();
-  updateGroupSortForPostcode(); // resets groupSortMode back to 'name' now that postcode is cleared
-  updateRatingSortAvailability();
-  updateViewSpecificControls();
-  syncStateToUrl();
-  render();
-}
-document.getElementById('reset-btn').addEventListener('click', resetAllFilters);
-
-// Makes the shareable-link feature (see syncStateToUrl) actually
-// discoverable — without this, nothing on the page would tell anyone
-// the URL updates as they filter, or give them an easy way to grab it.
-document.getElementById('copy-link-btn').addEventListener('click', async () => {
-  const btn = document.getElementById('copy-link-btn');
-  const original = btn.textContent;
-  try{
-    await navigator.clipboard.writeText(window.location.href);
-    btn.textContent = 'Copied!';
-  }catch(e){
-    btn.textContent = 'Copy failed — copy from address bar';
-  }
-  setTimeout(() => { btn.textContent = original; }, 1800);
-});
-
-// ---- Per-screening "Copy" (By time view) ----
-// Unlike "Copy link" (the whole filtered page), this grabs one specific
-// showing as plain text — the more natural thing to send a friend when
-// you've actually settled on which one to go to.
-function formatShareDate(iso){
+// Short "Sat 15" style label for a chip - keeps the weekday visible
+// even without a full grid of day-of-week columns around it.
+function fmtDayLabel(iso) {
   const d = new Date(iso + "T00:00:00");
-  return `${WEEKDAY_NAMES[d.getDay()]} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
 }
 
-function buildScreeningShareText(item){
-  const { text: langText } = langLabel(item.tags);
-  return `${item.film} (${langText}) — ${item.cinema}, ${item.address} — ${formatShareDate(activeDate)}, ${item.time}`;
+function renderCalendar() {
+  const el = document.getElementById('calendar');
+  const months = allMonths();
+  const idx = months.indexOf(currentMonth);
+  const prevMonth = idx > 0 ? months[idx - 1] : null;
+  const nextMonth = idx < months.length - 1 ? months[idx + 1] : null;
+  const today = todayIso();
+
+  // Only dates that (a) fall in the month currently being browsed AND
+  // (b) still have a fixture matching whatever league/district/team is
+  // currently selected - narrowed by the OTHER filters, per the note
+  // above matchesFilters(). Any date already picked stays visible and
+  // removable even if a later filter choice would otherwise hide it -
+  // so you're never left with a selected chip you can't get back to in
+  // order to deselect it.
+  const matchingThisMonth = new Set(
+    allMatches().filter(m => monthOf(m.date) === currentMonth && matchesFilters(m, { date: true })).map(m => m.date)
+  );
+  const keptSelected = datesInCurrentMonth().filter(d => selectedDates.has(d));
+  const activeDates = [...new Set([...matchingThisMonth, ...keptSelected])].sort();
+
+  const chips = activeDates.map(iso => {
+    const classes = ['chip'];
+    if (iso === today) classes.push('today');
+    if (selectedDates.has(iso)) classes.push('active');
+    return `<button type="button" class="${classes.join(' ')}" data-date="${iso}">${fmtDayLabel(iso)}</button>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="cal-header">
+      <button type="button" class="cal-nav" id="cal-prev"${prevMonth ? '' : ' disabled'}>‹</button>
+      <span class="cal-title">${fmtMonthLabel(currentMonth)}</span>
+      <button type="button" class="cal-nav" id="cal-next"${nextMonth ? '' : ' disabled'}>›</button>
+    </div>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No fixtures match your other filters this month.</div>'}</div>
+    <button type="button" class="chip-clear-btn${selectedDates.size === 0 ? ' active' : ''}" id="cal-all">Clear date selection</button>
+  `;
+
+  if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; renderAll(); };
+  if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; renderAll(); };
+  el.querySelector('#cal-all').onclick = () => { selectedDates.clear(); renderAll(); };
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const d = btn.dataset.date;
+      if (selectedDates.has(d)) selectedDates.delete(d); else selectedDates.add(d);
+      renderAll();
+    };
+  });
 }
 
-// Attached once to the (never-replaced) #results container, rather than
-// re-attached on every render — event delegation means it still catches
-// clicks on rows that get rebuilt every time render() runs.
-document.getElementById('results').addEventListener('click', async (e) => {
-  const btn = e.target.closest('.copy-screening-btn');
-  if (!btn) return;
-  const item = lastRenderedFlatItems[Number(btn.dataset.index)];
-  if (!item) return;
-  const original = btn.textContent;
-  try{
-    await navigator.clipboard.writeText(buildScreeningShareText(item));
-    btn.textContent = 'Copied!';
-  }catch(err){
-    btn.textContent = 'Copy failed';
+// League chip group - same multi-select/mutual-narrowing pattern as the
+// calendar above, just for league instead of date. Options are drawn
+// from the data itself (whatever leagues actually appear), sorted by
+// real tier rather than alphabetically, same as the old dropdown was.
+function renderLeagueChips() {
+  const el = document.getElementById('league-filter');
+  const matching = new Set(allMatches().filter(m => matchesFilters(m, { league: true })).map(m => m.league));
+  const leagues = [...new Set([...matching, ...selectedLeagues])]
+    .sort((a, b) => tierOf({ league: a }) - tierOf({ league: b }));
+  const chips = leagues.map(l => {
+    const classes = ['chip'];
+    if (selectedLeagues.has(l)) classes.push('active');
+    return `<button type="button" class="${classes.join(' ')}" data-league="${l}">${l}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="filter-label">League</div>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No leagues match your other filters.</div>'}</div>
+  `;
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const l = btn.dataset.league;
+      if (selectedLeagues.has(l)) selectedLeagues.delete(l); else selectedLeagues.add(l);
+      renderAll();
+    };
+  });
+}
+
+// District chip group - the universe of possible options is the fixed
+// 12-borough list (BERLIN_DISTRICTS), not derived from the data like
+// league is, since a district is a real stable place whether or not
+// this week's data happens to have a fixture in it. Narrowing still
+// applies on top: only districts that currently have a matching
+// fixture (or are already selected) get a chip at all.
+function renderDistrictChips() {
+  const el = document.getElementById('district-filter');
+  const matching = new Set(
+    allMatches().filter(m => matchesFilters(m, { district: true }))
+      .map(m => districtForAddress(m.venue_address))
+      .filter(Boolean)
+  );
+  const districts = BERLIN_DISTRICTS.filter(d => matching.has(d) || selectedDistricts.has(d));
+  const chips = districts.map(d => {
+    const classes = ['chip'];
+    if (selectedDistricts.has(d)) classes.push('active');
+    return `<button type="button" class="${classes.join(' ')}" data-district="${d}">${d}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="filter-label">District</div>
+    <div class="chip-row">${chips || '<div class="chip-empty-note">No districts match your other filters.</div>'}</div>
+  `;
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const d = btn.dataset.district;
+      if (selectedDistricts.has(d)) selectedDistricts.delete(d); else selectedDistricts.add(d);
+      renderAll();
+    };
+  });
+}
+
+// Team chip group - unlike league/district (small, near-fixed lists),
+// there are potentially hundreds of clubs across all seven tiers, so
+// showing every eligible team as a chip all the time would be a wall
+// of buttons. Instead: already-selected teams always show as removable
+// chips up top; below that, a plain text box narrows a short suggestion
+// list (max 8) as you type, and clicking a suggestion adds it to the
+// selection. Typing itself never filters the fixture list directly -
+// only an actual click (an exact team added to selectedTeams) does -
+// that's what makes "two teams at once" possible in the first place.
+function renderTeamChips() {
+  const el = document.getElementById('team-filter');
+  const typed = teamSearchText.trim().toLowerCase();
+
+  const matchingTeams = new Set(
+    allMatches().filter(m => matchesFilters(m, { team: true })).flatMap(m => [m.home_team, m.away_team])
+  );
+
+  const selectedChips = [...selectedTeams].sort().map(t =>
+    `<button type="button" class="chip active" data-team="${t}">${t} ×</button>`
+  ).join('');
+
+  let suggestionsHtml = '';
+  if (typed) {
+    const suggestions = [...matchingTeams]
+      .filter(t => !selectedTeams.has(t) && t.toLowerCase().includes(typed))
+      .sort()
+      .slice(0, 8);
+    suggestionsHtml = `<div class="chip-row">${
+      suggestions.length
+        ? suggestions.map(t => `<button type="button" class="chip" data-team="${t}">${t}</button>`).join('')
+        : '<div class="chip-empty-note">No matching teams.</div>'
+    }</div>`;
   }
-  setTimeout(() => { btn.textContent = original; }, 1800);
-});
 
-document.querySelectorAll('#time-sort-chips .chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    if (chip.classList.contains('disabled')) return;
-    document.querySelectorAll('#time-sort-chips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    timeSortMode = chip.dataset.sort;
-    render();
+  el.innerHTML = `
+    <div class="filter-label">Team</div>
+    ${selectedChips ? `<div class="chip-row">${selectedChips}</div>` : ''}
+    <input id="team-search-input" type="text" placeholder="Search team to add…" autocomplete="off" value="${teamSearchText.replace(/"/g, '&quot;')}">
+    ${suggestionsHtml}
+  `;
+
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.onclick = () => {
+      const t = btn.dataset.team;
+      if (selectedTeams.has(t)) selectedTeams.delete(t); else selectedTeams.add(t);
+      teamSearchText = '';
+      renderAll();
+    };
   });
-});
 
-document.getElementById('postcode').addEventListener('input', updatePostcode);
-document.querySelectorAll('#group-sort-chips .chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    if (chip.classList.contains('disabled')) return;
-    document.querySelectorAll('#group-sort-chips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    groupSortMode = chip.dataset.groupsort;
-    render();
+  const input = el.querySelector('#team-search-input');
+  input.addEventListener('input', (e) => {
+    teamSearchText = e.target.value;
+    // Only this widget needs to redraw for a keystroke - typing narrows
+    // suggestions, it doesn't change any actual selection, so the
+    // calendar/league/district chips and the match list below are
+    // untouched until a suggestion is actually clicked.
+    renderTeamChips();
   });
-});
+  if (teamSearchText) {
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+}
 
-loadData();
+function renderAll() {
+  renderCalendar();
+  renderLeagueChips();
+  renderDistrictChips();
+  renderTeamChips();
+  render();
+}
 
-// Handles the case where someone leaves the page open across midnight —
-// re-checks what "today" is in Berlin every minute. If the day has
-// rolled over, drops yesterday from the date chips and, if the person
-// was viewing "today" (not one they'd deliberately picked ahead), moves
-// them forward to the new today automatically. If they'd already picked
-// a future day on purpose, this only relabels the chips (e.g. Tomorrow
-// becomes Today) without yanking them anywhere.
-function refreshTodayIfNeeded(){
-  const nowIso = getBerlinDateISO();
-  if (nowIso !== TODAY_ISO){
-    const wasOnOldToday = (activeDate === TODAY_ISO);
-    TODAY_ISO = nowIso;
-    if (wasOnOldToday && availableDates.includes(TODAY_ISO)){
-      activeDate = TODAY_ISO;
-      loadDateData(activeDate);
+// Flat ranked list for "closest to me" / "kick-off time" sort modes -
+// deliberately not grouped by date or league like the default view,
+// since the whole point is one single ranking across everything in
+// scope. Each row still shows its date and league inline (that context
+// isn't implicit anymore once there's no date-heading/league-label
+// grouping it). `hint` is the small message strip above the results -
+// used to tell someone their postcode wasn't recognized rather than
+// silently reordering nothing.
+function renderFlatSorted(matches, mode, postcodeValue, hint) {
+  let list = matches.slice();
+
+  if (mode === 'distance') {
+    if (!postcodeValue) {
+      hint.textContent = 'Enter your postcode above to sort by distance.';
+      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+    } else if (!coordsForPlz(postcodeValue)) {
+      hint.textContent = `"${postcodeValue}" isn't a Berlin postcode I recognize - showing date order instead.`;
+      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
     } else {
-      render();
+      list.forEach(m => { m.__distanceKm = distanceFromPostcode(postcodeValue, m.venue_address); });
+      list.sort((a, b) => {
+        if (a.__distanceKm == null && b.__distanceKm == null) return 0;
+        if (a.__distanceKm == null) return 1;
+        if (b.__distanceKm == null) return -1;
+        return a.__distanceKm - b.__distanceKm;
+      });
     }
-  } else {
-    // No calendar rollover, but still worth checking every minute: this
-    // is what hides today's chip (and moves off it, if the user's on it)
-    // the moment its very last showing passes, not just at midnight.
-    maybeAdvanceIfTodayFinished();
+  } else if (mode === 'time') {
+    list.sort((a, b) => {
+      if (!a.time && !b.time) return (a.date).localeCompare(b.date);
+      if (!a.time) return 1;
+      if (!b.time) return -1;
+      return a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date);
+    });
   }
-  renderDateChips();
-}
-setInterval(refreshTodayIfNeeded, 60000);
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  });
+  return list.map(m => {
+    const tierTag = isCup(m) ? 'Cup' : `Tier ${tierOf(m)}`;
+    const distanceNote = m.__distanceKm != null
+      ? `<span class="addr">${m.__distanceKm < 1 ? '<1 km away' : Math.round(m.__distanceKm) + ' km away'}</span>`
+      : (mode === 'distance' && postcodeValue && coordsForPlz(postcodeValue) ? `<span class="addr">distance unknown</span>` : '');
+    return `
+      <div class="match">
+        <div class="match-time">${m.time || '—'}</div>
+        <div>
+          <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
+          <div class="venue">${fmtDateLabel(m.date)} · ${m.league} (${tierTag})${m.venue ? ' · ' + m.venue : ''}${distanceNote}</div>
+        </div>
+        <div class="matchday">${m.matchday || ''}</div>
+      </div>
+    `;
+  }).join('');
 }
+
+// Everything currently selected across ALL FOUR filters (date, league,
+// district, team) at once - matchesFilters() (above) is the single
+// place that combines them, the same helper the chip-rendering
+// functions use to narrow each other. "Scope" below is a separate,
+// smaller decision: with nothing at all selected, keep the existing
+// "browse one month at a time" behaviour rather than dumping the whole
+// dataset; but the moment ANY filter is active (a date, a league, a
+// district, or a team), search across everything, so a choice on (say)
+// a team doesn't silently miss fixtures outside whatever month happens
+// to be currently browsed.
+function currentlyVisibleMatches() {
+  const anyFilterActive = selectedDates.size || selectedLeagues.size || selectedDistricts.size || selectedTeams.size;
+  const scope = anyFilterActive ? allMatches() : datesInCurrentMonth().flatMap(d => allData[d] || []);
+  return scope.filter(m => matchesFilters(m));
+}
+
+function render() {
+  const main = document.getElementById('main');
+  const hint = document.getElementById('postcode-hint');
+  const sortMode = document.getElementById('sort-mode').value; // "" | "distance" | "time"
+  const postcodeValue = document.getElementById('postcode-input').value.trim();
+  hint.textContent = '';
+
+  const filtered = currentlyVisibleMatches();
+
+  if (!filtered.length) {
+    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixtures found for this combination of filters.</div>`;
+    return;
+  }
+
+  // "Closest to me" / "kick-off time" are flat ranked lists across
+  // whatever's currently in view (every filter above still applies) -
+  // deliberately NOT grouped by date or league on top of that, since a
+  // genuine distance or time ranking spanning several dates wouldn't
+  // make sense chopped up by date headings first. Plain "date" mode
+  // below keeps the existing date > league > team grouping.
+  if (sortMode === 'distance' || sortMode === 'time') {
+    main.innerHTML = renderFlatSorted(filtered, sortMode, postcodeValue, hint);
+    return;
+  }
+
+  // Sort hierarchy: date > league (by real tier order, not
+  // alphabetically) > team. When only one distinct date is left in the
+  // filtered results (e.g. a single date picked, or filters happen to
+  // narrow everything down to one specific day), that outer "date"
+  // level is a no-op - there's only one - so it goes straight to league
+  // groups. When several dates remain in view, matches are grouped
+  // under a date heading FIRST and league groups sit inside each date.
+  function renderLeagueGroups(matches) {
+    const byLeague = {};
+    matches.forEach(m => {
+      (byLeague[m.league] = byLeague[m.league] || []).push(m);
+    });
+    const orderedLeagues = Object.keys(byLeague).sort((a, b) => {
+      const ta = tierOf({ league: a, league_tier: byLeague[a][0]?.league_tier });
+      const tb = tierOf({ league: b, league_tier: byLeague[b][0]?.league_tier });
+      return ta !== tb ? ta - tb : a.localeCompare(b);
+    });
+    return orderedLeagues.map(league => {
+      const ms = byLeague[league];
+      const tier = tierOf(ms[0]);
+      const tierTag = isCup(ms[0]) ? 'Cup' : `Tier ${tier}`;
+      return `
+      <div class="league-group">
+        <div class="league-label">
+          <span>${league}</span>
+          <span class="tier-tag">${tierTag}</span>
+        </div>
+        ${ms.slice().sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
+          <div class="match">
+            <div class="match-time">${m.time || '—'}</div>
+            <div>
+              <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
+              <div class="venue">${m.venue || ''}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
+            </div>
+            <div class="matchday">${m.matchday || ''}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    }).join('');
+  }
+
+  const distinctDates = new Set(filtered.map(m => m.date));
+  if (distinctDates.size > 1) {
+    const byDate = {};
+    filtered.forEach(m => { (byDate[m.date] = byDate[m.date] || []).push(m); });
+    const orderedDates = Object.keys(byDate).sort();
+    main.innerHTML = orderedDates.map(d => `
+      <div class="date-heading">${fmtDateLabel(d)}</div>
+      ${renderLeagueGroups(byDate[d])}
+    `).join('');
+  } else {
+    main.innerHTML = renderLeagueGroups(filtered);
+  }
+}
+
+async function init() {
+  document.getElementById('sort-mode').addEventListener('change', render);
+  // Postcode is only numbers - restrict input as you type rather than
+  // waiting to reject it on submit, and re-render on every keystroke so
+  // "closest to me" updates live like everything else here.
+  document.getElementById('postcode-input').addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+    render();
+  });
+  // Clears every filter dimension (dates, leagues, districts, teams,
+  // sort mode) back to "everything," and drops back to viewing the
+  // whole current month rather than any specific selection - the
+  // calendar's month position is reset to the real current month too
+  // (see the note further down), same as before. The postcode itself
+  // is deliberately NOT cleared - it's more like "who you are" than a
+  // transient filter, no reason to make someone retype it just for
+  // resetting everything else.
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    selectedDates.clear();
+    selectedLeagues.clear();
+    selectedDistricts.clear();
+    selectedTeams.clear();
+    teamSearchText = '';
+    document.getElementById('sort-mode').value = '';
+    // Jump back to the CURRENT calendar month specifically, not just
+    // "whatever month you happened to be on" - a reset should feel like
+    // starting over, and starting over means today, not wherever you'd
+    // navigated to. Falls back to the earliest month with any fixtures
+    // if the current month itself has none (e.g. between seasons).
+    const months = allMonths();
+    const thisMonth = monthOf(todayIso());
+    currentMonth = months.includes(thisMonth) ? thisMonth : months[0];
+    renderAll();
+  });
+
+  try {
+    const idxResp = await fetch('data/index.json');
+    if (!idxResp.ok) throw new Error('no live data');
+    const dates = await idxResp.json();
+    for (const d of dates) {
+      const r = await fetch(`data/${d}.json`);
+      if (r.ok) allData[d] = await r.json();
+    }
+  } catch (e) {
+    allData = DEMO_DATA;
+  }
+
+  allData = dropPastDates(allData);
+
+  const months = allMonths();
+  if (!months.length) {
+    document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
+    return;
+  }
+  currentMonth = months[0];
+  renderAll();
+}
+
+// Drop any date that's already in the past, using the VISITOR'S local
+// calendar day (not UTC - a "today" fixture shouldn't vanish for
+// someone west of Berlin just because it's already tomorrow in UTC).
+// This is a client-side safety net on top of the scrapers' own pruning
+// (both scrapers drop past dates when they write data/) - it covers the
+// gap between "a match's day ends" and "the next scheduled scrape run
+// actually removes it," and also means a stale cached page still looks
+// right. A whole month disappears from the month pills automatically
+// once every one of its dates has been filtered out here - no separate
+// "hide past months" logic needed, it falls out of this for free.
+function todayIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function dropPastDates(data) {
+  const today = todayIso();
+  const kept = {};
+  for (const [d, matches] of Object.entries(data)) {
+    if (d >= today) kept[d] = matches;
+  }
+  return kept;
+}
+
+init();
 </script>
+
 </body>
 </html>
