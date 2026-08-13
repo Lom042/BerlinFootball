@@ -65,5 +65,22 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-viktoria-berlin/-/spiel/031G0H6NSS000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-05-22",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf II",
+    "away_team": "BFC Preussen II",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://bfc-preussen.de",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-ii-bfc-preussen-ii/-/spiel/031G0GRSLG000000VS5489BTVVG7L386"
   }
 ]

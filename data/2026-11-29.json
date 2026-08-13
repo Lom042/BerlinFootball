@@ -172,7 +172,7 @@
     "date": "2026-11-29",
     "time": null,
     "home_team": "SC Berliner Amateure",
-    "away_team": "SF Kladow",
+    "away_team": "VfB Fortuna Biesdorf II",
     "league": "LANDESLIGA STAFFEL 1",
     "league_tier": 7,
     "is_cup": false,
@@ -181,9 +181,9 @@
     "venue": "Kunstrasenplatz, Züllichauer Straße KR",
     "venue_address": "Züllichauer Str. 1-7, 10965 Berlin",
     "home_team_website": "https://www.berlineramateure.de/",
-    "away_team_website": "",
+    "away_team_website": "https://www.fortuna-biesdorf.de/",
     "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sc-berliner-amateure-sf-kladow/-/spiel/031G0GRM8G000000VS5489BTVVG7L386"
+    "source_url": "https://www.fussball.de/spiel/sc-berliner-amateure-vfb-fortuna-biesdorf-ii/-/spiel/031G0GRM8G000000VS5489BTVVG7L386"
   },
   {
     "date": "2026-11-29",

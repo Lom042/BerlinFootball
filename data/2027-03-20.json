@@ -15,5 +15,22 @@
     "away_team_website": "https://www.blauweiss90berlin.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-spvg-blau-weiss-1890-berlin/-/spiel/031G0H72SK000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-03-20",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf II",
+    "away_team": "BSV Dersim",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-ii-bsv-dersim/-/spiel/031G0GS2CK000000VS5489BTVVG7L386"
   }
 ]

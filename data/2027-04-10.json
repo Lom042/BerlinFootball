@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2027-04-10",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf II",
+    "away_team": "Friedenauer TSC",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://www.friedenauertsc-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-ii-friedenauer-tsc/-/spiel/031G0GRUUG000000VS5489BTVVG7L386"
+  }
+]

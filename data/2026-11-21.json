@@ -65,5 +65,22 @@
     "away_team_website": "https://www.ssc1947.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-ii-steglitzer-sc-suedwest-1947/-/spiel/031G0GRMHG000000VS5489BTVVG7L386"
+  },
+  {
+    "date": "2026-11-21",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf II",
+    "away_team": "Türkiyemspor Berlin 1978",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "",
+    "venue_address": "",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://tuerkiyemspor.com/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-ii-tuerkiyemspor-berlin-1978/-/spiel/031G0GRMBO000000VS5489BTVVG7L386"
   }
 ]

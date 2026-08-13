@@ -48,5 +48,22 @@
     "away_team_website": "https://www.empor-berlin.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/spandauer-kickers-sv-empor-berlin/-/spiel/031G0H6DO0000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-08-29",
+    "time": null,
+    "home_team": "VfB Fortuna Biesdorf II",
+    "away_team": "VSG Altglienicke II",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Grabensprung KR1",
+    "venue_address": "Grabensprung 56, 12683 Berlin",
+    "home_team_website": "https://www.fortuna-biesdorf.de/",
+    "away_team_website": "https://www.vsg-altglienicke.de",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-ii-vsg-altglienicke-ii/-/spiel/031G0GRODK000000VS5489BTVVG7L386"
   }
 ]
