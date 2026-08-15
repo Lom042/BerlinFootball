@@ -8,7 +8,7 @@
     "league_tier": 2,
     "gender": "M",
     "matchday": "2. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Olympiastadion Berlin",
     "venue_address": "Olympischer Platz 3, 14053 Berlin",
     "home_team_website": "https://www.herthabsc.com",
@@ -17,7 +17,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen",
     "away_team": "Greifswalder FC",
     "league": "REGIONALLIGA NORDOST",
@@ -34,7 +34,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "13:00",
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "FSV Optik Rathenow",
     "league": "OBERLIGA NORDOST",
@@ -51,7 +51,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
@@ -68,7 +68,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "14:00",
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -85,7 +85,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Empor Berlin",
     "away_team": "TSV Mariendorf 1897",
     "league": "BERLIN-LIGA",
@@ -102,7 +102,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "15:00",
     "home_team": "Viktoria Berlin",
     "away_team": "SC Staaken1919",
     "league": "BERLIN-LIGA",
@@ -119,7 +119,7 @@
   },
   {
     "date": "2026-08-15",
-    "time": null,
+    "time": "15:00",
     "home_team": "VSG Altglienicke II",
     "away_team": "Friedenauer TSC",
     "league": "LANDESLIGA STAFFEL 1",
