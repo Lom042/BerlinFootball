@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:02",
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "Hallescher FC",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Tasmania Berlin",
     "away_team": "1. FC Lokomotive Leipzig",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:00",
     "home_team": "F.C. Hertha 03 Zehlendorf",
     "away_team": "F.C. Hansa Rostock II",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:00",
     "home_team": "Berliner AK 07",
     "away_team": "Füchse Berlin Reinickendorf",
     "league": "OBERLIGA NORDOST",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Sparta Lichtenberg 1911",
     "away_team": "FC Mecklenburg Schwerin",
     "league": "OBERLIGA NORDOST",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "11:36",
     "home_team": "Spandauer Kickers",
     "away_team": "SC Charlottenburg",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "12:45",
     "home_team": "Frohnauer SC",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "14:34",
     "home_team": "S.D. Croatia Berlin",
     "away_team": "BFC Meteor 06",
     "league": "BERLIN-LIGA",
@@ -137,7 +137,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "12:00",
     "home_team": "Spandauer FC Veritas",
     "away_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "league": "LANDESLIGA STAFFEL 1",
@@ -154,7 +154,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "13:30",
     "home_team": "SC Berliner Amateure",
     "away_team": "1.FC Schöneberg",
     "league": "LANDESLIGA STAFFEL 1",
@@ -171,7 +171,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "12:30",
     "home_team": "Delay Sports Berlin",
     "away_team": "Köpenicker FC",
     "league": "LANDESLIGA STAFFEL 2",
