@@ -137,6 +137,23 @@
   {
     "date": "2026-10-10",
     "time": null,
+    "home_team": "Viktoria Berlin",
+    "away_team": "SV Empor Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
+    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://www.empor-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sv-empor-berlin/-/spiel/031G0H6B20000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
     "home_team": "VSG Altglienicke II",
     "away_team": "Friedrichshagener SV",
     "league": "LANDESLIGA STAFFEL 1",

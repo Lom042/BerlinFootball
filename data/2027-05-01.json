@@ -83,22 +83,5 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-ii-bsv-dersim/-/spiel/031G0GRT80000000VS5489BTVVG7L386"
-  },
-  {
-    "date": "2027-05-01",
-    "time": null,
-    "home_team": "BSV Eintracht Mahlsdorf II",
-    "away_team": "Delay Sports Berlin",
-    "league": "LANDESLIGA STAFFEL 2",
-    "league_tier": 7,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Am Rosenhag KR",
-    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
-    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
-    "away_team_website": "https://www.delaysports-berlin.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-ii-delay-sports-berlin/-/spiel/031G0GP1P8000000VS5489BTVVG7L386"
   }
 ]
