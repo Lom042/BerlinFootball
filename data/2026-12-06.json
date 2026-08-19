@@ -36,23 +36,6 @@
   {
     "date": "2026-12-06",
     "time": null,
-    "home_team": "Tennis Borussia Berlin",
-    "away_team": "SG Union Klosterfelde",
-    "league": "OBERLIGA NORDOST",
-    "league_tier": 5,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Mommsenstadion NR1",
-    "venue_address": "Waldschulallee 34-42, 14055 Berlin",
-    "home_team_website": "https://www.tebe.de",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/tennis-borussia-berlin-sg-union-klosterfelde/-/spiel/031AFMQK5K000000VS5489BUVV628VP4"
-  },
-  {
-    "date": "2026-12-06",
-    "time": null,
     "home_team": "Spandauer Kickers",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
