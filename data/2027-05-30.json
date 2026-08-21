@@ -19,23 +19,6 @@
   {
     "date": "2027-05-30",
     "time": null,
-    "home_team": "Berliner SC",
-    "away_team": "Berlin Türkspor",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Hubertussportplatz NR1",
-    "venue_address": "Hubertusallee 50, 14193 Berlin",
-    "home_team_website": "https://www.berlinersc-fussball.de/",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/berliner-sc-berlin-tuerkspor/-/spiel/031G0H6NQ0000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-05-30",
-    "time": null,
     "home_team": "TSV Mariendorf 1897",
     "away_team": "TSV Rudow",
     "league": "BERLIN-LIGA",

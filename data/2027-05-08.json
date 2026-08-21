@@ -18,23 +18,6 @@
   {
     "date": "2027-05-08",
     "time": null,
-    "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
-    "away_team": "SFC Stern 1900",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Rathausstraße NR1",
-    "venue_address": "Rathausstr. 10 A, 12105 Berlin",
-    "home_team_website": "https://www.blauweiss90berlin.de/",
-    "away_team_website": "https://www.stern1900.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/spvg-blau-weiss-1890-berlin-sfc-stern-1900/-/spiel/031G0H7198000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-05-08",
-    "time": null,
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "TSV Mariendorf 1897",
     "league": "BERLIN-LIGA",
