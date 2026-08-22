@@ -475,7 +475,7 @@ MATCH_MAPS_RE = re.compile(
 # collapses tags), so this errs on the side of a wider, cheap window
 # rather than an exact adjacency assumption that might not hold in the
 # actual raw HTML a plain urllib request gets back.
-ANPFIFF_TIME_RE = re.compile(r"Anpfiff.{0,300}?(\d{1,2}:\d{2}).{0,80}?Uhr", re.S)
+ANPFIFF_TIME_RE = re.compile(r"Anpfiff.{0,1200}?(\d{1,2}:\d{2})\s*Uhr", re.S)
 TAG_RE = re.compile(r"<[^>]+>")
 
 
