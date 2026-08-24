@@ -155,23 +155,6 @@
   {
     "date": "2026-08-30",
     "time": null,
-    "home_team": "BFC Preussen II",
-    "away_team": "Friedenauer TSC",
-    "league": "LANDESLIGA STAFFEL 1",
-    "league_tier": 7,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Preussen-Stadion KR1",
-    "venue_address": "Malteserstr. 24, 12249 Berlin",
-    "home_team_website": "https://bfc-preussen.de",
-    "away_team_website": "https://www.friedenauertsc-berlin.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/bfc-preussen-ii-friedenauer-tsc/-/spiel/031G0GROF0000000VS5489BTVVG7L386"
-  },
-  {
-    "date": "2026-08-30",
-    "time": null,
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "Spandauer FC Veritas",
     "league": "LANDESLIGA STAFFEL 1",
