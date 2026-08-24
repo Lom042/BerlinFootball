@@ -2,23 +2,6 @@
   {
     "date": "2026-09-13",
     "time": null,
-    "home_team": "F.C. Hertha 03 Zehlendorf",
-    "away_team": "SV Siedenbollentin",
-    "league": "OBERLIGA NORDOST",
-    "league_tier": 5,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Ernst-Reuter-Sportf. NR1",
-    "venue_address": "Onkel-Tom-Str. 40, 14169 Berlin",
-    "home_team_website": "https://www.h03.de",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-hertha-03-sv-siedenbollentin/-/spiel/031AFMQP9S000000VS5489BUVV628VP4"
-  },
-  {
-    "date": "2026-09-13",
-    "time": null,
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "SV Sparta Lichtenberg 1911",
     "league": "OBERLIGA NORDOST",
@@ -32,6 +15,23 @@
     "away_team_website": "https://sv-sparta.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-sv-sparta-lichtenberg-1911-ev/-/spiel/031AFMQPK4000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-09-13",
+    "time": null,
+    "home_team": "F.C. Hertha 03 Zehlendorf",
+    "away_team": "SV Siedenbollentin",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Ernst-Reuter-Sportf. NR1",
+    "venue_address": "Onkel-Tom-Str. 40, 14169 Berlin",
+    "home_team_website": "https://www.h03.de",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-hertha-03-sv-siedenbollentin/-/spiel/031AFMQP9S000000VS5489BUVV628VP4"
   },
   {
     "date": "2026-09-13",
