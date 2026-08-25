@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-09-17",
+    "time": null,
+    "home_team": "SV Empor Berlin",
+    "away_team": "FC Internationale Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Friedr-Ludwig-Jahn-Spp NR1",
+    "venue_address": "Cantianstr. 24, 10437 Berlin",
+    "home_team_website": "https://www.empor-berlin.de/",
+    "away_team_website": "https://www.inter-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-fc-internationale-berlin/-/spiel/031G0H6JPG000000VS5489BUVSJ4CRAP"
+  }
+]

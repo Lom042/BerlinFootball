@@ -70,23 +70,6 @@
   {
     "date": "2026-09-12",
     "time": null,
-    "home_team": "SV Empor Berlin",
-    "away_team": "Frohnauer SC",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Friedr-Ludwig-Jahn-Spp KR1",
-    "venue_address": "Cantianstr. 24, 10437 Berlin",
-    "home_team_website": "https://www.empor-berlin.de/",
-    "away_team_website": "https://www.frohnauersc.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-frohnauer-sc/-/spiel/031G0H6D14000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-12",
-    "time": null,
     "home_team": "FC Internationale Berlin",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -100,6 +83,23 @@
     "away_team_website": "https://www.berlinersc-fussball.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-berliner-sc/-/spiel/031G0H6D68000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-12",
+    "time": null,
+    "home_team": "SV Empor Berlin",
+    "away_team": "Frohnauer SC",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Friedr-Ludwig-Jahn-Spp KR1",
+    "venue_address": "Cantianstr. 24, 10437 Berlin",
+    "home_team_website": "https://www.empor-berlin.de/",
+    "away_team_website": "https://www.frohnauersc.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-frohnauer-sc/-/spiel/031G0H6D14000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-12",
