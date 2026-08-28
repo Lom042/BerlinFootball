@@ -2,23 +2,6 @@
   {
     "date": "2027-04-04",
     "time": null,
-    "home_team": "Hertha BSC II",
-    "away_team": "SV Babelsberg 03",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Stadion auf dem Wurfplatz",
-    "venue_address": "Friedrich-Friesen-Allee, 14053 Berlin",
-    "home_team_website": "https://www.herthabsc.com",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/hertha-bsc-u23-sv-babelsberg-03/-/spiel/031DEICGJS000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2027-04-04",
-    "time": null,
     "home_team": "SV Tasmania Berlin",
     "away_team": "BFC Preussen",
     "league": "REGIONALLIGA NORDOST",

@@ -35,23 +35,6 @@
   {
     "date": "2027-03-21",
     "time": null,
-    "home_team": "VSG Altglienicke Berlin",
-    "away_team": "FSV Zwickau",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Spree-Arena",
-    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
-    "home_team_website": "https://www.vsg-altglienicke.de",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-fsv-zwickau/-/spiel/031DEICFGS000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2027-03-21",
-    "time": null,
     "home_team": "BFC Preussen",
     "away_team": "FSV 63 Luckenwalde",
     "league": "REGIONALLIGA NORDOST",

@@ -18,23 +18,6 @@
   {
     "date": "2026-10-25",
     "time": null,
-    "home_team": "VSG Altglienicke Berlin",
-    "away_team": "FSV 63 Luckenwalde",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Spree-Arena",
-    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
-    "home_team_website": "https://www.vsg-altglienicke.de",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-fsv-63-luckenwalde/-/spiel/031DEIC5AO000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-10-25",
-    "time": null,
     "home_team": "Berliner AK 07",
     "away_team": "1. FC Lok Stendal",
     "league": "OBERLIGA NORDOST",

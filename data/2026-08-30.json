@@ -189,23 +189,6 @@
   {
     "date": "2026-08-30",
     "time": null,
-    "home_team": "Viktoria Berlin II (U23)",
-    "away_team": "Pfeffersport",
-    "league": "LANDESLIGA STAFFEL 2",
-    "league_tier": 7,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
-    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
-    "home_team_website": "",
-    "away_team_website": "https://pfeffersport.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-ii-u23-pfeffersport/-/spiel/031G0GOSMK000000VS5489BTVVG7L386"
-  },
-  {
-    "date": "2026-08-30",
-    "time": null,
     "home_team": "Delay Sports Berlin",
     "away_team": "SSC Teutonia 99",
     "league": "LANDESLIGA STAFFEL 2",
@@ -219,6 +202,23 @@
     "away_team_website": "https://www.ssc-teutonia.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/delay-sports-berlin-ssc-teutonia-99/-/spiel/031G0GOSTO000000VS5489BTVVG7L386"
+  },
+  {
+    "date": "2026-08-30",
+    "time": null,
+    "home_team": "Viktoria Berlin II (U23)",
+    "away_team": "Pfeffersport",
+    "league": "LANDESLIGA STAFFEL 2",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Carl-Schuhmann-Sportanl. KR1",
+    "venue_address": "Osdorfer Straße 52, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://pfeffersport.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-ii-u23-pfeffersport/-/spiel/031G0GOSMK000000VS5489BTVVG7L386"
   },
   {
     "date": "2026-08-30",
