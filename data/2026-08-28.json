@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-08-28",
-    "time": null,
+    "time": "19:00",
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "BSG Chemie Leipzig",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-08-28",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "Viktoria Berlin",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-08-28",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "league": "BERLIN-LIGA",

@@ -2,6 +2,23 @@
   {
     "date": "2026-11-01",
     "time": null,
+    "home_team": "BFC Dynamo",
+    "away_team": "RSV Eintracht 1949",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Sportforum Stadion",
+    "venue_address": "Weißenseer Weg 51-55, 13053 Berlin",
+    "home_team_website": "https://bfc.com",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-dynamo-rsv-eintracht-1949/-/spiel/031DEIC5J4000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-01",
+    "time": null,
     "home_team": "BFC Preussen",
     "away_team": "FSV Zwickau",
     "league": "REGIONALLIGA NORDOST",

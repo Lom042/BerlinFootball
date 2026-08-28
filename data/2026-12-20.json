@@ -36,23 +36,6 @@
   {
     "date": "2026-12-20",
     "time": null,
-    "home_team": "SV Sparta Lichtenberg 1911",
-    "away_team": "Füchse Berlin Reinickendorf",
-    "league": "OBERLIGA NORDOST",
-    "league_tier": 5,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Paul-Kalkbrenner-Sportfeld NR1",
-    "venue_address": "Fischerstr. 15, 10317 Berlin",
-    "home_team_website": "https://sv-sparta.de/",
-    "away_team_website": "https://www.fuechse-berlin-reinickendorf.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sv-sparta-lichtenberg-1911-ev-fuechse-berlin-reinickendorf/-/spiel/031AFMR8OC000000VS5489BUVV628VP4"
-  },
-  {
-    "date": "2026-12-20",
-    "time": null,
     "home_team": "Berliner SC",
     "away_team": "SV Empor Berlin",
     "league": "BERLIN-LIGA",
