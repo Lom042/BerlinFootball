@@ -8,7 +8,7 @@
     "league_tier": 1,
     "gender": "M",
     "matchday": "1. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Stadion An der Alten Försterei",
     "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
@@ -17,7 +17,7 @@
   },
   {
     "date": "2026-08-29",
-    "time": null,
+    "time": "14:03",
     "home_team": "Hertha BSC II",
     "away_team": "Hallescher FC",
     "league": "REGIONALLIGA NORDOST",
@@ -34,7 +34,7 @@
   },
   {
     "date": "2026-08-29",
-    "time": null,
+    "time": "15:00",
     "home_team": "Spandauer Kickers",
     "away_team": "SV Empor Berlin",
     "league": "BERLIN-LIGA",
@@ -51,7 +51,7 @@
   },
   {
     "date": "2026-08-29",
-    "time": null,
+    "time": "13:00",
     "home_team": "VfB Fortuna Biesdorf II",
     "away_team": "VSG Altglienicke II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -68,7 +68,7 @@
   },
   {
     "date": "2026-08-29",
-    "time": null,
+    "time": "14:06",
     "home_team": "Berliner SC II",
     "away_team": "BSV Eintracht Mahlsdorf II",
     "league": "LANDESLIGA STAFFEL 2",
