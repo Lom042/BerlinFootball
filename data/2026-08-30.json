@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "15:00",
     "home_team": "SV Tasmania Berlin",
     "away_team": "Greifswalder FC",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "13:00",
     "home_team": "SV Lichtenberg 47",
     "away_team": "F.C. Hertha 03 Zehlendorf",
     "league": "OBERLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Sparta Lichtenberg 1911",
     "away_team": "Berliner AK 07",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:00",
     "home_team": "Füchse Berlin Reinickendorf",
     "away_team": "BSV Eintracht Mahlsdorf",
     "league": "OBERLIGA NORDOST",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "12:45",
     "home_team": "Frohnauer SC",
     "away_team": "B.W. Hohen Neuendorf",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:02",
     "home_team": "SC Staaken1919",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:53",
     "home_team": "Berliner SC",
     "away_team": "BFC Meteor 06",
     "league": "BERLIN-LIGA",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:30",
     "home_team": "TSV Mariendorf 1897",
     "away_team": "S.D. Croatia Berlin",
     "league": "BERLIN-LIGA",
@@ -137,7 +137,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "13:34",
     "home_team": "SC Berliner Amateure",
     "away_team": "Steglitzer SC Südwest 1947",
     "league": "LANDESLIGA STAFFEL 1",
@@ -154,7 +154,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "14:00",
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "Spandauer FC Veritas",
     "league": "LANDESLIGA STAFFEL 1",
@@ -171,7 +171,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "15:18",
     "home_team": "FC Internationale Berlin II",
     "away_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "league": "LANDESLIGA STAFFEL 1",
@@ -188,7 +188,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "12:30",
     "home_team": "Delay Sports Berlin",
     "away_team": "SSC Teutonia 99",
     "league": "LANDESLIGA STAFFEL 2",
@@ -205,7 +205,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "12:45",
     "home_team": "Viktoria Berlin II (U23)",
     "away_team": "Pfeffersport",
     "league": "LANDESLIGA STAFFEL 2",
@@ -222,7 +222,7 @@
   },
   {
     "date": "2026-08-30",
-    "time": null,
+    "time": "13:33",
     "home_team": "Berlin Hilalspor",
     "away_team": "FSV Berolina Stralau",
     "league": "LANDESLIGA STAFFEL 2",
