@@ -18,23 +18,6 @@
   {
     "date": "2026-10-17",
     "time": null,
-    "home_team": "SV Empor Berlin",
-    "away_team": "VfB Fortuna Biesdorf",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Friedr-Ludwig-Jahn-Spp KR1",
-    "venue_address": "Cantianstr. 24, 10437 Berlin",
-    "home_team_website": "https://www.empor-berlin.de/",
-    "away_team_website": "https://www.fortuna-biesdorf.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-vfb-fortuna-biesdorf/-/spiel/031G0H6BIG000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-10-17",
-    "time": null,
     "home_team": "VfB Fortuna Biesdorf II",
     "away_team": "FC Internationale Berlin II",
     "league": "LANDESLIGA STAFFEL 1",
