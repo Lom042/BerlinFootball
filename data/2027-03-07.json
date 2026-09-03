@@ -188,6 +188,23 @@
   {
     "date": "2027-03-07",
     "time": null,
+    "home_team": "Türkiyemspor Berlin 1978",
+    "away_team": "Steglitzer SC Südwest 1947",
+    "league": "LANDESLIGA STAFFEL 1",
+    "league_tier": 7,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Willy-Kressmann-Stadion NR",
+    "venue_address": "Dudenstr. 40 / 64, 10965 Berlin",
+    "home_team_website": "https://tuerkiyemspor.com/",
+    "away_team_website": "https://www.ssc1947.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/tuerkiyemspor-berlin-1978-steglitzer-sc-suedwest-1947/-/spiel/031G0GRVMK000000VS5489BTVVG7L386"
+  },
+  {
+    "date": "2027-03-07",
+    "time": null,
     "home_team": "BFC Preussen II",
     "away_team": "VSG Altglienicke II",
     "league": "LANDESLIGA STAFFEL 1",
