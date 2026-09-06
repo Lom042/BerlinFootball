@@ -2,6 +2,23 @@
   {
     "date": "2026-09-09",
     "time": null,
+    "home_team": "Viktoria Berlin",
+    "away_team": "S.D. Croatia Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Carl-Schuhmann-Sportanl. KR1",
+    "venue_address": "Osdorfer Straße 52, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "http://sdcroatia.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sd-croatia-berlin/-/spiel/031G0H6JKG000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-09",
+    "time": null,
     "home_team": "Frohnauer SC",
     "away_team": "SC Staaken1919",
     "league": "BERLIN-LIGA",
@@ -15,23 +32,6 @@
     "away_team_website": "https://sc-staaken.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/frohnauer-sc-sc-staaken1919/-/spiel/031G0H6JUG000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-09",
-    "time": null,
-    "home_team": "Viktoria Berlin",
-    "away_team": "S.D. Croatia Berlin",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
-    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
-    "home_team_website": "",
-    "away_team_website": "http://sdcroatia.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sd-croatia-berlin/-/spiel/031G0H6JKG000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-09",
