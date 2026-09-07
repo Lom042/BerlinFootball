@@ -36,23 +36,6 @@
   {
     "date": "2026-09-12",
     "time": null,
-    "home_team": "Viktoria Berlin",
-    "away_team": "SF Johannisthal",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
-    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
-    "home_team_website": "",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sf-johannisthal/-/spiel/031G0H6CTO000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-12",
-    "time": null,
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "Spandauer Kickers",
     "league": "BERLIN-LIGA",
@@ -100,6 +83,23 @@
     "away_team_website": "https://www.frohnauersc.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-frohnauer-sc/-/spiel/031G0H6D14000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-12",
+    "time": null,
+    "home_team": "Viktoria Berlin",
+    "away_team": "SF Johannisthal",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Carl-Schuhmann-Sportanl. KR1",
+    "venue_address": "Osdorfer Straße 52, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sf-johannisthal/-/spiel/031G0H6CTO000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-12",
