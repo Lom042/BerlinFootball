@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-09",
-    "time": null,
+    "time": "19:00",
     "home_team": "Viktoria Berlin",
     "away_team": "S.D. Croatia Berlin",
     "league": "BERLIN-LIGA",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-09",
-    "time": null,
+    "time": "19:25",
     "home_team": "Frohnauer SC",
     "away_team": "SC Staaken1919",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-09",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-09",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "TSV Rudow",
     "league": "BERLIN-LIGA",
