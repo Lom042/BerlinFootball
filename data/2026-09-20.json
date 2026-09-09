@@ -53,6 +53,23 @@
   {
     "date": "2026-09-20",
     "time": null,
+    "home_team": "Berliner SC",
+    "away_team": "SFC Stern 1900",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Hubertussportplatz NR1",
+    "venue_address": "Hubertusallee 50, 14193 Berlin",
+    "home_team_website": "https://www.berlinersc-fussball.de/",
+    "away_team_website": "https://www.stern1900.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-sc-sfc-stern-1900/-/spiel/031G0H6CGC000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-20",
+    "time": null,
     "home_team": "Spandauer Kickers",
     "away_team": "Viktoria Berlin",
     "league": "BERLIN-LIGA",
@@ -83,23 +100,6 @@
     "away_team_website": "https://www.fortuna-biesdorf.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/frohnauer-sc-vfb-fortuna-biesdorf/-/spiel/031G0H6CJO000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-20",
-    "time": null,
-    "home_team": "Berliner SC",
-    "away_team": "SFC Stern 1900",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Hubertussportplatz NR1",
-    "venue_address": "Hubertusallee 50, 14193 Berlin",
-    "home_team_website": "https://www.berlinersc-fussball.de/",
-    "away_team_website": "https://www.stern1900.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/berliner-sc-sfc-stern-1900/-/spiel/031G0H6CGC000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-20",
