@@ -1,22 +1,6 @@
 [
   {
     "date": "2026-10-25",
-    "time": "13:30",
-    "home_team": "Hertha BSC",
-    "away_team": "DSC Arminia Bielefeld",
-    "league": "BL2",
-    "league_tier": 2,
-    "gender": "M",
-    "matchday": "9. Spieltag",
-    "finished": false,
-    "venue": "Olympiastadion Berlin",
-    "venue_address": "Olympischer Platz 3, 14053 Berlin",
-    "home_team_website": "https://www.herthabsc.com",
-    "away_team_website": "",
-    "source": "openligadb"
-  },
-  {
-    "date": "2026-10-25",
     "time": null,
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "FSV 63 Luckenwalde",

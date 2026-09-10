@@ -1,6 +1,22 @@
 [
   {
     "date": "2026-10-24",
+    "time": "13:00",
+    "home_team": "Hertha BSC",
+    "away_team": "DSC Arminia Bielefeld",
+    "league": "BL2",
+    "league_tier": 2,
+    "gender": "M",
+    "matchday": "9. Spieltag",
+    "finished": false,
+    "venue": "Olympiastadion Berlin",
+    "venue_address": "Olympischer Platz 3, 14053 Berlin",
+    "home_team_website": "https://www.herthabsc.com",
+    "away_team_website": "",
+    "source": "openligadb"
+  },
+  {
+    "date": "2026-10-24",
     "time": null,
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "F.C. Hertha 03 Zehlendorf",

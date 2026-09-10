@@ -1,6 +1,22 @@
 [
   {
     "date": "2026-11-07",
+    "time": "20:30",
+    "home_team": "Hertha BSC",
+    "away_team": "VfL Wolfsburg",
+    "league": "BL2",
+    "league_tier": 2,
+    "gender": "M",
+    "matchday": "11. Spieltag",
+    "finished": false,
+    "venue": "Olympiastadion Berlin",
+    "venue_address": "Olympischer Platz 3, 14053 Berlin",
+    "home_team_website": "https://www.herthabsc.com",
+    "away_team_website": "",
+    "source": "openligadb"
+  },
+  {
+    "date": "2026-11-07",
     "time": null,
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "TUS Makkabi",
