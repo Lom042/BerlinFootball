@@ -36,6 +36,23 @@
   {
     "date": "2026-09-26",
     "time": null,
+    "home_team": "SV Empor Berlin",
+    "away_team": "TSV Rudow",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Rennbahnstraße Stadion KR1",
+    "venue_address": "Rennbahnstraße 45, 13086 Berlin",
+    "home_team_website": "https://www.empor-berlin.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-tsv-rudow/-/spiel/031G0H6C10000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-26",
+    "time": null,
     "home_team": "Viktoria Berlin",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -66,23 +83,6 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/vfb-fortuna-biesdorf-bw-hohen-neuendorf/-/spiel/031G0H6BVG000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-26",
-    "time": null,
-    "home_team": "SV Empor Berlin",
-    "away_team": "TSV Rudow",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Friedr-Ludwig-Jahn-Spp KR1",
-    "venue_address": "Cantianstr. 24, 10437 Berlin",
-    "home_team_website": "https://www.empor-berlin.de/",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sv-empor-berlin-tsv-rudow/-/spiel/031G0H6C10000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-26",
