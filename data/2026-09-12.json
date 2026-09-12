@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen",
     "away_team": "1. FC Magdeburg II",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "14:00",
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "Spandauer Kickers",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "14:15",
     "home_team": "FC Internationale Berlin",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "14:35",
     "home_team": "SV Empor Berlin",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "17:00",
     "home_team": "Viktoria Berlin",
     "away_team": "SF Johannisthal",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-12",
-    "time": null,
+    "time": "15:00",
     "home_team": "VSG Altglienicke II",
     "away_team": "Türkiyemspor Berlin 1978",
     "league": "LANDESLIGA STAFFEL 1",
