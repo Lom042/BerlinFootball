@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "14:00",
     "home_team": "Berliner AK 07",
     "away_team": "FC Mecklenburg Schwerin",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "14:00",
     "home_team": "Tennis Borussia Berlin",
     "away_team": "FC Anker Wismar",
     "league": "OBERLIGA NORDOST",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "14:30",
     "home_team": "S.D. Croatia Berlin",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "16:00",
     "home_team": "BSV Eintracht Mahlsdorf II",
     "away_team": "FSV Hansa 07",
     "league": "LANDESLIGA STAFFEL 2",
