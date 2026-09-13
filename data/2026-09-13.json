@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "13:00",
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "SV Sparta Lichtenberg 1911",
     "league": "OBERLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "14:00",
     "home_team": "F.C. Hertha 03 Zehlendorf",
     "away_team": "SV Siedenbollentin",
     "league": "OBERLIGA NORDOST",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "12:00",
     "home_team": "Spandauer FC Veritas",
     "away_team": "SC Berliner Amateure",
     "league": "LANDESLIGA STAFFEL 1",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-13",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "away_team": "BFC Preussen II",
     "league": "LANDESLIGA STAFFEL 1",
