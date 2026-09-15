@@ -18,6 +18,23 @@
   {
     "date": "2026-11-21",
     "time": null,
+    "home_team": "SV Tasmania Berlin",
+    "away_team": "Hertha BSC II",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, W.-Seelenb.-Sportpark NR1",
+    "venue_address": "Oderstr. 182, 12051 Berlin",
+    "home_team_website": "https://www.sv-tasmania-berlin.de",
+    "away_team_website": "https://www.herthabsc.com",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sv-tasmania-berlin-hertha-bsc-u23/-/spiel/031DEIC79S000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-11-21",
+    "time": null,
     "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "away_team": "SV Empor Berlin",
     "league": "BERLIN-LIGA",

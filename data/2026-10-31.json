@@ -2,6 +2,23 @@
   {
     "date": "2026-10-31",
     "time": null,
+    "home_team": "BFC Preussen",
+    "away_team": "FSV Zwickau",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Preussen-Stadion NR1",
+    "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "home_team_website": "https://bfc-preussen.de",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-preussen-fsv-zwickau/-/spiel/031DEIC5LO000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-10-31",
+    "time": null,
     "home_team": "SV Lichtenberg 47",
     "away_team": "SV Siedenbollentin",
     "league": "OBERLIGA NORDOST",

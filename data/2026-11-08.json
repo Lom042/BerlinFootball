@@ -2,23 +2,6 @@
   {
     "date": "2026-11-08",
     "time": null,
-    "home_team": "VSG Altglienicke Berlin",
-    "away_team": "SV Tasmania Berlin",
-    "league": "REGIONALLIGA NORDOST",
-    "league_tier": 4,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Spree-Arena",
-    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
-    "home_team_website": "https://www.vsg-altglienicke.de",
-    "away_team_website": "https://www.sv-tasmania-berlin.de",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-sv-tasmania-berlin/-/spiel/031DEIC6DO000000VS5489BUVUR5FS5A"
-  },
-  {
-    "date": "2026-11-08",
-    "time": null,
     "home_team": "Hertha BSC II",
     "away_team": "1. FC Magdeburg II",
     "league": "REGIONALLIGA NORDOST",

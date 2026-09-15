@@ -18,6 +18,23 @@
   {
     "date": "2026-10-10",
     "time": null,
+    "home_team": "BFC Preussen",
+    "away_team": "Hertha BSC II",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Preussen-Stadion NR1",
+    "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "home_team_website": "https://bfc-preussen.de",
+    "away_team_website": "https://www.herthabsc.com",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-preussen-hertha-bsc-u23/-/spiel/031DEIC3IC000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-10-10",
+    "time": null,
     "home_team": "SV Lichtenberg 47",
     "away_team": "FC Anker Wismar",
     "league": "OBERLIGA NORDOST",

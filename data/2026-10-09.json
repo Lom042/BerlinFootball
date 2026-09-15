@@ -2,6 +2,23 @@
   {
     "date": "2026-10-09",
     "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "BFC Dynamo",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "https://bfc.com",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-bfc-dynamo/-/spiel/031DEIC3G0000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-10-09",
+    "time": null,
     "home_team": "SC Staaken1919",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
