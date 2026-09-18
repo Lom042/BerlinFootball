@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-18",
-    "time": null,
+    "time": "18:30",
     "home_team": "Füchse Berlin Reinickendorf",
     "away_team": "SG Union Klosterfelde",
     "league": "OBERLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-18",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-18",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "S.D. Croatia Berlin",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-18",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "BFC Meteor 06",
     "league": "BERLIN-LIGA",
