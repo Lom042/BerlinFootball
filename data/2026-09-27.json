@@ -19,6 +19,23 @@
   {
     "date": "2026-09-27",
     "time": null,
+    "home_team": "S.D. Croatia Berlin",
+    "away_team": "SC Charlottenburg",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Friedrich-Ebert-Stadion KR1",
+    "venue_address": "Bosestr. 21, 12103 Berlin",
+    "home_team_website": "http://sdcroatia.de/",
+    "away_team_website": "https://www.scc-berlin-fussball.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-sc-charlottenburg/-/spiel/031G0H6C8O000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-27",
+    "time": null,
     "home_team": "SC Staaken1919",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -32,23 +49,6 @@
     "away_team_website": "https://www.berlinersc-fussball.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sc-staaken1919-berliner-sc/-/spiel/031G0H6C2G000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-27",
-    "time": null,
-    "home_team": "S.D. Croatia Berlin",
-    "away_team": "SC Charlottenburg",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Friedrich-Ebert-Stadion NR1",
-    "venue_address": "Bosestr. 21, 12103 Berlin",
-    "home_team_website": "http://sdcroatia.de/",
-    "away_team_website": "https://www.scc-berlin-fussball.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-sc-charlottenburg/-/spiel/031G0H6C8O000000VS5489BUVSJ4CRAP"
   },
   {
     "date": "2026-09-27",
