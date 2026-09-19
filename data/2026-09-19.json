@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-19",
-    "time": null,
+    "time": "14:00",
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "RSV Eintracht 1949",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-19",
-    "time": null,
+    "time": "14:02",
     "home_team": "BFC Preussen",
     "away_team": "SV Tasmania Berlin",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-19",
-    "time": null,
+    "time": "13:00",
     "home_team": "SV Lichtenberg 47",
     "away_team": "TUS Makkabi",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-19",
-    "time": null,
+    "time": "14:00",
     "home_team": "VfB Fortuna Biesdorf II",
     "away_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "league": "LANDESLIGA STAFFEL 1",
