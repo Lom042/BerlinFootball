@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "11:00",
     "home_team": "Berliner SC",
     "away_team": "SFC Stern 1900",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "11:30",
     "home_team": "Spandauer Kickers",
     "away_team": "Viktoria Berlin",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "12:45",
     "home_team": "Frohnauer SC",
     "away_team": "VfB Fortuna Biesdorf",
     "league": "BERLIN-LIGA",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "10:45",
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "Friedenauer TSC",
     "league": "LANDESLIGA STAFFEL 1",
@@ -171,7 +171,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "11:30",
     "home_team": "Viktoria Berlin II (U23)",
     "away_team": "Berlin Hilalspor",
     "league": "LANDESLIGA STAFFEL 2",
@@ -188,7 +188,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "12:30",
     "home_team": "Delay Sports Berlin",
     "away_team": "BSV Hürtürkel",
     "league": "LANDESLIGA STAFFEL 2",
