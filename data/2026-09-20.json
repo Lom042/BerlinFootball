@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Dynamo",
     "away_team": "1. FC Magdeburg II",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "14:00",
     "home_team": "Berliner AK 07",
     "away_team": "BSV Eintracht Mahlsdorf",
     "league": "OBERLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Sparta Lichtenberg 1911",
     "away_team": "TSG Neustrelitz",
     "league": "OBERLIGA NORDOST",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "14:30",
     "home_team": "TSV Mariendorf 1897",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
@@ -137,7 +137,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "13:33",
     "home_team": "SC Berliner Amateure",
     "away_team": "VSG Altglienicke II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -154,7 +154,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen II",
     "away_team": "FC Stern Marienfelde",
     "league": "LANDESLIGA STAFFEL 1",
@@ -205,7 +205,7 @@
   },
   {
     "date": "2026-09-20",
-    "time": null,
+    "time": "15:00",
     "home_team": "Berliner SC II",
     "away_team": "Pfeffersport",
     "league": "LANDESLIGA STAFFEL 2",
