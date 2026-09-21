@@ -19,6 +19,23 @@
   {
     "date": "2026-10-30",
     "time": null,
+    "home_team": "F.C. Hertha 03 Zehlendorf",
+    "away_team": "TSG Neustrelitz",
+    "league": "OBERLIGA NORDOST",
+    "league_tier": 5,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Ernst-Reuter-Sportf. NR1",
+    "venue_address": "Onkel-Tom-Str. 40, 14169 Berlin",
+    "home_team_website": "https://www.h03.de",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/fc-hertha-03-tsg-neustrelitz/-/spiel/031AFMQLLS000000VS5489BUVV628VP4"
+  },
+  {
+    "date": "2026-10-30",
+    "time": null,
     "home_team": "BFC Meteor 06",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
