@@ -43,5 +43,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Debug fussball.de scraper
+      - name: Debug regional club fetch
         run: python scraper_fussballde.py --debug --club "BFC Dynamo"
+      - name: Debug full-staffel fetch
+        run: python scraper_fussballde.py --debug --staffel landesliga-1
+      - name: Debug Landespokal Berlin fetch
+        run: python scraper_fussballde.py --debug --pokal
