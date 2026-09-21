@@ -4,14 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Berlin Football — Fixtures</title>
-<!-- No favicon was ever set, so browser tabs/bookmarks were showing a
-     generic blank-page icon - that's the "website version looks worse"
-     gap, separate from "Add to Home Screen," which had nothing set
-     either but falls back to auto-screenshotting the page instead (why
-     that one already looked fine). A small inline SVG data URI needs no
-     separate image file to host - a gold pitch center-circle mark on
-     the same dark green as the rest of the theme. -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSIjMGYzZDJlIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YTczZCIgc3Ryb2tlLXdpZHRoPSI3Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTEiIGZpbGw9IiNkNGE3M2QiLz48L3N2Zz4K">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -39,6 +31,14 @@
     text-align: center;
     border-bottom: 2px solid var(--line);
   }
+  header .eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
   header h1 {
     font-family: 'Oswald', sans-serif;
     font-weight: 700;
@@ -52,144 +52,36 @@
     margin-top: 8px;
     font-size: 14px;
   }
-  /* Everything that controls WHAT you see (calendar, league, district,
-     team, postcode, sort) lives inside one bordered card, stacked as
-     full-width blocks rather than a cramped side-by-side row - once
-     league/district/team became multi-select chip groups (each capable
-     of wrapping onto several lines as you pick more than one), squeezing
-     them next to the calendar in one flex row got messy fast. Stacking
-     keeps every group readable at any screen width. */
-  .filters-card {
-    width: calc(100% - 40px);
-    max-width: 460px;
-    margin: 24px auto 0;
-    padding: 22px 22px 24px;
-    background: rgba(244,242,234,0.05);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-  .search-row {
-    width: 100%;
+  .controls {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 0 20px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
   }
-  /* Calendar, and the league/district/team filter groups below it, all
-     share the same "bordered box, wrapping row of chips" shape - .chip-
-     group is basically the same box as .calendar, minus the month-nav
-     header. Chips themselves (.chip) are shared by all four filters:
-     dates, leagues, districts, and teams all look and behave the same
-     way - click a chip to toggle it on or off. Every one of these is
-     MULTI-select now (you can pick more than one date, league, district,
-     or team at once), and each one narrows what the OTHERS offer - see
-     matchesFilters() in the script below for how that mutual narrowing
-     actually works. */
-  .calendar, .chip-group {
-    width: 100%;
-    background: rgba(244,242,234,0.06);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 16px 16px;
-  }
-  .cal-header {
+  .dates {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px;
   }
-  .cal-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--chalk);
-  }
-  .cal-nav {
-    background: transparent;
-    border: 1px solid var(--line);
-    color: var(--chalk-dim);
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 15px;
-    line-height: 1;
-    transition: all 0.15s ease;
-  }
-  .cal-nav:hover:not(:disabled) { border-color: var(--gold); color: var(--chalk); }
-  .cal-nav:disabled { opacity: 0.25; cursor: default; }
-  .filter-label {
-    font-family: 'Oswald', sans-serif;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--chalk-dim);
-    margin-bottom: 10px;
-  }
-  /* Deliberately NOT a full month grid with blank cells for every day
-     that has nothing on - a real month, most days have no fixture at
-     all, so a 31-cell grid was mostly dead space. This is just the
-     handful of dates that actually have something AND are still
-     consistent with whatever league/district/team is currently
-     selected, as a wrapping row of chips. */
-  .chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-  }
-  .chip {
+  .date-pill {
     font-family: 'Oswald', sans-serif;
     background: transparent;
     border: 1px solid var(--line);
     color: var(--chalk-dim);
-    padding: 7px 12px;
+    padding: 8px 16px;
     border-radius: 999px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
     letter-spacing: 0.5px;
     transition: all 0.15s ease;
   }
-  .chip:hover { border-color: var(--gold); color: var(--chalk); }
-  .chip.today:not(.active) { border-color: var(--chalk-dim); border-style: dashed; }
-  .chip.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
-  .chip-empty-note { color: var(--chalk-dim); font-size: 13px; padding: 6px 0; }
-  .chip-clear-btn {
-    display: block;
-    width: 100%;
-    margin-top: 12px;
-    background: transparent;
-    border: 1px solid var(--line);
-    color: var(--chalk-dim);
-    padding: 8px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    transition: all 0.15s ease;
-  }
-  .chip-clear-btn:hover { border-color: var(--gold); color: var(--chalk); }
-  .chip-clear-btn.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
-
-  .reset-btn {
-    background: transparent;
-    border: 1px solid var(--line);
-    color: var(--chalk-dim);
-    padding: 9px 16px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    transition: all 0.15s ease;
-  }
-  .reset-btn:hover { border-color: var(--gold); color: var(--chalk); }
+  .date-pill:hover { border-color: var(--gold); color: var(--chalk); }
+  .date-pill.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
 
   select {
     background: var(--pitch-dark);
@@ -200,8 +92,16 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
   }
-  #sort-mode { flex: 1 1 140px; max-width: 100%; }
-  #team-search-input, #postcode-input {
+  .search-row {
+    max-width: 900px;
+    margin: 16px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #team-search {
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     color: var(--chalk);
@@ -209,50 +109,17 @@
     border-radius: 999px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    flex: 1 1 140px;
-    min-width: 0;
+    width: 220px;
+    max-width: 60vw;
   }
-  #team-search-input { width: 100%; margin-top: 4px; }
-  #team-search-input::placeholder, #postcode-input::placeholder { color: var(--chalk-dim); }
+  #team-search::placeholder { color: var(--chalk-dim); }
   .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
-  .postcode-hint {
-    width: 100%;
-    text-align: center;
-    color: var(--gold);
-    font-size: 12px;
-    min-height: 14px;
-    margin: -4px 0 0;
-  }
 
   main {
     max-width: 900px;
     margin: 28px auto 60px;
     padding: 0 20px;
   }
-  /* Sort/display hierarchy: date (the pills above) > league (tier order) >
-     team. Each league-group sits directly under the selected date, and
-     the league identity travels WITH its matches (label right above the
-     team rows it belongs to) rather than as a separate badge floating
-     off to the side, disconnected from the teams it describes. */
-  /* When multiple dates end up in view at once (no single date picked,
-     or more than one date picked, or a league/district/team filter that
-     matches fixtures spanning several dates), fixtures are grouped under
-     a date heading first, then by league within that date - so the sort
-     hierarchy is genuinely date > league > team, not league-across-all-
-     dates. Results that land on exactly one date skip straight to the
-     league groups below, no redundant single date heading. */
-  .date-heading {
-    font-family: 'Oswald', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--chalk);
-    margin: 26px 0 12px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid var(--gold);
-  }
-  .date-heading:first-of-type { margin-top: 0; }
   .league-group { margin-bottom: 28px; }
   .league-label {
     font-family: 'Oswald', sans-serif;
@@ -263,14 +130,6 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 8px;
     margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .league-label .tier-tag {
-    color: var(--chalk-dim);
-    font-weight: 400;
-    letter-spacing: 1px;
   }
   .match {
     display: grid;
@@ -292,14 +151,6 @@
   }
   .teams { font-size: 16px; font-weight: 500; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
   .teams .vs { color: var(--chalk-dim); font-weight: 400; padding: 0 2px; }
-  .club-link {
-    color: var(--chalk-dim);
-    text-decoration: none;
-    font-size: 12px;
-    opacity: 0.7;
-    margin-left: -2px;
-  }
-  .club-link:hover { opacity: 1; text-decoration: underline; }
   .crest {
     display: inline-flex;
     align-items: center;
@@ -315,9 +166,7 @@
     flex-shrink: 0;
   }
   .venue { color: var(--chalk-dim); font-size: 12px; margin-top: 3px; }
-  .venue .addr { opacity: 0.8; }
-  .venue .addr::before { content: " · "; }
-  .matchday {
+  .badge {
     font-family: 'Oswald', sans-serif;
     font-size: 11px;
     letter-spacing: 1px;
@@ -326,7 +175,6 @@
     padding: 4px 8px;
     border-radius: 4px;
     white-space: nowrap;
-    text-align: center;
   }
   .empty {
     text-align: center;
@@ -347,83 +195,88 @@
 <body>
 
 <header>
+  <div class="eyebrow">Matchday</div>
   <h1>Berlin Football</h1>
-  <p class="sub">Every club, every level — Bundesliga to the local Sportplatz.</p>
+  <p class="sub">Every club, every level — Bundesliga down to the local pitch.</p>
 </header>
 
-<div class="filters-card">
-  <div class="calendar" id="calendar"></div>
-  <div class="chip-group" id="league-filter"></div>
-  <div class="chip-group" id="district-filter"></div>
-  <div class="chip-group" id="team-filter"></div>
-  <div class="search-row">
-    <input id="postcode-input" type="text" inputmode="numeric" placeholder="Your postcode (optional)" autocomplete="off" maxlength="5">
-    <select id="sort-mode">
-      <option value="">Sort: date</option>
-      <option value="distance">Sort: closest to me</option>
-      <option value="time">Sort: kick-off time</option>
-    </select>
-  </div>
-  <button id="reset-filters" type="button" class="reset-btn">Reset filters</button>
-  <p class="postcode-hint" id="postcode-hint"></p>
+<div class="controls">
+  <div class="dates" id="dates"></div>
+  <select id="league-filter">
+    <option value="">All divisions</option>
+  </select>
+</div>
+<div class="search-row">
+  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off">
 </div>
 
 <main id="main">
   <div class="empty">Loading fixtures…</div>
 </main>
 
-<footer>Free & ad-free. Data refreshed automatically. Covers Bundesliga down through Landesliga — see README.</footer>
+<footer>Free & ad-free. Data refreshed automatically.</footer>
 
 <script>
 // Placeholder fixtures only — not real games. Shown until the live
-// scrapers (scraper_openligadb.py / scraper_fussballde.py) have run and
-// produced real data/index.json + data/<date>.json files.
-//
-// Every fixture below is internally consistent with real current
-// divisions: Hertha BSC (BL2, tier 2) and 1. FC Union Berlin (BL1, tier
-// 1) are shown against other clubs in THEIR OWN tier, never against
-// each other, because that pairing can't happen in real league play
-// while they sit in different divisions. Each fixture also carries an
-// explicit `gender` and `league_tier` so the schema itself rules out
-// the kind of mixup that produced the old demo data's Hertha-vs-Union
-// fixture.
+// scrapers (scraper_openligadb.py / scraper_fussballde.py) have run
+// and produced real data/index.json + data/<date>.json files.
+// League tiers, top to bottom — used to order league groups on the page
+// (not alphabetically, since e.g. "BERLIN-LIGA" would wrongly sort before
+// "BL2"). LANDESPOKAL BERLIN (the cup) is placed first on any day it runs,
+// since it replaces league fixtures that weekend rather than sitting
+// alongside them.
+const LEAGUE_ORDER = [
+  "LANDESPOKAL BERLIN",
+  "BL1", "BL2", "BL3",
+  "REGIONALLIGA NORDOST",
+  "OBERLIGA NORDOST",
+  "BERLIN-LIGA",
+  "LANDESLIGA STAFFEL 1", "LANDESLIGA STAFFEL 2",
+  "BEZIRKSLIGA STAFFEL 1", "BEZIRKSLIGA STAFFEL 2", "BEZIRKSLIGA STAFFEL 3"
+];
+function leagueRank(league) {
+  const i = LEAGUE_ORDER.indexOf(league);
+  return i === -1 ? LEAGUE_ORDER.length : i;
+}
+
 const DEMO_DATA = {
   "2026-08-08": [
-    { date: "2026-08-08", time: "15:30", home_team: "1. FC Union Berlin", away_team: "VfL Wolfsburg", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 1", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin", home_team_website: "https://www.fc-union-berlin.de" },
-    { date: "2026-08-08", time: "13:00", home_team: "Hertha BSC", away_team: "SV Elversberg", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 1", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin", home_team_website: "https://www.herthabsc.com" },
-    { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportforum Berlin", venue_address: "Conrad-Blenkle-Straße 33, 13405 Berlin" },
-    { date: "2026-08-08", time: "14:00", home_team: "VSG Altglienicke", away_team: "Tasmania Berlin", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Sportpark Altglienicke", venue_address: "Rudolf-Seiffert-Straße 30, 12524 Berlin" },
-    { date: "2026-08-08", time: "14:00", home_team: "Berliner AK 07", away_team: "SV Lichtenberg 47", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Poststadion", venue_address: "Rathenower Str. 42, 10559 Berlin" },
-    { date: "2026-08-08", time: "15:00", home_team: "Tennis Borussia Berlin", away_team: "TuS Makkabi Berlin", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14055 Berlin" }
+    { date: "2026-08-08", time: "15:30", home_team: "Hertha BSC", away_team: "SV Waldhof Mannheim", league: "BL2", gender: "men", matchday: "Matchday 4", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin" },
+    { date: "2026-08-08", time: "13:00", home_team: "BFC Dynamo", away_team: "Chemnitzer FC", league: "REGIONALLIGA NORDOST", gender: "men", matchday: "Matchday 5", venue: "Sportforum Berlin", venue_address: "Conrad-Blenkle-Straße 55, 10315 Berlin" },
+    { date: "2026-08-08", time: "14:00", home_team: "VSG Altglienicke", away_team: "Tasmania Berlin", league: "REGIONALLIGA NORDOST", gender: "men", matchday: "Matchday 5", venue: "Sportpark Altglienicke", venue_address: "Rudolf-Seiffert-Straße 100, 12524 Berlin" },
+    { date: "2026-08-08", time: "14:00", home_team: "Berliner AK 07", away_team: "SV Lichtenberg 47", league: "OBERLIGA NORDOST", gender: "men", matchday: "Matchday 3", venue: "Poststadion", venue_address: "Lehrter Straße 59, 10557 Berlin" },
+    { date: "2026-08-08", time: "15:00", home_team: "Tennis Borussia Berlin", away_team: "TuS Makkabi Berlin", league: "OBERLIGA NORDOST", gender: "men", matchday: "Matchday 3", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14052 Berlin" }
   ],
   "2026-08-09": [
-    { date: "2026-08-09", time: "14:00", home_team: "Hertha 03 Zehlendorf", away_team: "Eintracht Mahlsdorf", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Rehwiese", venue_address: "Potsdamer Chaussee 4, 14109 Berlin" },
-    { date: "2026-08-09", time: "14:00", home_team: "Füchse Berlin Reinickendorf", away_team: "SV Sparta Lichtenberg", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Stadion Reinickendorf", venue_address: "Egellsstraße, 13407 Berlin" },
-    { date: "2026-08-09", time: "13:00", home_team: "SC Staaken", away_team: "TSG Neustrelitz", league: "OBERLIGA NORDOST", league_tier: 5, gender: "M", venue: "Stadion Staaken", venue_address: "Reimerweg 30, 13593 Berlin" }
+    { date: "2026-08-09", time: "14:00", home_team: "Hertha 03 Zehlendorf", away_team: "Eintracht Mahlsdorf", league: "OBERLIGA NORDOST", gender: "men", matchday: "Matchday 3", venue: "Rehwiese", venue_address: "Clayallee 330, 14169 Berlin" },
+    { date: "2026-08-09", time: "14:00", home_team: "Füchse Berlin Reinickendorf", away_team: "SV Sparta Lichtenberg", league: "OBERLIGA NORDOST", gender: "men", matchday: "Matchday 3", venue: "Stadion Reinickendorf", venue_address: "Provinzstraße 40, 13409 Berlin" },
+    { date: "2026-08-09", time: "13:00", home_team: "SC Staaken", away_team: "TSG Neustrelitz", league: "OBERLIGA NORDOST", gender: "men", matchday: "Matchday 3", venue: "Stadion Staaken", venue_address: "Nennhauser Damm 111, 13591 Berlin" }
   ],
   "2026-08-15": [
-    { date: "2026-08-15", time: "15:30", home_team: "Hertha BSC", away_team: "Karlsruher SC", league: "BL2", league_tier: 2, gender: "M", matchday: "Matchday 2", venue: "Olympiastadion Berlin", venue_address: "Olympischer Platz 3, 14053 Berlin" },
-    { date: "2026-08-15", time: "14:00", home_team: "Tasmania Berlin", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", league_tier: 4, gender: "M", venue: "Werner-Seelenbinder-Sportpark", venue_address: "Oderstraße 182, 12049 Berlin" },
-    { date: "2026-08-16", time: "14:00", home_team: "Blau-Weiss 90 Berlin", away_team: "1. FC Wilmersdorf", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Poststadion Nebenplatz", venue_address: "Rathenower Str. 42, 10559 Berlin" },
-    { date: "2026-08-16", time: "14:00", home_team: "SC Charlottenburg", away_team: "Spandauer Kickers", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14055 Berlin" }
+    { date: "2026-08-15", time: "15:30", home_team: "1. FC Union Berlin", away_team: "SC Freiburg", league: "BL1", gender: "men", matchday: "Matchday 2", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 68-90, 12555 Berlin" },
+    { date: "2026-08-15", time: "14:00", home_team: "Tasmania Berlin", away_team: "BFC Dynamo", league: "REGIONALLIGA NORDOST", gender: "men", matchday: "Matchday 6", venue: "Werner-Seelenbinder-Sportpark", venue_address: "Neuköllnische Allee 137, 12057 Berlin" },
+    { date: "2026-08-16", time: "14:00", home_team: "Blau-Weiss 90 Berlin", away_team: "1. FC Wilmersdorf", league: "BERLIN-LIGA", gender: "men", matchday: "Matchday 2", venue: "Poststadion Nebenplatz", venue_address: "Lehrter Straße 59, 10557 Berlin" },
+    { date: "2026-08-16", time: "14:00", home_team: "SC Charlottenburg", away_team: "Spandauer Kickers", league: "BERLIN-LIGA", gender: "men", matchday: "Matchday 2", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14052 Berlin" }
   ],
   "2026-08-22": [
-    { date: "2026-08-22", time: "15:30", home_team: "1. FC Union Berlin", away_team: "Bayer Leverkusen", league: "BL1", league_tier: 1, gender: "M", matchday: "Matchday 2", venue: "Stadion An der Alten Försterei", venue_address: "Hämmerlingstraße 61, 12559 Berlin" },
-    { date: "2026-08-22", time: "13:00", home_team: "SSC Südwest", away_team: "Fortuna Biesdorf", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Poststadion", venue_address: "Rathenower Str. 42, 10559 Berlin" },
-    { date: "2026-08-22", time: "14:00", home_team: "Türkiyemspor Berlin", away_team: "SV Empor Berlin", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Stadion Rathenower Straße", venue_address: "Rathenower Str. 42, 10559 Berlin" },
-    { date: "2026-08-22", time: "14:00", home_team: "TSV Mariendorf 1897", away_team: "Frohnauer SC", league: "BERLIN-LIGA", league_tier: 6, gender: "M", venue: "Sportplatz Mariendorf", venue_address: "Motzener Straße 20, 12277 Berlin" }
+    { date: "2026-08-22", time: "13:00", home_team: "SSC Südwest", away_team: "Fortuna Biesdorf", league: "BERLIN-LIGA", gender: "men", matchday: "Matchday 3", venue: "Poststadion", venue_address: "Lehrter Straße 59, 10557 Berlin" },
+    { date: "2026-08-22", time: "14:00", home_team: "Türkiyemspor Berlin", away_team: "SV Empor Berlin", league: "BERLIN-LIGA", gender: "men", matchday: "Matchday 3", venue: "Stadion Rathenower Straße", venue_address: "Rathenower Straße 39, 10559 Berlin" },
+    { date: "2026-08-22", time: "14:00", home_team: "TSV Mariendorf 1897", away_team: "Frohnauer SC", league: "BERLIN-LIGA", gender: "men", matchday: "Matchday 3", venue: "Sportplatz Mariendorf", venue_address: "Rathausstraße 5, 12105 Berlin" }
+  ],
+  // Landespokal Berlin (the Berlin Cup) round — this is why Oct 3 showed
+  // no games at all before: clubs skip their league fixture on cup
+  // weekends, and nothing was pulling cup rounds. 178 clubs enter this
+  // season, Regionalliga Nordost down to Kreisliga C.
+  "2026-10-03": [
+    { date: "2026-10-03", time: "14:00", home_team: "Tennis Borussia Berlin", away_team: "BFC Dynamo", league: "LANDESPOKAL BERLIN", gender: "men", matchday: "Round 3", venue: "Mommsenstadion", venue_address: "Waldschulallee 34, 14052 Berlin" },
+    { date: "2026-10-03", time: "14:00", home_team: "Berliner AK 07", away_team: "VSG Altglienicke", league: "LANDESPOKAL BERLIN", gender: "men", matchday: "Round 3", venue: "Poststadion", venue_address: "Lehrter Straße 59, 10557 Berlin" },
+    { date: "2026-10-03", time: "13:00", home_team: "SC Staaken", away_team: "Tasmania Berlin", league: "LANDESPOKAL BERLIN", gender: "men", matchday: "Round 3", venue: "Stadion Staaken", venue_address: "Nennhauser Damm 111, 13591 Berlin" },
+    { date: "2026-10-03", time: "13:00", home_team: "Blau-Weiss 90 Berlin", away_team: "Hertha 03 Zehlendorf", league: "LANDESPOKAL BERLIN", gender: "men", matchday: "Round 3", venue: "Poststadion Nebenplatz", venue_address: "Lehrter Straße 59, 10557 Berlin" }
   ]
 };
 
 let allData = {};
-let currentMonth = null;        // "YYYY-MM" - which month's dates the calendar box is currently showing
-let selectedDates = new Set();  // "YYYY-MM-DD" - zero or more specific dates picked
-let selectedLeagues = new Set();
-let selectedDistricts = new Set();
-let selectedTeams = new Set();
-let teamSearchText = '';        // text currently typed into the "search team to add" box - only
-                                 // narrows the SUGGESTION chips shown, doesn't filter fixtures
-                                 // itself until you actually click a suggestion to add it
+let currentDate = null;
 
 // No real club crests are used here (they're trademarked) — instead we
 // generate a simple colored monogram per team from its initials.
@@ -442,661 +295,87 @@ function crestHtml(name) {
   return `<span class="crest" style="background:${teamColor(name)}">${teamInitials(name)}</span>`;
 }
 
-// Small "official club site" link next to a team name (ticket info etc.)
-// - not the fussball.de match page (that's source_url), the club's own
-// site. Blank/missing for clubs without one on file (e.g. lower amateur
-// tiers, or Berlin Türkspor which genuinely has no independent site).
-function clubLinkHtml(website) {
-  if (!website) return '';
-  return `<a href="${website}" target="_blank" rel="noopener noreferrer" class="club-link" title="Official club website" onclick="event.stopPropagation()">↗</a>`;
-}
-
 function fmtDateLabel(iso) {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
 }
-function fmtMonthLabel(ym) {
-  const [y, m] = ym.split('-');
-  const d = new Date(Number(y), Number(m) - 1, 1);
-  return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-}
-function monthOf(iso) {
-  return iso.slice(0, 7); // "YYYY-MM-DD" -> "YYYY-MM"
-}
 
-// Fallback tier lookup for older/incoming data that might not carry an
-// explicit league_tier yet. Keep in sync with both scrapers' tier maps.
-const TIER_BY_LEAGUE = {
-  "DFB-POKAL": 0, "BERLIN-POKAL": 0.5,
-  "BL1": 1, "BL2": 2, "BL3": 3,
-  "REGIONALLIGA NORDOST": 4, "OBERLIGA NORDOST": 5, "BERLIN-LIGA": 6,
-  "LANDESLIGA STAFFEL 1": 7, "LANDESLIGA STAFFEL 2": 7,
-};
-function tierOf(m) {
-  return typeof m.league_tier === "number" ? m.league_tier : (TIER_BY_LEAGUE[m.league] ?? 99);
-}
-// Cups aren't part of the league pyramid, so "Tier 0" would be
-// meaningless to show - this decides whether a match belongs to a cup
-// competition (explicit `is_cup` flag from live data, or a name-based
-// fallback for older/demo data that predates the flag).
-function isCup(m) {
-  return Boolean(m.is_cup) || m.league === "DFB-POKAL" || m.league === "BERLIN-POKAL";
-}
-
-// "Closest to me" postcode feature - entirely client-side, no backend,
-// no live geocoding API. One shared lookup table covers BOTH sides of
-// the distance calc: the postcode a visitor types in, and the postcode
-// already embedded in every fixture's own venue_address (e.g. "...,
-// 14055 Berlin"). All 191 real Berlin postal codes, centroid lat/lon,
-// rounded to 3 decimal places (~100m of rounding error - plenty for
-// "which stadium is roughly closer," not meant for turn-by-turn).
-// Sourced from OpenPLZ (which PLZs are real, current Berlin codes - not
-// just numeric range guessing, which would wrongly sweep in Brandenburg
-// towns like Schönefeld/Potsdam that share Berlin's 10000-14999 block)
-// cross-checked against the WZB Berlin Social Science Center's
-// plz_geocoord dataset (geocoded from the official Destatis postal code
-// registry) for the actual coordinates.
-// One flagged exception: "15569" straddles Berlin-Rahnsdorf and
-// Woltersdorf, Brandenburg - the source's single centroid for that PLZ
-// may skew slightly toward the Brandenburg side since it treats the
-// whole postal area as one shape. Worth keeping in mind if a venue ever
-// resolves to it, but not worth a special case for one edge PLZ.
-const BERLIN_PLZ_COORDS = {
-  "10115": [52.533, 13.378], "10117": [52.516, 13.385], "10119": [52.531, 13.406],
-  "10178": [52.522, 13.409], "10179": [52.512, 13.414], "10243": [52.515, 13.439],
-  "10245": [52.502, 13.455], "10247": [52.517, 13.463], "10249": [52.524, 13.441],
-  "10315": [52.515, 13.514], "10317": [52.499, 13.485], "10318": [52.481, 13.519],
-  "10319": [52.496, 13.514], "10365": [52.519, 13.495], "10367": [52.521, 13.480],
-  "10369": [52.529, 13.467],
-  "10405": [52.534, 13.423], "10407": [52.534, 13.456], "10409": [52.543, 13.441],
-  "10435": [52.538, 13.410], "10437": [52.546, 13.407], "10439": [52.552, 13.412],
-  "10551": [52.532, 13.339], "10553": [52.528, 13.321], "10555": [52.522, 13.336],
-  "10557": [52.523, 13.365], "10559": [52.532, 13.348], "10585": [52.515, 13.305],
-  "10587": [52.517, 13.324], "10589": [52.530, 13.307],
-  "10623": [52.507, 13.328], "10625": [52.509, 13.314], "10627": [52.507, 13.302],
-  "10629": [52.502, 13.303],
-  "10707": [52.495, 13.315], "10709": [52.492, 13.304], "10711": [52.499, 13.292],
-  "10713": [52.487, 13.314], "10715": [52.484, 13.330], "10717": [52.491, 13.328],
-  "10719": [52.499, 13.325],
-  "10777": [52.497, 13.343], "10779": [52.492, 13.340], "10781": [52.493, 13.353],
-  "10783": [52.498, 13.362], "10785": [52.507, 13.365], "10787": [52.509, 13.343],
-  "10789": [52.501, 13.338],
-  "10823": [52.486, 13.349], "10825": [52.484, 13.340], "10827": [52.483, 13.354],
-  "10829": [52.480, 13.360],
-  "10961": [52.493, 13.397], "10963": [52.499, 13.378], "10965": [52.485, 13.399],
-  "10967": [52.491, 13.416], "10969": [52.503, 13.402], "10997": [52.500, 13.433],
-  "10999": [52.496, 13.427],
-  "12043": [52.478, 13.442], "12045": [52.487, 13.434], "12047": [52.490, 13.428],
-  "12049": [52.477, 13.422], "12051": [52.467, 13.430], "12053": [52.476, 13.433],
-  "12055": [52.471, 13.450], "12057": [52.469, 13.462], "12059": [52.481, 13.453],
-  "12099": [52.459, 13.403], "12101": [52.476, 13.396], "12103": [52.464, 13.373],
-  "12105": [52.445, 13.379], "12107": [52.433, 13.391], "12109": [52.447, 13.402],
-  "12157": [52.466, 13.345], "12159": [52.474, 13.335], "12161": [52.469, 13.325],
-  "12163": [52.463, 13.320], "12165": [52.457, 13.312], "12167": [52.450, 13.329],
-  "12169": [52.456, 13.340], "12203": [52.443, 13.310], "12205": [52.433, 13.298],
-  "12207": [52.421, 13.308], "12209": [52.418, 13.329],
-  "12247": [52.440, 13.343], "12249": [52.427, 13.349],
-  "12277": [52.411, 13.376], "12279": [52.411, 13.349], "12305": [52.405, 13.400],
-  "12307": [52.382, 13.399], "12309": [52.390, 13.417],
-  "12347": [52.451, 13.430], "12349": [52.428, 13.415], "12351": [52.434, 13.456],
-  "12353": [52.423, 13.457], "12355": [52.408, 13.498], "12357": [52.428, 13.488],
-  "12359": [52.448, 13.452],
-  "12435": [52.484, 13.470], "12437": [52.461, 13.482], "12439": [52.450, 13.524],
-  "12459": [52.461, 13.528], "12487": [52.438, 13.513], "12489": [52.437, 13.547],
-  "12524": [52.413, 13.547], "12526": [52.400, 13.575], "12527": [52.392, 13.629],
-  "12555": [52.462, 13.587], "12557": [52.427, 13.588], "12559": [52.417, 13.649],
-  "12587": [52.461, 13.641], "12589": [52.448, 13.704],
-  "12619": [52.524, 13.591], "12621": [52.505, 13.588], "12623": [52.503, 13.607],
-  "12627": [52.538, 13.613], "12629": [52.540, 13.592], "12679": [52.548, 13.562],
-  "12681": [52.555, 13.540], "12683": [52.498, 13.558], "12685": [52.538, 13.566],
-  "12687": [52.556, 13.564], "12689": [52.564, 13.572],
-  "13051": [52.582, 13.491], "13053": [52.556, 13.506], "13055": [52.538, 13.499],
-  "13057": [52.573, 13.545], "13059": [52.579, 13.521],
-  "13086": [52.555, 13.447], "13088": [52.559, 13.476], "13089": [52.569, 13.442],
-  "13125": [52.633, 13.478], "13127": [52.611, 13.428], "13129": [52.593, 13.458],
-  "13156": [52.582, 13.398], "13158": [52.592, 13.384], "13159": [52.625, 13.404],
-  "13187": [52.572, 13.413], "13189": [52.560, 13.422],
-  "13347": [52.550, 13.364], "13349": [52.559, 13.344], "13351": [52.550, 13.339],
-  "13353": [52.541, 13.351], "13355": [52.542, 13.390], "13357": [52.550, 13.379],
-  "13359": [52.559, 13.383],
-  "13403": [52.574, 13.319], "13405": [52.558, 13.310], "13407": [52.574, 13.351],
-  "13409": [52.569, 13.371], "13435": [52.602, 13.342], "13437": [52.588, 13.335],
-  "13439": [52.595, 13.354],
-  "13465": [52.632, 13.288], "13467": [52.614, 13.306], "13469": [52.613, 13.340],
-  "13503": [52.611, 13.242], "13505": [52.588, 13.246], "13507": [52.575, 13.271],
-  "13509": [52.589, 13.303],
-  "13581": [52.530, 13.187], "13583": [52.542, 13.183], "13585": [52.547, 13.207],
-  "13587": [52.573, 13.192], "13589": [52.566, 13.158], "13591": [52.535, 13.143],
-  "13593": [52.519, 13.170], "13595": [52.508, 13.192], "13597": [52.530, 13.214],
-  "13599": [52.549, 13.239], "13627": [52.541, 13.304], "13629": [52.540, 13.265],
-  "14050": [52.520, 13.273], "14052": [52.513, 13.260], "14053": [52.521, 13.227],
-  "14055": [52.503, 13.236], "14057": [52.506, 13.286], "14059": [52.521, 13.287],
-  "14089": [52.474, 13.152], "14109": [52.415, 13.147], "14129": [52.431, 13.201],
-  "14163": [52.448, 13.240], "14165": [52.416, 13.259], "14167": [52.419, 13.276],
-  "14169": [52.442, 13.265],
-  "14193": [52.468, 13.211], "14195": [52.453, 13.289], "14197": [52.472, 13.314],
-  "14199": [52.477, 13.296],
-  "15569": [52.457, 13.751],
-};
-
-// District ("Bezirk") filter - Berlin's 12 official boroughs, mapped
-// from the same PLZ embedded in every venue_address. Sourced from the
-// 2001 Bezirk reform's Ortsteil boundaries (Wikipedia) cross-checked
-// PLZ-by-PLZ against Kaupert's Berlin PLZ/Ortsteil/Bezirk directory
-// wherever a code looked like it might straddle two boroughs. Berlin's
-// Bezirk borders don't always line up neatly with postal code borders,
-// so a handful of these are a documented "majority" call on a PLZ that
-// genuinely touches a second Bezirk too - two codes (12161, 13629) had
-// no clear majority at all in the source and are a best-guess rather
-// than a confirmed primary. None of that matters much for "roughly
-// which part of town is this club in," but it's not laboratory-precise.
-const BERLIN_PLZ_DISTRICT = {
-  "10115": "Mitte", "10117": "Mitte", "10119": "Mitte", "10178": "Mitte", "10179": "Mitte",
-  "10243": "Friedrichshain-Kreuzberg", "10245": "Friedrichshain-Kreuzberg",
-  "10247": "Friedrichshain-Kreuzberg", "10249": "Friedrichshain-Kreuzberg",
-  "10315": "Lichtenberg", "10317": "Lichtenberg", "10318": "Lichtenberg", "10319": "Lichtenberg",
-  "10365": "Lichtenberg", "10367": "Lichtenberg", "10369": "Lichtenberg",
-  "10405": "Pankow", "10407": "Pankow", "10409": "Pankow",
-  "10435": "Pankow", "10437": "Pankow", "10439": "Pankow",
-  "10551": "Mitte", "10553": "Mitte", "10555": "Mitte", "10557": "Mitte", "10559": "Mitte",
-  "10585": "Charlottenburg-Wilmersdorf", "10587": "Charlottenburg-Wilmersdorf", "10589": "Charlottenburg-Wilmersdorf",
-  "10623": "Charlottenburg-Wilmersdorf", "10625": "Charlottenburg-Wilmersdorf",
-  "10627": "Charlottenburg-Wilmersdorf", "10629": "Charlottenburg-Wilmersdorf",
-  "10707": "Charlottenburg-Wilmersdorf", "10709": "Charlottenburg-Wilmersdorf",
-  "10711": "Charlottenburg-Wilmersdorf", "10713": "Charlottenburg-Wilmersdorf",
-  "10715": "Charlottenburg-Wilmersdorf", "10717": "Charlottenburg-Wilmersdorf", "10719": "Charlottenburg-Wilmersdorf",
-  "10777": "Tempelhof-Schöneberg", "10779": "Tempelhof-Schöneberg",
-  "10781": "Tempelhof-Schöneberg", "10783": "Tempelhof-Schöneberg",
-  "10785": "Mitte", "10787": "Mitte", "10789": "Charlottenburg-Wilmersdorf",
-  "10823": "Tempelhof-Schöneberg", "10825": "Tempelhof-Schöneberg", "10827": "Tempelhof-Schöneberg", "10829": "Tempelhof-Schöneberg",
-  "10961": "Friedrichshain-Kreuzberg", "10963": "Friedrichshain-Kreuzberg", "10965": "Friedrichshain-Kreuzberg",
-  "10967": "Friedrichshain-Kreuzberg", "10969": "Friedrichshain-Kreuzberg", "10997": "Friedrichshain-Kreuzberg", "10999": "Friedrichshain-Kreuzberg",
-  "12043": "Neukölln", "12045": "Neukölln", "12047": "Neukölln", "12049": "Neukölln",
-  "12051": "Neukölln", "12053": "Neukölln", "12055": "Neukölln", "12057": "Neukölln", "12059": "Neukölln",
-  "12099": "Tempelhof-Schöneberg", "12101": "Tempelhof-Schöneberg", "12103": "Tempelhof-Schöneberg", "12105": "Tempelhof-Schöneberg",
-  "12107": "Tempelhof-Schöneberg", "12109": "Tempelhof-Schöneberg",
-  "12157": "Tempelhof-Schöneberg", "12159": "Tempelhof-Schöneberg", "12161": "Tempelhof-Schöneberg",
-  "12163": "Steglitz-Zehlendorf", "12165": "Steglitz-Zehlendorf", "12167": "Steglitz-Zehlendorf", "12169": "Steglitz-Zehlendorf",
-  "12203": "Steglitz-Zehlendorf", "12205": "Steglitz-Zehlendorf", "12207": "Steglitz-Zehlendorf", "12209": "Steglitz-Zehlendorf",
-  "12247": "Steglitz-Zehlendorf", "12249": "Steglitz-Zehlendorf",
-  "12277": "Tempelhof-Schöneberg", "12279": "Tempelhof-Schöneberg",
-  "12305": "Tempelhof-Schöneberg", "12307": "Tempelhof-Schöneberg", "12309": "Tempelhof-Schöneberg",
-  "12347": "Neukölln", "12349": "Neukölln", "12351": "Neukölln", "12353": "Neukölln",
-  "12355": "Neukölln", "12357": "Neukölln", "12359": "Neukölln",
-  "12435": "Treptow-Köpenick", "12437": "Treptow-Köpenick", "12439": "Treptow-Köpenick", "12459": "Treptow-Köpenick",
-  "12487": "Treptow-Köpenick", "12489": "Treptow-Köpenick",
-  "12524": "Treptow-Köpenick", "12526": "Treptow-Köpenick", "12527": "Treptow-Köpenick",
-  "12555": "Treptow-Köpenick", "12557": "Treptow-Köpenick", "12559": "Treptow-Köpenick",
-  "12587": "Treptow-Köpenick", "12589": "Treptow-Köpenick",
-  "12619": "Marzahn-Hellersdorf", "12621": "Marzahn-Hellersdorf", "12623": "Marzahn-Hellersdorf",
-  "12627": "Marzahn-Hellersdorf", "12629": "Marzahn-Hellersdorf",
-  "12679": "Marzahn-Hellersdorf", "12681": "Marzahn-Hellersdorf", "12683": "Marzahn-Hellersdorf",
-  "12685": "Marzahn-Hellersdorf", "12687": "Marzahn-Hellersdorf", "12689": "Marzahn-Hellersdorf",
-  "13051": "Lichtenberg", "13053": "Lichtenberg", "13055": "Lichtenberg", "13057": "Lichtenberg", "13059": "Lichtenberg",
-  "13086": "Pankow", "13088": "Pankow", "13089": "Pankow",
-  "13125": "Pankow", "13127": "Pankow", "13129": "Pankow",
-  "13156": "Pankow", "13158": "Pankow", "13159": "Pankow",
-  "13187": "Pankow", "13189": "Pankow",
-  "13347": "Mitte", "13349": "Mitte", "13351": "Mitte", "13353": "Mitte", "13355": "Mitte", "13357": "Mitte", "13359": "Mitte",
-  "13403": "Reinickendorf", "13405": "Reinickendorf", "13407": "Reinickendorf", "13409": "Reinickendorf",
-  "13435": "Reinickendorf", "13437": "Reinickendorf", "13439": "Reinickendorf",
-  "13465": "Reinickendorf", "13467": "Reinickendorf", "13469": "Reinickendorf",
-  "13503": "Reinickendorf", "13505": "Reinickendorf", "13507": "Reinickendorf", "13509": "Reinickendorf",
-  "13581": "Spandau", "13583": "Spandau", "13585": "Spandau", "13587": "Spandau", "13589": "Spandau",
-  "13591": "Spandau", "13593": "Spandau", "13595": "Spandau",
-  "13597": "Spandau", "13599": "Spandau",
-  "13627": "Charlottenburg-Wilmersdorf", "13629": "Spandau",
-  "14050": "Charlottenburg-Wilmersdorf", "14052": "Charlottenburg-Wilmersdorf", "14053": "Charlottenburg-Wilmersdorf",
-  "14055": "Charlottenburg-Wilmersdorf", "14057": "Charlottenburg-Wilmersdorf", "14059": "Charlottenburg-Wilmersdorf",
-  "14089": "Spandau",
-  "14109": "Steglitz-Zehlendorf", "14129": "Steglitz-Zehlendorf",
-  "14163": "Steglitz-Zehlendorf", "14165": "Steglitz-Zehlendorf", "14167": "Steglitz-Zehlendorf", "14169": "Steglitz-Zehlendorf",
-  "14193": "Charlottenburg-Wilmersdorf", "14195": "Steglitz-Zehlendorf",
-  "14197": "Charlottenburg-Wilmersdorf", "14199": "Charlottenburg-Wilmersdorf",
-  "15569": "Treptow-Köpenick",
-};
-const BERLIN_DISTRICTS = [
-  "Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf",
-  "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Neukölln",
-  "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf",
-];
-function districtForAddress(address) {
-  const plz = extractPlz(address);
-  return plz ? (BERLIN_PLZ_DISTRICT[plz] || null) : null;
-}
-
-function haversineKm(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-function extractPlz(address) {
-  const m = (address || '').match(/\b(\d{5})\b/);
-  return m ? m[1] : null;
-}
-function coordsForPlz(plz) {
-  return BERLIN_PLZ_COORDS[plz] || null;
-}
-// Returns null (rather than a distance) whenever either side can't be
-// resolved - an unrecognized/incomplete postcode typed in, or a fixture
-// whose venue_address doesn't carry a Berlin PLZ we have on file. The
-// render code below is responsible for showing those as "distance
-// unknown" rather than silently sorting them to the top as if 0km away.
-function distanceFromPostcode(postcodeValue, venueAddress) {
-  const from = coordsForPlz((postcodeValue || '').trim());
-  const to = coordsForPlz(extractPlz(venueAddress));
-  if (!from || !to) return null;
-  return haversineKm(from[0], from[1], to[0], to[1]);
-}
-
-function allMonths() {
-  return [...new Set(Object.keys(allData).map(monthOf))].sort();
-}
-function datesInCurrentMonth() {
-  return Object.keys(allData).filter(d => monthOf(d) === currentMonth).sort();
-}
-function allMatches() {
-  return Object.values(allData).flat();
-}
-
-// Every filter control (date calendar, league, district, team) can now
-// have MULTIPLE values selected at once, and each one narrows what the
-// OTHER controls offer: picking a date only shows leagues/districts/
-// teams that actually have a fixture on that date; picking a league
-// only shows dates/districts/teams with a fixture in that league; and
-// so on. This is the single source of truth for "does this fixture
-// satisfy everything currently selected" - every chip-rendering
-// function below calls it with ONE dimension excluded (its own), so it
-// can work out "what would still match if I ignore my own filter" to
-// decide which of its own options to offer, while every OTHER active
-// filter still narrows it.
-function matchesFilters(m, exclude = {}) {
-  if (!exclude.date && selectedDates.size && !selectedDates.has(m.date)) return false;
-  if (!exclude.league && selectedLeagues.size && !selectedLeagues.has(m.league)) return false;
-  if (!exclude.district && selectedDistricts.size) {
-    const d = districtForAddress(m.venue_address);
-    if (!d || !selectedDistricts.has(d)) return false;
-  }
-  if (!exclude.team && selectedTeams.size && !selectedTeams.has(m.home_team) && !selectedTeams.has(m.away_team)) return false;
-  return true;
-}
-
-// Short "Sat 15" style label for a chip - keeps the weekday visible
-// even without a full grid of day-of-week columns around it.
-function fmtDayLabel(iso) {
-  const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
-}
-
-function renderCalendar() {
-  const el = document.getElementById('calendar');
-  const months = allMonths();
-  const idx = months.indexOf(currentMonth);
-  const prevMonth = idx > 0 ? months[idx - 1] : null;
-  const nextMonth = idx < months.length - 1 ? months[idx + 1] : null;
-  const today = todayIso();
-
-  // Only dates that (a) fall in the month currently being browsed AND
-  // (b) still have a fixture matching whatever league/district/team is
-  // currently selected - narrowed by the OTHER filters, per the note
-  // above matchesFilters(). Any date already picked stays visible and
-  // removable even if a later filter choice would otherwise hide it -
-  // so you're never left with a selected chip you can't get back to in
-  // order to deselect it.
-  const matchingThisMonth = new Set(
-    allMatches().filter(m => monthOf(m.date) === currentMonth && matchesFilters(m, { date: true })).map(m => m.date)
-  );
-  const keptSelected = datesInCurrentMonth().filter(d => selectedDates.has(d));
-  const activeDates = [...new Set([...matchingThisMonth, ...keptSelected])].sort();
-
-  const chips = activeDates.map(iso => {
-    const classes = ['chip'];
-    if (iso === today) classes.push('today');
-    if (selectedDates.has(iso)) classes.push('active');
-    return `<button type="button" class="${classes.join(' ')}" data-date="${iso}">${fmtDayLabel(iso)}</button>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="cal-header">
-      <button type="button" class="cal-nav" id="cal-prev"${prevMonth ? '' : ' disabled'}>‹</button>
-      <span class="cal-title">${fmtMonthLabel(currentMonth)}</span>
-      <button type="button" class="cal-nav" id="cal-next"${nextMonth ? '' : ' disabled'}>›</button>
-    </div>
-    <div class="chip-row">${chips || '<div class="chip-empty-note">No fixtures match your other filters this month.</div>'}</div>
-    <button type="button" class="chip-clear-btn${selectedDates.size === 0 ? ' active' : ''}" id="cal-all">Clear date selection</button>
-  `;
-
-  if (prevMonth) el.querySelector('#cal-prev').onclick = () => { currentMonth = prevMonth; renderAll(); };
-  if (nextMonth) el.querySelector('#cal-next').onclick = () => { currentMonth = nextMonth; renderAll(); };
-  el.querySelector('#cal-all').onclick = () => { selectedDates.clear(); renderAll(); };
-  el.querySelectorAll('.chip').forEach(btn => {
-    btn.onclick = () => {
-      const d = btn.dataset.date;
-      if (selectedDates.has(d)) selectedDates.delete(d); else selectedDates.add(d);
-      renderAll();
-    };
+function renderDatePills(dates) {
+  const el = document.getElementById('dates');
+  el.innerHTML = '';
+  dates.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'date-pill' + (d === currentDate ? ' active' : '');
+    btn.textContent = fmtDateLabel(d);
+    btn.onclick = () => { currentDate = d; render(); };
+    el.appendChild(btn);
   });
 }
 
-// League chip group - same multi-select/mutual-narrowing pattern as the
-// calendar above, just for league instead of date. Options are drawn
-// from the data itself (whatever leagues actually appear), sorted by
-// real tier rather than alphabetically, same as the old dropdown was.
-function renderLeagueChips() {
-  const el = document.getElementById('league-filter');
-  const matching = new Set(allMatches().filter(m => matchesFilters(m, { league: true })).map(m => m.league));
-  const leagues = [...new Set([...matching, ...selectedLeagues])]
-    .sort((a, b) => tierOf({ league: a }) - tierOf({ league: b }));
-  const chips = leagues.map(l => {
-    const classes = ['chip'];
-    if (selectedLeagues.has(l)) classes.push('active');
-    return `<button type="button" class="${classes.join(' ')}" data-league="${l}">${l}</button>`;
-  }).join('');
-  el.innerHTML = `
-    <div class="filter-label">League</div>
-    <div class="chip-row">${chips || '<div class="chip-empty-note">No leagues match your other filters.</div>'}</div>
-  `;
-  el.querySelectorAll('.chip').forEach(btn => {
-    btn.onclick = () => {
-      const l = btn.dataset.league;
-      if (selectedLeagues.has(l)) selectedLeagues.delete(l); else selectedLeagues.add(l);
-      renderAll();
-    };
-  });
-}
-
-// District chip group - the universe of possible options is the fixed
-// 12-borough list (BERLIN_DISTRICTS), not derived from the data like
-// league is, since a district is a real stable place whether or not
-// this week's data happens to have a fixture in it. Narrowing still
-// applies on top: only districts that currently have a matching
-// fixture (or are already selected) get a chip at all.
-function renderDistrictChips() {
-  const el = document.getElementById('district-filter');
-  const matching = new Set(
-    allMatches().filter(m => matchesFilters(m, { district: true }))
-      .map(m => districtForAddress(m.venue_address))
-      .filter(Boolean)
-  );
-  const districts = BERLIN_DISTRICTS.filter(d => matching.has(d) || selectedDistricts.has(d));
-  const chips = districts.map(d => {
-    const classes = ['chip'];
-    if (selectedDistricts.has(d)) classes.push('active');
-    return `<button type="button" class="${classes.join(' ')}" data-district="${d}">${d}</button>`;
-  }).join('');
-  el.innerHTML = `
-    <div class="filter-label">District</div>
-    <div class="chip-row">${chips || '<div class="chip-empty-note">No districts match your other filters.</div>'}</div>
-  `;
-  el.querySelectorAll('.chip').forEach(btn => {
-    btn.onclick = () => {
-      const d = btn.dataset.district;
-      if (selectedDistricts.has(d)) selectedDistricts.delete(d); else selectedDistricts.add(d);
-      renderAll();
-    };
-  });
-}
-
-// Team chip group - unlike league/district (small, near-fixed lists),
-// there are potentially hundreds of clubs across all seven tiers, so
-// showing every eligible team as a chip all the time would be a wall
-// of buttons. Instead: already-selected teams always show as removable
-// chips up top; below that, a plain text box narrows a short suggestion
-// list (max 8) as you type, and clicking a suggestion adds it to the
-// selection. Typing itself never filters the fixture list directly -
-// only an actual click (an exact team added to selectedTeams) does -
-// that's what makes "two teams at once" possible in the first place.
-function renderTeamChips() {
-  const el = document.getElementById('team-filter');
-  const typed = teamSearchText.trim().toLowerCase();
-
-  const matchingTeams = new Set(
-    allMatches().filter(m => matchesFilters(m, { team: true })).flatMap(m => [m.home_team, m.away_team])
-  );
-
-  const selectedChips = [...selectedTeams].sort().map(t =>
-    `<button type="button" class="chip active" data-team="${t}">${t} ×</button>`
-  ).join('');
-
-  let suggestionsHtml = '';
-  if (typed) {
-    const suggestions = [...matchingTeams]
-      .filter(t => !selectedTeams.has(t) && t.toLowerCase().includes(typed))
-      .sort()
-      .slice(0, 8);
-    suggestionsHtml = `<div class="chip-row">${
-      suggestions.length
-        ? suggestions.map(t => `<button type="button" class="chip" data-team="${t}">${t}</button>`).join('')
-        : '<div class="chip-empty-note">No matching teams.</div>'
-    }</div>`;
-  }
-
-  el.innerHTML = `
-    <div class="filter-label">Team</div>
-    ${selectedChips ? `<div class="chip-row">${selectedChips}</div>` : ''}
-    <input id="team-search-input" type="text" placeholder="Search team to add…" autocomplete="off" value="${teamSearchText.replace(/"/g, '&quot;')}">
-    ${suggestionsHtml}
-  `;
-
-  el.querySelectorAll('.chip').forEach(btn => {
-    btn.onclick = () => {
-      const t = btn.dataset.team;
-      if (selectedTeams.has(t)) selectedTeams.delete(t); else selectedTeams.add(t);
-      teamSearchText = '';
-      renderAll();
-    };
-  });
-
-  const input = el.querySelector('#team-search-input');
-  input.addEventListener('input', (e) => {
-    teamSearchText = e.target.value;
-    // Only this widget needs to redraw for a keystroke - typing narrows
-    // suggestions, it doesn't change any actual selection, so the
-    // calendar/league/district chips and the match list below are
-    // untouched until a suggestion is actually clicked.
-    renderTeamChips();
-  });
-  if (teamSearchText) {
-    input.focus();
-    input.setSelectionRange(input.value.length, input.value.length);
-  }
-}
-
-function renderAll() {
-  renderCalendar();
-  renderLeagueChips();
-  renderDistrictChips();
-  renderTeamChips();
-  render();
-}
-
-// Flat ranked list for "closest to me" / "kick-off time" sort modes -
-// deliberately not grouped by date or league like the default view,
-// since the whole point is one single ranking across everything in
-// scope. Each row still shows its date and league inline (that context
-// isn't implicit anymore once there's no date-heading/league-label
-// grouping it). `hint` is the small message strip above the results -
-// used to tell someone their postcode wasn't recognized rather than
-// silently reordering nothing.
-function renderFlatSorted(matches, mode, postcodeValue, hint) {
-  let list = matches.slice();
-
-  if (mode === 'distance') {
-    if (!postcodeValue) {
-      hint.textContent = 'Enter your postcode above to sort by distance.';
-      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
-    } else if (!coordsForPlz(postcodeValue)) {
-      hint.textContent = `"${postcodeValue}" isn't a Berlin postcode I recognize - showing date order instead.`;
-      list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
-    } else {
-      list.forEach(m => { m.__distanceKm = distanceFromPostcode(postcodeValue, m.venue_address); });
-      list.sort((a, b) => {
-        if (a.__distanceKm == null && b.__distanceKm == null) return 0;
-        if (a.__distanceKm == null) return 1;
-        if (b.__distanceKm == null) return -1;
-        return a.__distanceKm - b.__distanceKm;
-      });
-    }
-  } else if (mode === 'time') {
-    list.sort((a, b) => {
-      if (!a.time && !b.time) return (a.date).localeCompare(b.date);
-      if (!a.time) return 1;
-      if (!b.time) return -1;
-      return a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date);
-    });
-  }
-
-  return list.map(m => {
-    const tierTag = isCup(m) ? 'Cup' : `Tier ${tierOf(m)}`;
-    const distanceNote = m.__distanceKm != null
-      ? `<span class="addr">${m.__distanceKm < 1 ? '<1 km away' : Math.round(m.__distanceKm) + ' km away'}</span>`
-      : (mode === 'distance' && postcodeValue && coordsForPlz(postcodeValue) ? `<span class="addr">distance unknown</span>` : '');
-    return `
-      <div class="match">
-        <div class="match-time">${m.time || '—'}</div>
-        <div>
-          <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
-          <div class="venue">${fmtDateLabel(m.date)} · ${m.league} (${tierTag})${m.venue ? ' · ' + m.venue : ''}${distanceNote}</div>
-        </div>
-        <div class="matchday">${m.matchday || ''}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-// Everything currently selected across ALL FOUR filters (date, league,
-// district, team) at once - matchesFilters() (above) is the single
-// place that combines them, the same helper the chip-rendering
-// functions use to narrow each other. "Scope" below is a separate,
-// smaller decision: with nothing at all selected, keep the existing
-// "browse one month at a time" behaviour rather than dumping the whole
-// dataset; but the moment ANY filter is active (a date, a league, a
-// district, or a team), search across everything, so a choice on (say)
-// a team doesn't silently miss fixtures outside whatever month happens
-// to be currently browsed.
-function currentlyVisibleMatches() {
-  const anyFilterActive = selectedDates.size || selectedLeagues.size || selectedDistricts.size || selectedTeams.size;
-  const scope = anyFilterActive ? allMatches() : datesInCurrentMonth().flatMap(d => allData[d] || []);
-  return scope.filter(m => matchesFilters(m));
+function populateLeagueFilter(matches) {
+  const sel = document.getElementById('league-filter');
+  const leagues = [...new Set(matches.map(m => m.league))].sort();
+  sel.innerHTML = '<option value="">All leagues</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
 }
 
 function render() {
   const main = document.getElementById('main');
-  const hint = document.getElementById('postcode-hint');
-  const sortMode = document.getElementById('sort-mode').value; // "" | "distance" | "time"
-  const postcodeValue = document.getElementById('postcode-input').value.trim();
-  hint.textContent = '';
+  const leagueFilter = document.getElementById('league-filter').value;
+  const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
 
-  const filtered = currentlyVisibleMatches();
+  // If searching by team, look across ALL dates, not just the selected one —
+  // otherwise a search would silently show nothing on days with no matches.
+  const pool = searchTerm
+    ? Object.values(allData).flat()
+    : (allData[currentDate] || []);
+
+  let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
+  if (searchTerm) {
+    filtered = filtered.filter(m =>
+      m.home_team.toLowerCase().includes(searchTerm) ||
+      m.away_team.toLowerCase().includes(searchTerm)
+    );
+  }
 
   if (!filtered.length) {
-    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixtures found for this combination of filters.</div>`;
+    const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this day.';
+    main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
     return;
   }
 
-  // "Closest to me" / "kick-off time" are flat ranked lists across
-  // whatever's currently in view (every filter above still applies) -
-  // deliberately NOT grouped by date or league on top of that, since a
-  // genuine distance or time ranking spanning several dates wouldn't
-  // make sense chopped up by date headings first. Plain "date" mode
-  // below keeps the existing date > league > team grouping.
-  if (sortMode === 'distance' || sortMode === 'time') {
-    main.innerHTML = renderFlatSorted(filtered, sortMode, postcodeValue, hint);
-    return;
-  }
+  const byLeague = {};
+  filtered.forEach(m => {
+    (byLeague[m.league] = byLeague[m.league] || []).push(m);
+  });
 
-  // Sort hierarchy: date > league (by real tier order, not
-  // alphabetically) > team. When only one distinct date is left in the
-  // filtered results (e.g. a single date picked, or filters happen to
-  // narrow everything down to one specific day), that outer "date"
-  // level is a no-op - there's only one - so it goes straight to league
-  // groups. When several dates remain in view, matches are grouped
-  // under a date heading FIRST and league groups sit inside each date.
-  function renderLeagueGroups(matches) {
-    const byLeague = {};
-    matches.forEach(m => {
-      (byLeague[m.league] = byLeague[m.league] || []).push(m);
-    });
-    const orderedLeagues = Object.keys(byLeague).sort((a, b) => {
-      const ta = tierOf({ league: a, league_tier: byLeague[a][0]?.league_tier });
-      const tb = tierOf({ league: b, league_tier: byLeague[b][0]?.league_tier });
-      return ta !== tb ? ta - tb : a.localeCompare(b);
-    });
-    return orderedLeagues.map(league => {
-      const ms = byLeague[league];
-      const tier = tierOf(ms[0]);
-      const tierTag = isCup(ms[0]) ? 'Cup' : `Tier ${tier}`;
-      return `
-      <div class="league-group">
-        <div class="league-label">
-          <span>${league}</span>
-          <span class="tier-tag">${tierTag}</span>
-        </div>
-        ${ms.slice().sort((a,b) => (a.time||'').localeCompare(b.time||'')).map(m => `
-          <div class="match">
-            <div class="match-time">${m.time || '—'}</div>
-            <div>
-              <div class="teams">${crestHtml(m.home_team)}${m.home_team}${clubLinkHtml(m.home_team_website)} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}${clubLinkHtml(m.away_team_website)}</div>
-              <div class="venue">${m.venue || ''}${m.venue_address ? `<span class="addr">${m.venue_address}</span>` : ''}</div>
+  // Leagues sorted by tier (Landespokal cup first when it's running, then
+  // top flight down to Bezirksliga) rather than alphabetically — so e.g.
+  // BERLIN-LIGA doesn't wrongly sort above BL2. Matches within a league
+  // sort by kickoff time, then team name.
+  const orderedLeagues = Object.keys(byLeague).sort((a, b) => leagueRank(a) - leagueRank(b));
+
+  main.innerHTML = orderedLeagues.map(league => { const ms = byLeague[league]; return `
+    <div class="league-group">
+      <div class="league-label">${league}</div>
+      ${ms.sort((a,b) => (a.date + (a.time||'') + a.home_team).localeCompare(b.date + (b.time||'') + b.home_team)).map(m => `
+        <div class="match">
+          <div class="match-time">${m.time || '—'}</div>
+          <div>
+            <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
+            <div class="venue">
+              ${searchTerm ? fmtDateLabel(m.date) + ' · ' : ''}${m.matchday ? m.matchday + ' · ' : ''}${m.venue || ''}${m.venue_address ? ' — ' + m.venue_address : ''}
             </div>
-            <div class="matchday">${m.matchday || ''}</div>
           </div>
-        `).join('')}
-      </div>
-    `;
-    }).join('');
-  }
-
-  const distinctDates = new Set(filtered.map(m => m.date));
-  if (distinctDates.size > 1) {
-    const byDate = {};
-    filtered.forEach(m => { (byDate[m.date] = byDate[m.date] || []).push(m); });
-    const orderedDates = Object.keys(byDate).sort();
-    main.innerHTML = orderedDates.map(d => `
-      <div class="date-heading">${fmtDateLabel(d)}</div>
-      ${renderLeagueGroups(byDate[d])}
-    `).join('');
-  } else {
-    main.innerHTML = renderLeagueGroups(filtered);
-  }
+          <div class="badge">${league}</div>
+        </div>
+      `).join('')}
+    </div>
+  `; }).join('');
 }
 
 async function init() {
-  document.getElementById('sort-mode').addEventListener('change', render);
-  // Postcode is only numbers - restrict input as you type rather than
-  // waiting to reject it on submit, and re-render on every keystroke so
-  // "closest to me" updates live like everything else here.
-  document.getElementById('postcode-input').addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
-    render();
-  });
-  // Clears every filter dimension (dates, leagues, districts, teams,
-  // sort mode) back to "everything," and drops back to viewing the
-  // whole current month rather than any specific selection - the
-  // calendar's month position is reset to the real current month too
-  // (see the note further down), same as before. The postcode itself
-  // is deliberately NOT cleared - it's more like "who you are" than a
-  // transient filter, no reason to make someone retype it just for
-  // resetting everything else.
-  document.getElementById('reset-filters').addEventListener('click', () => {
-    selectedDates.clear();
-    selectedLeagues.clear();
-    selectedDistricts.clear();
-    selectedTeams.clear();
-    teamSearchText = '';
-    document.getElementById('sort-mode').value = '';
-    // Jump back to the CURRENT calendar month specifically, not just
-    // "whatever month you happened to be on" - a reset should feel like
-    // starting over, and starting over means today, not wherever you'd
-    // navigated to. Falls back to the earliest month with any fixtures
-    // if the current month itself has none (e.g. between seasons).
-    const months = allMonths();
-    const thisMonth = monthOf(todayIso());
-    currentMonth = months.includes(thisMonth) ? thisMonth : months[0];
-    renderAll();
-  });
+  document.getElementById('league-filter').addEventListener('change', render);
+  document.getElementById('team-search').addEventListener('input', render);
 
   try {
     const idxResp = await fetch('data/index.json');
@@ -1110,38 +389,15 @@ async function init() {
     allData = DEMO_DATA;
   }
 
-  allData = dropPastDates(allData);
-
-  const months = allMonths();
-  if (!months.length) {
+  const dates = Object.keys(allData).sort();
+  if (!dates.length) {
     document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
     return;
   }
-  currentMonth = months[0];
-  renderAll();
-}
-
-// Drop any date that's already in the past, using the VISITOR'S local
-// calendar day (not UTC - a "today" fixture shouldn't vanish for
-// someone west of Berlin just because it's already tomorrow in UTC).
-// This is a client-side safety net on top of the scrapers' own pruning
-// (both scrapers drop past dates when they write data/) - it covers the
-// gap between "a match's day ends" and "the next scheduled scrape run
-// actually removes it," and also means a stale cached page still looks
-// right. A whole month disappears from the month pills automatically
-// once every one of its dates has been filtered out here - no separate
-// "hide past months" logic needed, it falls out of this for free.
-function todayIso() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-function dropPastDates(data) {
-  const today = todayIso();
-  const kept = {};
-  for (const [d, matches] of Object.entries(data)) {
-    if (d >= today) kept[d] = matches;
-  }
-  return kept;
+  currentDate = dates[0];
+  renderDatePills(dates);
+  populateLeagueFilter(Object.values(allData).flat());
+  render();
 }
 
 init();
