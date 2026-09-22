@@ -2,23 +2,6 @@
   {
     "date": "2026-09-30",
     "time": null,
-    "home_team": "BFC Meteor 06",
-    "away_team": "Viktoria Berlin",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "home_team_website": "https://meteor06.de/",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-viktoria-berlin/-/spiel/031G0H6JAC000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-09-30",
-    "time": null,
     "home_team": "Berlin Türkspor",
     "away_team": "SF Johannisthal",
     "league": "BERLIN-LIGA",
@@ -32,5 +15,22 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-sf-johannisthal/-/spiel/031G0H6JHO000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-09-30",
+    "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "Viktoria Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Hanne-Sobek-Sportanl. NR1 (u)",
+    "venue_address": "Osloer Str. 42-62, 13359 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-viktoria-berlin/-/spiel/031G0H6JAC000000VS5489BUVSJ4CRAP"
   }
 ]
