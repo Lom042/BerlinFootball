@@ -348,6 +348,84 @@ def get_club_website(team_name):
     return ""
 
 
+# TEMPORARY FALLBACK - remove once fussball.de publishes this round
+# itself. As of 2026-09-22, fussball.de's Berlin-Pokal page correctly
+# redirects to "Round 3" (confirmed via the CUPS "-C" URL above), but
+# that round's own page shows "Leider wurden zu deiner Eingabe keine
+# Treffer gefunden" (no matches found) - the staffelleiter hasn't
+# released/published it there yet, even though the draw and kickoff
+# times are already public on Transfermarkt:
+# https://www.transfermarkt.co.uk/landespokal-berlin/gesamtspielplan/pokalwettbewerb/BPP/saison_id/2026
+# Hand-copied from that page below as a stopgap. Only 14 of the 16 Round
+# 3 ties are listed - the other 2 showed a broken opponent image/name on
+# Transfermarkt's own page ("Unknown"/".png") with no real team name to
+# go on, so they're left out rather than guessed. Times are taken as
+# given (assumed to already be local Berlin kickoff time, same as every
+# other kickoff time in this file) - worth double-checking if any one of
+# these turns out to be an hour off.
+#
+# This only ever gets used when the LIVE fussball.de scrape for
+# "berlin-pokal" comes back with zero fixtures (see the check in
+# main()) - so the moment fussball.de actually publishes Round 3, this
+# stops being added automatically. Nothing to remember to undo.
+MANUAL_CUP_FIXTURES_RAW = [
+    # (date, time, home_team, away_team)
+    ("2026-10-03", "13:00", "FC Viktoria 1889 Berlin", "Blau-Weiss 90 Berlin"),
+    ("2026-10-03", "13:15", "FSV Hansa 07 Berlin", "Croatia Berlin"),
+    ("2026-10-03", "17:00", "Stern Marienfelde", "BFC Preussen"),
+    ("2026-10-04", "10:00", "VfB Berlin-Friedrichshain", "FC Hertha 03 Zehlendorf"),
+    ("2026-10-04", "11:00", "SV Buchholz (Bln.)", "Sport-Union Berlin"),
+    ("2026-10-04", "11:30", "Delay Sports Berlin", "FSV Spandauer Kickers"),
+    ("2026-10-04", "12:00", "Berliner SV 92", "Frohnauer SC"),
+    ("2026-10-04", "13:00", "SV Tasmania Berlin", "VSG Altglienicke"),
+    ("2026-10-04", "13:00", "Türkiyemspor Berlin", "Füchse Berlin Reinickendorf"),
+    ("2026-10-04", "13:00", "Berlin Türkspor 04", "SV Sparta Lichtenberg"),
+    ("2026-10-04", "13:00", "Tennis Borussia Berlin", "BFC Dynamo"),
+    ("2026-10-04", "13:15", "BSV Victoria Friedrichshain", "Berliner AK 07"),
+    ("2026-10-04", "13:30", "TSV Mariendorf 1897", "FC Internationale Berlin"),
+    ("2026-10-04", "14:00", "FSV Berolina Stralau", "BSV Eintracht Mahlsdorf"),
+]
+
+
+def _build_manual_cup_fixtures():
+    info = CUPS["berlin-pokal"]
+    fixtures = []
+    for d, t, home, away in MANUAL_CUP_FIXTURES_RAW:
+        venue, venue_address = "", ""
+        for club, (v, addr) in VENUE_ADDRESSES_BY_CLUB.items():
+            if club in home:
+                venue, venue_address = v, addr
+                break
+        # get_club_website() does a plain substring match, which is a
+        # real trap here: "Sport-Union Berlin" (an unrelated amateur
+        # club, no site on file) contains the substring "Union Berlin",
+        # which IS a CLUB_WEBSITES key - for 1. FC Union Berlin. Force
+        # that one blank rather than link to the wrong club's site.
+        home_site = "" if home == "Sport-Union Berlin" else get_club_website(home)
+        away_site = "" if away == "Sport-Union Berlin" else get_club_website(away)
+        fixtures.append({
+            "date": d,
+            "time": t,
+            "home_team": home,
+            "away_team": away,
+            "league": info["label"],
+            "league_tier": info["tier"],
+            "is_cup": True,
+            "gender": GENDER,
+            "matchday": "Round 3",
+            "venue": venue,
+            "venue_address": venue_address,
+            "home_team_website": home_site,
+            "away_team_website": away_site,
+            "source": "transfermarkt-manual",
+            "source_url": "https://www.transfermarkt.co.uk/landespokal-berlin/gesamtspielplan/pokalwettbewerb/BPP/saison_id/2026",
+        })
+    return fixtures
+
+
+MANUAL_CUP_FIXTURES = _build_manual_cup_fixtures()
+
+
 MANNSCHAFT_RE = re.compile(r"/mannschaft/[^\"'/]+/-/saison/\d+/team-id/([A-Za-z0-9]+)")
 SPIEL_RE = re.compile(r"/spiel/[^\"'/]+/-/spiel/([A-Za-z0-9]+)")
 SPIELDATUM_RE = re.compile(r"/spieldatum/(\d{4}-\d{2}-\d{2})/")
@@ -668,7 +746,14 @@ def main():
         if not DEBUG and not info.get("verified"):
             log(f"Skipping '{key}' - URL not yet verified (run --debug --league \"{key}\" first).")
             continue
-        all_fixtures.extend(collect_league(key, info))
+        result = collect_league(key, info)
+        all_fixtures.extend(result)
+
+        # See MANUAL_CUP_FIXTURES above - only kicks in while fussball.de's
+        # own Berlin-Pokal page still has nothing for the current round.
+        if key == "berlin-pokal" and not DEBUG and not result:
+            log(f"  '{key}' live scrape returned 0 - using MANUAL_CUP_FIXTURES fallback ({len(MANUAL_CUP_FIXTURES)} fixture(s))")
+            all_fixtures.extend(MANUAL_CUP_FIXTURES)
 
     if DEBUG:
         print(f"\nTotal Berlin fixtures parsed across requested league(s): {len(all_fixtures)}")
