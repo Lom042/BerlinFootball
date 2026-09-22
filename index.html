@@ -61,6 +61,18 @@
     flex-wrap: wrap;
     justify-content: center;
   }
+  .controls-stack {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+  }
+  .months {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    margin-bottom: 8px;
+  }
   .dates {
     display: flex;
     gap: 8px;
@@ -82,6 +94,19 @@
   }
   .date-pill:hover { border-color: var(--gold); color: var(--chalk); }
   .date-pill.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
+  .month-pill { font-weight: 600; }
+  .clear-dates {
+    font-family: 'Inter', sans-serif;
+    background: transparent;
+    border: none;
+    color: var(--chalk-dim);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 8px 6px;
+    white-space: nowrap;
+  }
+  .clear-dates:hover { color: var(--chalk); }
 
   select {
     background: var(--pitch-dark);
@@ -212,11 +237,15 @@
   <p class="sub">Every club, every level — Bundesliga down to the local pitch.</p>
 </header>
 
-<div class="controls">
-  <div class="dates" id="dates"></div>
-  <select id="league-filter">
-    <option value="">All divisions</option>
-  </select>
+<div class="controls-stack">
+  <div class="months" id="months"></div>
+  <div class="controls" style="margin:0; padding:0;">
+    <div class="dates" id="dates"></div>
+    <button class="clear-dates" id="clear-dates" type="button">Clear dates</button>
+    <select id="league-filter">
+      <option value="">All divisions</option>
+    </select>
+  </div>
 </div>
 <div class="search-row">
   <input id="team-search" type="text" placeholder="Search team…" autocomplete="off">
@@ -291,7 +320,14 @@ const DEMO_DATA = {
 };
 
 let allData = {};
-let currentDate = null;
+// Both multi-select, click-to-toggle, mutually narrowing: picking one or
+// more months narrows which day-pills are offered below it, and picking
+// one or more days is what actually filters the fixtures shown (so you
+// can e.g. select both Saturday and Sunday of a weekend at once). Empty
+// Set means "no filter at that level" - all months, respectively all
+// days within the visible months, act as selected.
+let selectedMonths = new Set();
+let selectedDates = new Set();
 
 // No real club crests are used here (they're trademarked) — instead we
 // generate a simple colored monogram per team from its initials.
@@ -315,14 +351,66 @@ function fmtDateLabel(iso) {
   return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
 }
 
-function renderDatePills(dates) {
+function monthKey(iso) { return iso.slice(0, 7); } // "YYYY-MM"
+function fmtMonthLabel(key) {
+  const d = new Date(key + "-01T00:00:00");
+  return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+
+// A month pill's own "active" state is separate from whether any of its
+// days happen to be selected - toggling a month only changes which day
+// pills are OFFERED below (all months act as visible when none are
+// picked). Deselecting a month also drops any of its days out of
+// selectedDates, so the day-pill row and the fixtures shown never fall
+// out of sync with the month filter above them.
+function renderMonthPills(allDates) {
+  const el = document.getElementById('months');
+  const months = [...new Set(allDates.map(monthKey))]; // already chronological, dates is sorted
+  el.innerHTML = '';
+  months.forEach(mk => {
+    const btn = document.createElement('button');
+    btn.className = 'date-pill month-pill' + (selectedMonths.has(mk) ? ' active' : '');
+    btn.textContent = fmtMonthLabel(mk);
+    btn.onclick = () => {
+      if (selectedMonths.has(mk)) {
+        selectedMonths.delete(mk);
+      } else {
+        selectedMonths.add(mk);
+      }
+      // Keep selectedDates consistent with the (possibly narrower) set
+      // of months now in effect - drop any day that's no longer visible.
+      const visibleMonths = selectedMonths.size ? selectedMonths : new Set(months);
+      selectedDates = new Set([...selectedDates].filter(d => visibleMonths.has(monthKey(d))));
+      renderMonthPills(allDates);
+      renderDatePills(allDates);
+      render();
+    };
+    el.appendChild(btn);
+  });
+}
+
+// Day pills only ever show dates within the currently visible month(s) -
+// every month acts as visible when none are explicitly selected above.
+// Clicking a day toggles it in/out of selectedDates (multi-select), so
+// e.g. both days of a cup weekend can be picked at once.
+function renderDatePills(allDates) {
   const el = document.getElementById('dates');
+  const visibleMonths = selectedMonths.size ? selectedMonths : new Set(allDates.map(monthKey));
+  const dates = allDates.filter(d => visibleMonths.has(monthKey(d)));
   el.innerHTML = '';
   dates.forEach(d => {
     const btn = document.createElement('button');
-    btn.className = 'date-pill' + (d === currentDate ? ' active' : '');
+    btn.className = 'date-pill' + (selectedDates.has(d) ? ' active' : '');
     btn.textContent = fmtDateLabel(d);
-    btn.onclick = () => { currentDate = d; render(); };
+    btn.onclick = () => {
+      if (selectedDates.has(d)) {
+        selectedDates.delete(d);
+      } else {
+        selectedDates.add(d);
+      }
+      renderDatePills(allDates);
+      render();
+    };
     el.appendChild(btn);
   });
 }
@@ -353,11 +441,13 @@ function render() {
   const leagueFilter = document.getElementById('league-filter').value;
   const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
 
-  // If searching by team, look across ALL dates, not just the selected one —
-  // otherwise a search would silently show nothing on days with no matches.
+  // If searching by team, look across ALL dates, not just the selected
+  // ones — otherwise a search would silently show nothing on days with
+  // no matches. Otherwise, union of every currently-selected date (so
+  // picking both days of a weekend shows fixtures from both at once).
   const pool = searchTerm
     ? Object.values(allData).flat()
-    : (allData[currentDate] || []);
+    : [...selectedDates].flatMap(d => allData[d] || []);
 
   let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
   if (searchTerm) {
@@ -368,7 +458,9 @@ function render() {
   }
 
   if (!filtered.length) {
-    const msg = searchTerm ? `No fixtures found for "${document.getElementById('team-search').value}".` : 'No fixtures found for this day.';
+    const msg = searchTerm
+      ? `No fixtures found for "${document.getElementById('team-search').value}".`
+      : (selectedDates.size ? 'No fixtures found for the selected date(s).' : 'Pick a date above to see fixtures.');
     main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
     return;
   }
@@ -406,6 +498,11 @@ function render() {
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('team-search').addEventListener('input', render);
+  document.getElementById('clear-dates').addEventListener('click', () => {
+    selectedDates.clear();
+    renderDatePills(Object.keys(allData).sort());
+    render();
+  });
 
   try {
     const idxResp = await fetch('data/index.json');
@@ -424,7 +521,17 @@ async function init() {
     document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
     return;
   }
-  currentDate = dates[0];
+  // Default to today's month (or the first month with fixtures, if
+  // today's has none) and its first date, so the page isn't blank on
+  // first load - same starting experience as before, just multi-select
+  // from here on.
+  const todayKey = new Date().toISOString().slice(0, 7);
+  const startMonth = dates.map(monthKey).includes(todayKey) ? todayKey : monthKey(dates[0]);
+  selectedMonths = new Set([startMonth]);
+  const firstVisibleDate = dates.find(d => monthKey(d) === startMonth);
+  selectedDates = new Set(firstVisibleDate ? [firstVisibleDate] : []);
+
+  renderMonthPills(dates);
   renderDatePills(dates);
   populateLeagueFilter(Object.values(allData).flat());
   render();
