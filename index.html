@@ -359,11 +359,11 @@ function fmtMonthLabel(key) {
   return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 }
 
-// Months are single-select by default - clicking one shows that whole
-// month's fixtures straight away (every date in it selected at once),
-// switching away from whichever month was showing before. The day-pills
-// below are what narrow things down further within the month (toggle
-// individual days on/off there, multi-select).
+// Months are single-select by default - clicking one switches away from
+// whichever month was showing before, and reveals that month's day-pills
+// below. It does NOT pre-select any of those days - picking a specific
+// date (or several) is a separate, deliberate step below, not something
+// a month click should do on your behalf.
 function renderMonthPills(allDates) {
   const el = document.getElementById('months');
   const months = [...new Set(allDates.map(monthKey))]; // already chronological, dates is sorted
@@ -374,7 +374,7 @@ function renderMonthPills(allDates) {
     btn.textContent = fmtMonthLabel(mk);
     btn.onclick = () => {
       selectedMonths = new Set([mk]);
-      selectedDates = new Set(allDates.filter(d => monthKey(d) === mk));
+      selectedDates = new Set();
       renderMonthPills(allDates);
       renderDatePills(allDates);
       render();
@@ -516,12 +516,15 @@ async function init() {
     return;
   }
   // Default to today's month (or the first month with fixtures, if
-  // today's has none), showing every fixture in it straight away - same
-  // as clicking that month pill by hand.
+  // today's has none), with just its first date pre-picked as a single
+  // stand-alone selection - same starting point as clicking that date by
+  // hand, not "every date in the month" (that's not what a month click
+  // does either - see renderMonthPills above).
   const todayKey = new Date().toISOString().slice(0, 7);
   const startMonth = dates.map(monthKey).includes(todayKey) ? todayKey : monthKey(dates[0]);
   selectedMonths = new Set([startMonth]);
-  selectedDates = new Set(dates.filter(d => monthKey(d) === startMonth));
+  const firstOfStartMonth = dates.find(d => monthKey(d) === startMonth);
+  selectedDates = new Set(firstOfStartMonth ? [firstOfStartMonth] : []);
 
   renderMonthPills(dates);
   renderDatePills(dates);
