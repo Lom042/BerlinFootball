@@ -69,14 +69,16 @@
   .months {
     display: flex;
     gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 4px 2px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .dates {
     display: flex;
     gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 4px 2px;
   }
   .date-pill {
@@ -357,12 +359,11 @@ function fmtMonthLabel(key) {
   return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 }
 
-// A month pill's own "active" state is separate from whether any of its
-// days happen to be selected - toggling a month only changes which day
-// pills are OFFERED below (all months act as visible when none are
-// picked). Deselecting a month also drops any of its days out of
-// selectedDates, so the day-pill row and the fixtures shown never fall
-// out of sync with the month filter above them.
+// Months are single-select by default - clicking one shows that whole
+// month's fixtures straight away (every date in it selected at once),
+// switching away from whichever month was showing before. The day-pills
+// below are what narrow things down further within the month (toggle
+// individual days on/off there, multi-select).
 function renderMonthPills(allDates) {
   const el = document.getElementById('months');
   const months = [...new Set(allDates.map(monthKey))]; // already chronological, dates is sorted
@@ -372,15 +373,8 @@ function renderMonthPills(allDates) {
     btn.className = 'date-pill month-pill' + (selectedMonths.has(mk) ? ' active' : '');
     btn.textContent = fmtMonthLabel(mk);
     btn.onclick = () => {
-      if (selectedMonths.has(mk)) {
-        selectedMonths.delete(mk);
-      } else {
-        selectedMonths.add(mk);
-      }
-      // Keep selectedDates consistent with the (possibly narrower) set
-      // of months now in effect - drop any day that's no longer visible.
-      const visibleMonths = selectedMonths.size ? selectedMonths : new Set(months);
-      selectedDates = new Set([...selectedDates].filter(d => visibleMonths.has(monthKey(d))));
+      selectedMonths = new Set([mk]);
+      selectedDates = new Set(allDates.filter(d => monthKey(d) === mk));
       renderMonthPills(allDates);
       renderDatePills(allDates);
       render();
@@ -485,7 +479,7 @@ function render() {
           <div>
             <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
             <div class="venue">
-              ${searchTerm ? fmtDateLabel(m.date) + ' · ' : ''}${m.matchday ? m.matchday + ' · ' : ''}${m.venue || ''}${m.venue_address ? ' — ' + m.venue_address : ''}
+              ${(searchTerm || selectedDates.size > 1) ? fmtDateLabel(m.date) + ' · ' : ''}${m.matchday ? m.matchday + ' · ' : ''}${m.venue || ''}${m.venue_address ? ' — ' + m.venue_address : ''}
             </div>
           </div>
           <div class="badge">${league}</div>
@@ -522,14 +516,12 @@ async function init() {
     return;
   }
   // Default to today's month (or the first month with fixtures, if
-  // today's has none) and its first date, so the page isn't blank on
-  // first load - same starting experience as before, just multi-select
-  // from here on.
+  // today's has none), showing every fixture in it straight away - same
+  // as clicking that month pill by hand.
   const todayKey = new Date().toISOString().slice(0, 7);
   const startMonth = dates.map(monthKey).includes(todayKey) ? todayKey : monthKey(dates[0]);
   selectedMonths = new Set([startMonth]);
-  const firstVisibleDate = dates.find(d => monthKey(d) === startMonth);
-  selectedDates = new Set(firstVisibleDate ? [firstVisibleDate] : []);
+  selectedDates = new Set(dates.filter(d => monthKey(d) === startMonth));
 
   renderMonthPills(dates);
   renderDatePills(dates);
