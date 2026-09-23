@@ -222,7 +222,7 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  #team-search {
+  #postcode-search {
     background: rgba(244,242,234,0.06);
     border: 1px solid var(--line);
     color: var(--chalk);
@@ -233,7 +233,7 @@
     width: 220px;
     max-width: 60vw;
   }
-  #team-search::placeholder { color: var(--chalk-dim); }
+  #postcode-search::placeholder { color: var(--chalk-dim); }
   .no-match { text-align: center; color: var(--chalk-dim); padding: 8px 0 0; font-size: 13px; }
 
   main {
@@ -356,10 +356,13 @@
     <select id="district-filter">
       <option value="">All districts</option>
     </select>
+    <select id="team-filter">
+      <option value="">All teams</option>
+    </select>
   </div>
 </div>
 <div class="search-row">
-  <input id="team-search" type="text" placeholder="Search team or postcode…" autocomplete="off">
+  <input id="postcode-search" type="text" placeholder="Search postcode…" autocomplete="off">
 </div>
 
 <main id="main">
@@ -543,6 +546,11 @@ function goToMonth(newIdx, allDates) {
   monthIdx = Math.max(0, Math.min(MONTHS.length - 1, newIdx));
   renderMonthStepper(allDates);
   renderDatePills(allDates);
+  // Re-render too, not just the pickers - when no date is selected and a
+  // league/district filter is active, the fixture list defaults to
+  // "whatever month the stepper is showing" (see render()), so stepping
+  // months needs to refresh it, not just the pills above it.
+  render();
 }
 function renderMonthStepper(allDates) {
   const mk = MONTHS[monthIdx];
@@ -672,38 +680,68 @@ function populateDistrictFilter(matches) {
     districts.map(d => `<option value="${d}">${d}</option>`).join('');
 }
 
+// Team dropdown - every club that appears as either home or away across
+// every fixture, alphabetical, so you can pick a specific club's
+// fixtures without typing its name.
+function populateTeamFilter(matches) {
+  const sel = document.getElementById('team-filter');
+  const teams = [...new Set(matches.flatMap(m => [m.home_team, m.away_team]))].sort();
+  sel.innerHTML = '<option value="">All teams</option>' +
+    teams.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
 function render() {
   const main = document.getElementById('main');
   const leagueFilter = document.getElementById('league-filter').value;
   const districtFilter = document.getElementById('district-filter').value;
-  const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
+  const teamFilter = document.getElementById('team-filter').value;
+  const postcodeSearch = document.getElementById('postcode-search').value.trim().toLowerCase();
+  const allDatesSorted = Object.keys(allData).sort();
 
-  // If searching by team, look across ALL dates, not just the selected
-  // ones — otherwise a search would silently show nothing on days with
-  // no matches. Otherwise, union of every currently-selected date (so
-  // picking both days of a weekend shows fixtures from both at once).
-  const pool = searchTerm
-    ? Object.values(allData).flat()
-    : [...selectedDates].flatMap(d => allData[d] || []);
+  // Which dates to pull fixtures from, most specific wins first:
+  //   1) an explicit date (or dates) picked below the stepper - always
+  //      wins, however every other filter is set.
+  //   2) a team or postcode search - these look ACROSS THE WHOLE SEASON
+  //      by design (picking "BFC Dynamo" should find every BFC Dynamo
+  //      fixture, not just ones in whatever month happens to be
+  //      showing - otherwise the search would silently show nothing on
+  //      months with no match for it).
+  //   3) a league or district filter with nothing else set - defaults
+  //      to the month currently showing in the stepper, so picking just
+  //      a league/district shows that month's fixtures in it instead of
+  //      nothing. Selecting a date (or team/postcode) narrows further
+  //      from there.
+  //   4) nothing picked at all - the initial "pick a date" prompt.
+  let pool;
+  if (selectedDates.size) {
+    pool = [...selectedDates].flatMap(d => allData[d] || []);
+  } else if (teamFilter || postcodeSearch) {
+    pool = Object.values(allData).flat();
+  } else if (leagueFilter || districtFilter) {
+    const mk = MONTHS[monthIdx];
+    pool = allDatesSorted.filter(d => monthKey(d) === mk).flatMap(d => allData[d] || []);
+  } else {
+    pool = [];
+  }
 
   let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
   if (districtFilter) {
     filtered = filtered.filter(m => districtFor(m.venue_address) === districtFilter);
   }
-  if (searchTerm) {
-    // Matches team name OR the venue address - so typing a postcode
-    // ("14055") or a street name works the same as typing a club name.
-    filtered = filtered.filter(m =>
-      m.home_team.toLowerCase().includes(searchTerm) ||
-      m.away_team.toLowerCase().includes(searchTerm) ||
-      (m.venue_address || '').toLowerCase().includes(searchTerm)
-    );
+  if (teamFilter) {
+    filtered = filtered.filter(m => m.home_team === teamFilter || m.away_team === teamFilter);
+  }
+  if (postcodeSearch) {
+    filtered = filtered.filter(m => (m.venue_address || '').toLowerCase().includes(postcodeSearch));
   }
 
   if (!filtered.length) {
-    const msg = searchTerm
-      ? `No fixtures found for "${document.getElementById('team-search').value}".`
-      : (selectedDates.size ? 'No fixtures found for the selected date(s).' : 'Pick a date above to see fixtures.');
+    let msg;
+    if (teamFilter) msg = `No fixtures found for ${teamFilter}.`;
+    else if (postcodeSearch) msg = `No fixtures found for postcode "${document.getElementById('postcode-search').value}".`;
+    else if (selectedDates.size) msg = 'No fixtures found for the selected date(s).';
+    else if (leagueFilter || districtFilter) msg = `No fixtures found in ${fmtMonthLabel(MONTHS[monthIdx])} for the selected filter(s).`;
+    else msg = 'Pick a date above to see fixtures.';
     main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
     return;
   }
@@ -719,6 +757,11 @@ function render() {
   // league sort by kickoff time, then team name.
   const orderedLeagues = Object.keys(byLeague).sort((a, b) => leagueRank(a) - leagueRank(b));
 
+  // Show each match's own date whenever the current result spans more
+  // than one - true whether that's because of a whole-month/season view
+  // or a multi-date chip selection - not just when there's a search term.
+  const distinctDates = new Set(filtered.map(m => m.date)).size;
+
   main.innerHTML = orderedLeagues.map(league => { const ms = byLeague[league]; const isCup = ms.some(m => m.is_cup); return `
     <div class="league-group">
       <div class="league-label">${league}${isCup ? '<span class="cup-tag">CUP</span>' : ''}</div>
@@ -728,7 +771,7 @@ function render() {
           <div>
             <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
             <div class="venue">
-              ${(searchTerm || selectedDates.size > 1) ? fmtDateLabel(m.date) + ' · ' : ''}${m.matchday ? m.matchday + ' · ' : ''}${m.venue || ''}${m.venue_address ? ' — ' + m.venue_address : ''}
+              ${distinctDates > 1 ? fmtDateLabel(m.date) + ' · ' : ''}${m.matchday ? m.matchday + ' · ' : ''}${m.venue || ''}${m.venue_address ? ' — ' + m.venue_address : ''}
             </div>
           </div>
           <div class="badge">${league}</div>
@@ -741,7 +784,8 @@ function render() {
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('district-filter').addEventListener('change', render);
-  document.getElementById('team-search').addEventListener('input', render);
+  document.getElementById('team-filter').addEventListener('change', render);
+  document.getElementById('postcode-search').addEventListener('input', render);
 
   const menuEl = document.getElementById('month-menu');
   document.getElementById('month-prev').addEventListener('click', () => goToMonth(monthIdx - 1, Object.keys(allData).sort()));
@@ -790,6 +834,7 @@ async function init() {
   renderChips();
   populateLeagueFilter(Object.values(allData).flat());
   populateDistrictFilter(Object.values(allData).flat());
+  populateTeamFilter(Object.values(allData).flat());
   render();
 }
 
