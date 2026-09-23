@@ -713,7 +713,20 @@ def write_fixtures(all_fixtures):
         if os.path.exists(path):
             with open(path) as fh:
                 existing = json.load(fh)
-        merged = [x for x in existing if x.get("source") != "fussballde"] + by_date.get(d, [])
+        # BUG FOUND (user report - cup fixtures appearing 2-4x on the live
+        # site): this used to only strip out this script's own
+        # "fussballde"-sourced entries before re-adding the fresh set,
+        # forgetting that this script ALSO writes "transfermarkt-manual"
+        # entries (see MANUAL_CUP_FIXTURES above). Since the manual
+        # fallback keeps re-firing every run while fussball.de's own
+        # Berlin-Pokal round is still unpublished, each run kept the OLD
+        # manual copies (source != "fussballde" was true for them) AND
+        # appended a fresh batch on top - one extra duplicate copy per
+        # run, forever. Fix: also strip stale "transfermarkt-manual"
+        # entries before re-adding, since both sources are this script's
+        # own responsibility to regenerate fresh each run.
+        stale_sources = ("fussballde", "transfermarkt-manual")
+        merged = [x for x in existing if x.get("source") not in stale_sources] + by_date.get(d, [])
         if merged:
             with open(path, "w") as fh:
                 json.dump(merged, fh, indent=2, ensure_ascii=False)
