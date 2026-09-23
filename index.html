@@ -66,20 +66,95 @@
     margin: 20px auto 0;
     padding: 0 20px;
   }
-  .months {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 4px 2px;
-    margin-bottom: 10px;
+  .tier-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    margin-bottom: 7px;
+    text-align: center;
   }
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stepper button.step-btn {
+    font-family: 'Oswald', sans-serif;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+  .stepper button.step-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .stepper button.step-btn:disabled { opacity: .3; cursor: default; }
+  .jumpmenu { position: relative; display: inline-block; }
+  .current-month {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    min-width: 160px;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 2px;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    color: var(--chalk);
+  }
+  .current-month:hover { border-color: var(--gold); color: var(--gold); }
+  .jumpmenu-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--pitch-dark);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 8px;
+    gap: 4px;
+    grid-template-columns: repeat(3, 1fr);
+    z-index: 5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    width: 280px;
+  }
+  .jumpmenu-list.open { display: grid; }
+  .jumpmenu-list button {
+    font-family: 'Oswald', sans-serif;
+    background: transparent;
+    border: none;
+    color: var(--chalk-dim);
+    padding: 7px 4px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .jumpmenu-list button:hover { background: rgba(244,242,234,0.08); color: var(--chalk); }
+  .jumpmenu-list button.active { background: var(--gold); color: var(--pitch-dark); font-weight: 600; }
   .dates {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     justify-content: center;
     padding: 4px 2px;
+    margin-bottom: 16px;
   }
   .date-pill {
     font-family: 'Oswald', sans-serif;
@@ -96,7 +171,26 @@
   }
   .date-pill:hover { border-color: var(--gold); color: var(--chalk); }
   .date-pill.active { background: var(--gold); border-color: var(--gold); color: var(--pitch-dark); font-weight: 600; }
-  .month-pill { font-weight: 600; }
+  .chips-wrap { margin-bottom: 10px; }
+  .chiprow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; min-height: 32px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Oswald', sans-serif;
+    background: var(--gold);
+    border: none;
+    color: var(--pitch-dark);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .chip:hover { opacity: 0.82; }
+  .chip-empty { color: var(--chalk-dim); font-size: 13px; font-style: italic; }
   .clear-dates {
     font-family: 'Inter', sans-serif;
     background: transparent;
@@ -240,17 +334,32 @@
 </header>
 
 <div class="controls-stack">
-  <div class="months" id="months"></div>
+  <div class="stepper">
+    <button class="step-btn" id="month-prev" aria-label="Previous month" type="button">‹</button>
+    <div class="jumpmenu">
+      <button class="current-month" id="month-current" type="button"></button>
+      <div class="jumpmenu-list" id="month-menu"></div>
+    </div>
+    <button class="step-btn" id="month-next" aria-label="Next month" type="button">›</button>
+  </div>
+
+  <div class="dates" id="dates"></div>
+
+  <div class="chips-wrap">
+    <div class="chiprow" id="date-chips"></div>
+  </div>
+
   <div class="controls" style="margin:0; padding:0;">
-    <div class="dates" id="dates"></div>
-    <button class="clear-dates" id="clear-dates" type="button">Clear dates</button>
     <select id="league-filter">
       <option value="">All divisions</option>
+    </select>
+    <select id="district-filter">
+      <option value="">All districts</option>
     </select>
   </div>
 </div>
 <div class="search-row">
-  <input id="team-search" type="text" placeholder="Search team…" autocomplete="off">
+  <input id="team-search" type="text" placeholder="Search team or postcode…" autocomplete="off">
 </div>
 
 <main id="main">
@@ -282,6 +391,59 @@ const LEAGUE_ORDER = [
 function leagueRank(league) {
   const i = LEAGUE_ORDER.indexOf(league);
   return i === -1 ? LEAGUE_ORDER.length : i;
+}
+
+// Postcode -> Berlin borough (Bezirk), for the "District" filter. Built
+// from the official Berlin postcode/locality list (berlinstadtservice.de)
+// plus Berlin's 12 official (post-2001-merger) boroughs. WORTH KNOWING:
+// Berlin's ~190 postcode areas were never drawn along borough lines and
+// several genuinely straddle two or more boroughs (e.g. 10965 touches
+// Kreuzberg, Schöneberg, Tempelhof AND Neukölln all at once) - where a
+// postcode lists more than one locality, this table picks whichever one
+// is listed first for that postcode, so a handful of fixtures right on a
+// borough border may show the "wrong side" rather than the literal
+// truth. Same trade-off this project already makes elsewhere (see
+// VENUE_ADDRESSES_BY_CLUB) - better to have a working best-effort filter
+// than none at all. A postcode not in this table just shows no district
+// rather than guessing.
+const POSTCODE_DISTRICT = {
+  "10115":"Mitte","10117":"Mitte","10119":"Mitte","10178":"Mitte","10179":"Mitte",
+  "10243":"Friedrichshain-Kreuzberg","10247":"Friedrichshain-Kreuzberg","10249":"Friedrichshain-Kreuzberg",
+  "10315":"Lichtenberg","10317":"Lichtenberg","10318":"Lichtenberg","10319":"Lichtenberg","10365":"Lichtenberg","10367":"Lichtenberg","10369":"Lichtenberg",
+  "10405":"Pankow","10407":"Pankow","10409":"Pankow","10435":"Mitte","10437":"Pankow","10439":"Pankow",
+  "10551":"Mitte","10553":"Mitte","10555":"Mitte","10557":"Mitte","10559":"Mitte","10585":"Charlottenburg-Wilmersdorf","10587":"Charlottenburg-Wilmersdorf","10589":"Charlottenburg-Wilmersdorf",
+  "10623":"Charlottenburg-Wilmersdorf","10625":"Charlottenburg-Wilmersdorf","10627":"Charlottenburg-Wilmersdorf","10629":"Charlottenburg-Wilmersdorf",
+  "10707":"Charlottenburg-Wilmersdorf","10709":"Charlottenburg-Wilmersdorf","10711":"Charlottenburg-Wilmersdorf","10713":"Charlottenburg-Wilmersdorf","10715":"Charlottenburg-Wilmersdorf","10717":"Charlottenburg-Wilmersdorf","10719":"Charlottenburg-Wilmersdorf",
+  "10777":"Charlottenburg-Wilmersdorf","10779":"Tempelhof-Schöneberg","10781":"Tempelhof-Schöneberg","10783":"Tempelhof-Schöneberg","10785":"Friedrichshain-Kreuzberg","10787":"Charlottenburg-Wilmersdorf","10789":"Charlottenburg-Wilmersdorf",
+  "10823":"Tempelhof-Schöneberg","10825":"Tempelhof-Schöneberg","10827":"Tempelhof-Schöneberg","10829":"Tempelhof-Schöneberg",
+  "10961":"Friedrichshain-Kreuzberg","10963":"Friedrichshain-Kreuzberg","10965":"Friedrichshain-Kreuzberg","10967":"Friedrichshain-Kreuzberg","10969":"Friedrichshain-Kreuzberg","10997":"Friedrichshain-Kreuzberg","10999":"Friedrichshain-Kreuzberg",
+  "12043":"Neukölln","12045":"Neukölln","12047":"Neukölln","12049":"Neukölln","12051":"Neukölln","12053":"Neukölln","12055":"Neukölln","12057":"Neukölln","12059":"Neukölln","12099":"Neukölln",
+  "12101":"Tempelhof-Schöneberg","12103":"Tempelhof-Schöneberg","12105":"Tempelhof-Schöneberg","12107":"Tempelhof-Schöneberg","12109":"Tempelhof-Schöneberg",
+  "12157":"Tempelhof-Schöneberg","12159":"Tempelhof-Schöneberg","12161":"Tempelhof-Schöneberg","12163":"Tempelhof-Schöneberg","12165":"Steglitz-Zehlendorf","12167":"Steglitz-Zehlendorf","12169":"Steglitz-Zehlendorf",
+  "12203":"Steglitz-Zehlendorf","12205":"Steglitz-Zehlendorf","12207":"Steglitz-Zehlendorf","12209":"Steglitz-Zehlendorf","12247":"Steglitz-Zehlendorf","12249":"Steglitz-Zehlendorf","12277":"Tempelhof-Schöneberg","12279":"Steglitz-Zehlendorf",
+  "12305":"Neukölln","12307":"Tempelhof-Schöneberg","12309":"Tempelhof-Schöneberg","12347":"Neukölln","12349":"Neukölln","12351":"Neukölln","12353":"Neukölln","12355":"Neukölln","12357":"Neukölln","12359":"Neukölln",
+  "12435":"Treptow-Köpenick","12437":"Treptow-Köpenick","12439":"Treptow-Köpenick","12459":"Treptow-Köpenick","12487":"Treptow-Köpenick","12489":"Treptow-Köpenick",
+  "12524":"Treptow-Köpenick","12526":"Treptow-Köpenick","12527":"Treptow-Köpenick","12555":"Treptow-Köpenick","12557":"Treptow-Köpenick","12559":"Treptow-Köpenick","12587":"Treptow-Köpenick","12589":"Treptow-Köpenick",
+  "12619":"Marzahn-Hellersdorf","12621":"Marzahn-Hellersdorf","12623":"Marzahn-Hellersdorf","12627":"Marzahn-Hellersdorf","12629":"Marzahn-Hellersdorf","12679":"Marzahn-Hellersdorf","12681":"Marzahn-Hellersdorf","12683":"Marzahn-Hellersdorf","12685":"Marzahn-Hellersdorf","12687":"Marzahn-Hellersdorf","12689":"Marzahn-Hellersdorf",
+  "13051":"Lichtenberg","13053":"Lichtenberg","13055":"Lichtenberg","13057":"Lichtenberg","13059":"Lichtenberg","13086":"Pankow","13088":"Pankow","13089":"Pankow",
+  "13125":"Pankow","13127":"Pankow","13129":"Pankow","13156":"Pankow","13158":"Pankow","13159":"Pankow","13187":"Pankow","13189":"Pankow",
+  "13347":"Mitte","13349":"Mitte","13351":"Mitte","13353":"Charlottenburg-Wilmersdorf","13355":"Mitte","13357":"Mitte","13359":"Mitte",
+  "13403":"Reinickendorf","13405":"Reinickendorf","13407":"Reinickendorf","13409":"Reinickendorf","13435":"Reinickendorf","13437":"Reinickendorf","13439":"Reinickendorf",
+  "13465":"Reinickendorf","13467":"Reinickendorf","13469":"Reinickendorf",
+  "13503":"Reinickendorf","13505":"Reinickendorf","13509":"Reinickendorf",
+  "13581":"Spandau","13583":"Spandau","13585":"Spandau","13587":"Spandau","13589":"Spandau","13591":"Spandau","13593":"Spandau","13595":"Spandau","13597":"Charlottenburg-Wilmersdorf","13599":"Spandau",
+  "13627":"Charlottenburg-Wilmersdorf","13629":"Charlottenburg-Wilmersdorf",
+  "14050":"Charlottenburg-Wilmersdorf","14052":"Charlottenburg-Wilmersdorf","14053":"Charlottenburg-Wilmersdorf","14055":"Charlottenburg-Wilmersdorf","14057":"Charlottenburg-Wilmersdorf","14059":"Charlottenburg-Wilmersdorf","14089":"Spandau",
+  "14109":"Steglitz-Zehlendorf","14129":"Steglitz-Zehlendorf","14163":"Steglitz-Zehlendorf","14165":"Steglitz-Zehlendorf","14167":"Steglitz-Zehlendorf","14169":"Steglitz-Zehlendorf",
+  "14193":"Steglitz-Zehlendorf","14195":"Steglitz-Zehlendorf","14197":"Charlottenburg-Wilmersdorf","14199":"Charlottenburg-Wilmersdorf",
+};
+const POSTCODE_RE = /\b(\d{5})\b/;
+function extractPostcode(address) {
+  const m = POSTCODE_RE.exec(address || "");
+  return m ? m[1] : "";
+}
+function districtFor(address) {
+  return POSTCODE_DISTRICT[extractPostcode(address)] || "";
 }
 
 const DEMO_DATA = {
@@ -322,13 +484,18 @@ const DEMO_DATA = {
 };
 
 let allData = {};
-// Both multi-select, click-to-toggle, mutually narrowing: picking one or
-// more months narrows which day-pills are offered below it, and picking
-// one or more days is what actually filters the fixtures shown (so you
-// can e.g. select both Saturday and Sunday of a weekend at once). Empty
-// Set means "no filter at that level" - all months, respectively all
-// days within the visible months, act as selected.
-let selectedMonths = new Set();
+// MONTHS is every month that actually has fixtures, in chronological
+// order - computed once real/demo data has loaded (see init()). monthIdx
+// is which one the stepper is currently showing.
+let MONTHS = [];
+let monthIdx = 0;
+// Selected dates are completely separate from "which month is the
+// stepper showing" - stepping to a different month with the ‹ › arrows
+// or the jump menu NEVER touches this Set, only adding/removing a date
+// pill or a chip (or "Clear") does. That's what lets a weekend spanning
+// two months (e.g. Sat 31 Oct + Sun 01 Nov) be selected as a unit: pick
+// the Saturday, step forward a month, pick the Sunday - the first pick
+// stays selected the whole time.
 let selectedDates = new Set();
 
 // No real club crests are used here (they're trademarked) — instead we
@@ -358,39 +525,54 @@ function fmtMonthLabel(key) {
   const d = new Date(key + "-01T00:00:00");
   return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 }
+function fmtMonthShort(key) {
+  const d = new Date(key + "-01T00:00:00");
+  return d.toLocaleDateString('en-GB', { month: 'short', year: '2-digit' });
+}
+function fmtChipLabel(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+}
 
-// Months are single-select by default - clicking one switches away from
-// whichever month was showing before, and reveals that month's day-pills
-// below. It does NOT pre-select any of those days - picking a specific
-// date (or several) is a separate, deliberate step below, not something
-// a month click should do on your behalf.
-function renderMonthPills(allDates) {
-  const el = document.getElementById('months');
-  const months = [...new Set(allDates.map(monthKey))]; // already chronological, dates is sorted
-  el.innerHTML = '';
-  months.forEach(mk => {
-    const btn = document.createElement('button');
-    btn.className = 'date-pill month-pill' + (selectedMonths.has(mk) ? ' active' : '');
-    btn.textContent = fmtMonthLabel(mk);
-    btn.onclick = () => {
-      selectedMonths = new Set([mk]);
-      selectedDates = new Set();
-      renderMonthPills(allDates);
-      renderDatePills(allDates);
-      render();
-    };
-    el.appendChild(btn);
+// One stepper (‹ month-name ›), one jump-menu grid for hopping straight
+// to a distant month, one row of day-pills for whichever month is
+// currently showing. Stepping/jumping months only changes monthIdx -
+// it never touches selectedDates (see the comment on that Set above),
+// so fixtures already picked in another month stay picked.
+function goToMonth(newIdx, allDates) {
+  monthIdx = Math.max(0, Math.min(MONTHS.length - 1, newIdx));
+  renderMonthStepper(allDates);
+  renderDatePills(allDates);
+}
+function renderMonthStepper(allDates) {
+  const mk = MONTHS[monthIdx];
+  const currentEl = document.getElementById('month-current');
+  const menuEl = document.getElementById('month-menu');
+  const prevBtn = document.getElementById('month-prev');
+  const nextBtn = document.getElementById('month-next');
+
+  currentEl.textContent = fmtMonthLabel(mk);
+  prevBtn.disabled = monthIdx === 0;
+  nextBtn.disabled = monthIdx === MONTHS.length - 1;
+
+  menuEl.innerHTML = '';
+  MONTHS.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.className = m === mk ? 'active' : '';
+    b.textContent = fmtMonthShort(m);
+    b.onclick = () => { goToMonth(i, allDates); menuEl.classList.remove('open'); };
+    menuEl.appendChild(b);
   });
 }
 
-// Day pills only ever show dates within the currently visible month(s) -
-// every month acts as visible when none are explicitly selected above.
-// Clicking a day toggles it in/out of selectedDates (multi-select), so
-// e.g. both days of a cup weekend can be picked at once.
+// Day pills only ever show dates within the CURRENTLY SHOWING month
+// (MONTHS[monthIdx]) - clicking one toggles it in/out of selectedDates
+// (multi-select), so e.g. both days of a cup weekend can be picked at
+// once, whether or not they're in the same month.
 function renderDatePills(allDates) {
   const el = document.getElementById('dates');
-  const visibleMonths = selectedMonths.size ? selectedMonths : new Set(allDates.map(monthKey));
-  const dates = allDates.filter(d => visibleMonths.has(monthKey(d)));
+  const mk = MONTHS[monthIdx];
+  const dates = allDates.filter(d => monthKey(d) === mk);
   el.innerHTML = '';
   dates.forEach(d => {
     const btn = document.createElement('button');
@@ -403,10 +585,59 @@ function renderDatePills(allDates) {
         selectedDates.add(d);
       }
       renderDatePills(allDates);
+      renderChips();
       render();
     };
     el.appendChild(btn);
   });
+}
+
+// The "Selected dates" chip row is the one part of this UI that ignores
+// which month is currently showing - it always lists every date in
+// selectedDates, however many different months they span, each one
+// clickable to remove just that date. This is what makes a cross-month
+// weekend selection visible/manageable at a glance. Each chip is a
+// single flat button (label + a trailing ✕) rather than a button nested
+// inside another element - simpler, bigger tap target on mobile, and
+// consistent with how every other pill on this page is built.
+function renderChips() {
+  const el = document.getElementById('date-chips');
+  el.innerHTML = '';
+  const allDates = Object.keys(allData).sort();
+
+  if (!selectedDates.size) {
+    const empty = document.createElement('span');
+    empty.className = 'chip-empty';
+    empty.textContent = 'No dates selected — pick one above.';
+    el.appendChild(empty);
+    return;
+  }
+
+  [...selectedDates].sort().forEach(d => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.type = 'button';
+    chip.textContent = fmtChipLabel(d) + '  ✕';
+    chip.onclick = () => {
+      selectedDates.delete(d);
+      renderDatePills(allDates);
+      renderChips();
+      render();
+    };
+    el.appendChild(chip);
+  });
+
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'clear-dates';
+  clearBtn.type = 'button';
+  clearBtn.textContent = 'Clear';
+  clearBtn.onclick = () => {
+    selectedDates.clear();
+    renderDatePills(allDates);
+    renderChips();
+    render();
+  };
+  el.appendChild(clearBtn);
 }
 
 // Splits the "All divisions" dropdown into two <optgroup>s — Cups and
@@ -430,9 +661,21 @@ function populateLeagueFilter(matches) {
   sel.innerHTML = html;
 }
 
+// District dropdown only ever lists boroughs that actually have a
+// fixture with a resolvable postcode right now - no point offering a
+// district with nothing in it. Blank/unresolved districts are just
+// left out rather than shown as an "Unknown" option.
+function populateDistrictFilter(matches) {
+  const sel = document.getElementById('district-filter');
+  const districts = [...new Set(matches.map(m => districtFor(m.venue_address)).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">All districts</option>' +
+    districts.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
 function render() {
   const main = document.getElementById('main');
   const leagueFilter = document.getElementById('league-filter').value;
+  const districtFilter = document.getElementById('district-filter').value;
   const searchTerm = document.getElementById('team-search').value.trim().toLowerCase();
 
   // If searching by team, look across ALL dates, not just the selected
@@ -444,10 +687,16 @@ function render() {
     : [...selectedDates].flatMap(d => allData[d] || []);
 
   let filtered = leagueFilter ? pool.filter(m => m.league === leagueFilter) : pool;
+  if (districtFilter) {
+    filtered = filtered.filter(m => districtFor(m.venue_address) === districtFilter);
+  }
   if (searchTerm) {
+    // Matches team name OR the venue address - so typing a postcode
+    // ("14055") or a street name works the same as typing a club name.
     filtered = filtered.filter(m =>
       m.home_team.toLowerCase().includes(searchTerm) ||
-      m.away_team.toLowerCase().includes(searchTerm)
+      m.away_team.toLowerCase().includes(searchTerm) ||
+      (m.venue_address || '').toLowerCase().includes(searchTerm)
     );
   }
 
@@ -491,11 +740,15 @@ function render() {
 
 async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
+  document.getElementById('district-filter').addEventListener('change', render);
   document.getElementById('team-search').addEventListener('input', render);
-  document.getElementById('clear-dates').addEventListener('click', () => {
-    selectedDates.clear();
-    renderDatePills(Object.keys(allData).sort());
-    render();
+
+  const menuEl = document.getElementById('month-menu');
+  document.getElementById('month-prev').addEventListener('click', () => goToMonth(monthIdx - 1, Object.keys(allData).sort()));
+  document.getElementById('month-next').addEventListener('click', () => goToMonth(monthIdx + 1, Object.keys(allData).sort()));
+  document.getElementById('month-current').addEventListener('click', () => menuEl.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.jumpmenu')) menuEl.classList.remove('open');
   });
 
   try {
@@ -515,20 +768,28 @@ async function init() {
     document.getElementById('main').innerHTML = `<div class="empty"><span class="ball">⚽</span>No fixture data available yet.</div>`;
     return;
   }
+  // MONTHS is every month that actually has fixtures, oldest to newest -
+  // read straight off the real data each time (see the "note" in the
+  // design writeup: no hardcoded year/season list, so this keeps working
+  // for 2027-28 and beyond with zero code changes, same as the rolling
+  // data/index.json window already does).
+  MONTHS = [...new Set(dates.map(monthKey))];
+
   // Default to today's month (or the first month with fixtures, if
   // today's has none), with just its first date pre-picked as a single
   // stand-alone selection - same starting point as clicking that date by
-  // hand, not "every date in the month" (that's not what a month click
-  // does either - see renderMonthPills above).
+  // hand, not "every date in the month".
   const todayKey = new Date().toISOString().slice(0, 7);
-  const startMonth = dates.map(monthKey).includes(todayKey) ? todayKey : monthKey(dates[0]);
-  selectedMonths = new Set([startMonth]);
-  const firstOfStartMonth = dates.find(d => monthKey(d) === startMonth);
+  const startMonthIdx = MONTHS.includes(todayKey) ? MONTHS.indexOf(todayKey) : 0;
+  monthIdx = startMonthIdx;
+  const firstOfStartMonth = dates.find(d => monthKey(d) === MONTHS[monthIdx]);
   selectedDates = new Set(firstOfStartMonth ? [firstOfStartMonth] : []);
 
-  renderMonthPills(dates);
+  renderMonthStepper(dates);
   renderDatePills(dates);
+  renderChips();
   populateLeagueFilter(Object.values(allData).flat());
+  populateDistrictFilter(Object.values(allData).flat());
   render();
 }
 
