@@ -362,7 +362,7 @@
   </div>
 </div>
 <div class="search-row">
-  <input id="postcode-search" type="text" placeholder="Search postcode…" autocomplete="off">
+  <input id="postcode-search" type="text" placeholder="Search postcode, or type yours for nearest…" autocomplete="off">
 </div>
 
 <main id="main">
@@ -447,6 +447,81 @@ function extractPostcode(address) {
 }
 function districtFor(address) {
   return POSTCODE_DISTRICT[extractPostcode(address)] || "";
+}
+
+// "Nearest to me" upgrade for the postcode box, via Zippopotam.us (a
+// free, no-signup public API that covers every German postcode,
+// including Berlin's, and returns real coordinates) - so distances are
+// computed properly with a real lat/lng + haversine formula, instead of
+// hand-typing a ~190-row postcode coordinate table that would only ever
+// be an approximation. Purely additive: typing anything that ISN'T a
+// full, valid 5-digit postcode (partial digits, a street name, an
+// unrecognised code) leaves the postcode box exactly as it always was -
+// a plain substring match against venue_address. Only a complete, real
+// postcode "upgrades" the box into nearest-first + distance mode.
+const GEO_CACHE = {}; // postcode -> {lat,lng} | null (null = lookup failed, don't retry it again)
+async function geocodePostcode(postcode) {
+  if (postcode in GEO_CACHE) return GEO_CACHE[postcode];
+  try {
+    const resp = await fetch(`https://api.zippopotam.us/de/${postcode}`);
+    if (!resp.ok) { GEO_CACHE[postcode] = null; return null; }
+    const data = await resp.json();
+    const place = data.places && data.places[0];
+    if (!place) { GEO_CACHE[postcode] = null; return null; }
+    const geo = { lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) };
+    GEO_CACHE[postcode] = geo;
+    return geo;
+  } catch (e) {
+    GEO_CACHE[postcode] = null;
+    return null;
+  }
+}
+function haversineKm(a, b) {
+  const R = 6371;
+  const toRad = deg => deg * Math.PI / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+// null = the postcode box is in its normal plain-substring-match mode.
+// Once set, { rawInput, distances } holds the exact input string this
+// was computed for (so a stale in-flight lookup never overwrites a
+// newer one - see handlePostcodeInput below) plus a postcode -> km Map
+// covering every venue postcode that could be geocoded.
+let nearestMode = null;
+
+async function handlePostcodeInput() {
+  const raw = document.getElementById('postcode-search').value.trim();
+  if (!/^\d{5}$/.test(raw)) {
+    // Not a complete postcode (still typing, or free text) - plain mode.
+    nearestMode = null;
+    render();
+    return;
+  }
+  const origin = await geocodePostcode(raw);
+  if (document.getElementById('postcode-search').value.trim() !== raw) return; // input moved on while we waited
+  if (!origin) {
+    // Looks like a postcode but isn't a real/known one - fall back to
+    // the plain substring behaviour rather than showing an error.
+    nearestMode = null;
+    render();
+    return;
+  }
+  // Geocode every distinct venue postcode in the data (cached, so this
+  // only ever costs real requests once per postcode, however many times
+  // it's searched).
+  const venuePostcodes = [...new Set(Object.values(allData).flat().map(m => extractPostcode(m.venue_address)).filter(Boolean))];
+  const distances = new Map();
+  for (const pc of venuePostcodes) {
+    const geo = await geocodePostcode(pc);
+    if (geo) distances.set(pc, haversineKm(origin, geo));
+  }
+  if (document.getElementById('postcode-search').value.trim() !== raw) return;
+  nearestMode = { rawInput: raw, distances };
+  render();
 }
 
 const DEMO_DATA = {
@@ -695,7 +770,9 @@ function render() {
   const leagueFilter = document.getElementById('league-filter').value;
   const districtFilter = document.getElementById('district-filter').value;
   const teamFilter = document.getElementById('team-filter').value;
-  const postcodeSearch = document.getElementById('postcode-search').value.trim().toLowerCase();
+  const postcodeRaw = document.getElementById('postcode-search').value.trim();
+  const postcodeSearch = postcodeRaw.toLowerCase();
+  const useNearest = !!(nearestMode && nearestMode.rawInput === postcodeRaw);
   const allDatesSorted = Object.keys(allData).sort();
 
   // Which dates to pull fixtures from, most specific wins first:
@@ -731,18 +808,52 @@ function render() {
   if (teamFilter) {
     filtered = filtered.filter(m => m.home_team === teamFilter || m.away_team === teamFilter);
   }
-  if (postcodeSearch) {
+  if (useNearest) {
+    // Only fixtures whose venue postcode actually geocoded successfully
+    // can be ranked by distance - anything else just isn't shown in
+    // this mode (same "leave it out rather than guess wrong" approach
+    // used elsewhere in this project).
+    filtered = filtered.filter(m => nearestMode.distances.has(extractPostcode(m.venue_address)));
+  } else if (postcodeSearch) {
     filtered = filtered.filter(m => (m.venue_address || '').toLowerCase().includes(postcodeSearch));
   }
 
   if (!filtered.length) {
     let msg;
     if (teamFilter) msg = `No fixtures found for ${teamFilter}.`;
+    else if (useNearest) msg = `No fixtures found near postcode "${postcodeRaw}".`;
     else if (postcodeSearch) msg = `No fixtures found for postcode "${document.getElementById('postcode-search').value}".`;
     else if (selectedDates.size) msg = 'No fixtures found for the selected date(s).';
     else if (leagueFilter || districtFilter) msg = `No fixtures found in ${fmtMonthLabel(MONTHS[monthIdx])} for the selected filter(s).`;
     else msg = 'Pick a date above to see fixtures.';
     main.innerHTML = `<div class="empty"><span class="ball">⚽</span>${msg}</div>`;
+    return;
+  }
+
+  // Nearest-postcode mode bypasses the usual "grouped by league" layout
+  // in favour of one flat list sorted closest-first, with a distance in
+  // place of the date - the league is still shown, just as the badge.
+  if (useNearest) {
+    const withDistance = filtered
+      .map(m => ({ m, km: nearestMode.distances.get(extractPostcode(m.venue_address)) }))
+      .sort((a, b) => a.km - b.km);
+    main.innerHTML = `
+      <div class="league-group">
+        <div class="league-label">Nearest to ${postcodeRaw}</div>
+        ${withDistance.map(({ m, km }) => `
+          <div class="match">
+            <div class="match-time">${m.time || '—'}</div>
+            <div>
+              <div class="teams">${crestHtml(m.home_team)}${m.home_team} <span class="vs">vs</span> ${crestHtml(m.away_team)}${m.away_team}</div>
+              <div class="venue">
+                ${km.toFixed(1)} km away · ${fmtDateLabel(m.date)} · ${m.league}${m.matchday ? ' · ' + m.matchday : ''}${m.venue ? ' · ' + m.venue : ''}${m.venue_address ? ' — ' + m.venue_address : ''}
+              </div>
+            </div>
+            <div class="badge">${m.league}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
     return;
   }
 
@@ -785,7 +896,7 @@ async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('district-filter').addEventListener('change', render);
   document.getElementById('team-filter').addEventListener('change', render);
-  document.getElementById('postcode-search').addEventListener('input', render);
+  document.getElementById('postcode-search').addEventListener('input', handlePostcodeInput);
 
   const menuEl = document.getElementById('month-menu');
   document.getElementById('month-prev').addEventListener('click', () => goToMonth(monthIdx - 1, Object.keys(allData).sort()));
