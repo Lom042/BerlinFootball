@@ -449,32 +449,80 @@ function districtFor(address) {
   return POSTCODE_DISTRICT[extractPostcode(address)] || "";
 }
 
-// "Nearest to me" upgrade for the postcode box, via Zippopotam.us (a
-// free, no-signup public API that covers every German postcode,
-// including Berlin's, and returns real coordinates) - so distances are
-// computed properly with a real lat/lng + haversine formula, instead of
-// hand-typing a ~190-row postcode coordinate table that would only ever
-// be an approximation. Purely additive: typing anything that ISN'T a
-// full, valid 5-digit postcode (partial digits, a street name, an
-// unrecognised code) leaves the postcode box exactly as it always was -
-// a plain substring match against venue_address. Only a complete, real
-// postcode "upgrades" the box into nearest-first + distance mode.
-const GEO_CACHE = {}; // postcode -> {lat,lng} | null (null = lookup failed, don't retry it again)
-async function geocodePostcode(postcode) {
-  if (postcode in GEO_CACHE) return GEO_CACHE[postcode];
-  try {
-    const resp = await fetch(`https://api.zippopotam.us/de/${postcode}`);
-    if (!resp.ok) { GEO_CACHE[postcode] = null; return null; }
-    const data = await resp.json();
-    const place = data.places && data.places[0];
-    if (!place) { GEO_CACHE[postcode] = null; return null; }
-    const geo = { lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) };
-    GEO_CACHE[postcode] = geo;
-    return geo;
-  } catch (e) {
-    GEO_CACHE[postcode] = null;
-    return null;
-  }
+// "Nearest to me" upgrade for the postcode box. FIRST ATTEMPT used the
+// live Zippopotam.us API (free, no signup) - but its German data turned
+// out to only be accurate to CITY level, not postcode level: every
+// Berlin postcode queried came back with the exact same coordinate
+// (52.5167, 13.4), which is why every fixture was showing "0.0 km away"
+// regardless of how far away it actually was. Real user report caught
+// this. Fixed by baking in real per-postcode coordinates instead of
+// calling a live API at all - no network dependency, no rate limit, no
+// risk of a data provider silently degrading again. Source: WZB Berlin
+// Social Science Center's public PLZ geocoordinate dataset (determined
+// via Google's Geocoding API, Jan 2019 - see
+// https://github.com/WZBSocialScienceCenter/plz_geocoord), filtered
+// down to Berlin's own postcode range (10115-14199). Typing anything
+// that ISN'T a full, valid, KNOWN 5-digit postcode (partial digits, a
+// street name, a postcode outside this table) leaves the box exactly as
+// it always was - a plain substring match against venue_address.
+const POSTCODE_COORDS = {
+  "10115":[52.53261,13.37770],"10117":[52.51551,13.38475],"10119":[52.53074,13.40581],"10178":[52.52219,13.40933],"10179":[52.51214,13.41405],
+  "10243":[52.51475,13.43856],"10245":[52.50193,13.45545],"10247":[52.51734,13.46308],"10249":[52.52395,13.44118],
+  "10315":[52.51547,13.51447],"10317":[52.49854,13.48475],"10318":[52.48104,13.51865],"10319":[52.49583,13.51371],
+  "10365":[52.51909,13.49495],"10367":[52.52051,13.48000],"10369":[52.52852,13.46677],
+  "10405":[52.53419,13.42301],"10407":[52.53445,13.45607],"10409":[52.54340,13.44136],
+  "10435":[52.53845,13.40962],"10437":[52.54551,13.40729],"10439":[52.55173,13.41230],
+  "10551":[52.53167,13.33855],"10553":[52.52820,13.32138],"10555":[52.52246,13.33596],"10557":[52.52317,13.36532],"10559":[52.53191,13.34834],
+  "10585":[52.51511,13.30531],"10587":[52.51708,13.32366],"10589":[52.52988,13.30674],
+  "10623":[52.50704,13.32840],"10625":[52.50871,13.31376],"10627":[52.50740,13.30153],"10629":[52.50184,13.30267],
+  "10707":[52.49502,13.31478],"10709":[52.49221,13.30375],"10711":[52.49902,13.29164],"10713":[52.48687,13.31373],
+  "10715":[52.48373,13.33048],"10717":[52.49078,13.32815],"10719":[52.49933,13.32461],
+  "10777":[52.49723,13.34290],"10779":[52.49210,13.34038],"10781":[52.49341,13.35261],"10783":[52.49771,13.36246],
+  "10785":[52.50691,13.36505],"10787":[52.50943,13.34309],"10789":[52.50118,13.33808],
+  "10823":[52.48570,13.34883],"10825":[52.48397,13.34025],"10827":[52.48304,13.35428],"10829":[52.48038,13.35973],
+  "10961":[52.49309,13.39686],"10963":[52.49860,13.37836],"10965":[52.48538,13.39890],"10967":[52.49093,13.41614],
+  "10969":[52.50271,13.40165],"10997":[52.50041,13.43340],"10999":[52.49569,13.42720],
+  "12043":[52.47775,13.44154],"12045":[52.48672,13.43437],"12047":[52.49013,13.42832],"12049":[52.47729,13.42198],
+  "12051":[52.46683,13.43034],"12053":[52.47602,13.43295],"12055":[52.47135,13.44997],"12057":[52.46858,13.46214],"12059":[52.48054,13.45259],
+  "12099":[52.45909,13.40333],"12101":[52.47618,13.39630],"12103":[52.46394,13.37289],"12105":[52.44531,13.37950],
+  "12107":[52.43341,13.39067],"12109":[52.44673,13.40198],
+  "12157":[52.46580,13.34485],"12159":[52.47369,13.33521],"12161":[52.46939,13.32538],"12163":[52.46318,13.32040],
+  "12165":[52.45738,13.31178],"12167":[52.44995,13.32851],"12169":[52.45553,13.33980],
+  "12203":[52.44263,13.31034],"12205":[52.43319,13.29801],"12207":[52.42125,13.30758],"12209":[52.41825,13.32884],
+  "12247":[52.43951,13.34337],"12249":[52.42734,13.34911],"12277":[52.41074,13.37565],"12279":[52.41110,13.34885],
+  "12305":[52.40523,13.39994],"12307":[52.38249,13.39938],"12309":[52.39009,13.41655],
+  "12347":[52.45058,13.43004],"12349":[52.42790,13.41498],"12351":[52.43421,13.45606],"12353":[52.42281,13.45740],
+  "12355":[52.40750,13.49756],"12357":[52.42758,13.48821],"12359":[52.44805,13.45197],
+  "12435":[52.48399,13.46978],"12437":[52.46091,13.48155],"12439":[52.44960,13.52407],"12459":[52.46095,13.52801],
+  "12487":[52.43828,13.51286],"12489":[52.43702,13.54705],
+  "12524":[52.41266,13.54651],"12526":[52.39968,13.57468],"12527":[52.39216,13.62912],"12529":[52.36907,13.50165],
+  "12555":[52.46224,13.58676],"12557":[52.42677,13.58838],"12559":[52.41693,13.64929],"12587":[52.46137,13.64061],"12589":[52.44850,13.70397],
+  "12619":[52.52426,13.59064],"12621":[52.50511,13.58840],"12623":[52.50329,13.60731],"12627":[52.53795,13.61304],"12629":[52.54042,13.59185],
+  "12679":[52.54801,13.56174],"12681":[52.55464,13.53981],"12683":[52.49816,13.55819],"12685":[52.53795,13.56643],"12687":[52.55640,13.56399],"12689":[52.56450,13.57193],
+  "13051":[52.58201,13.49131],"13053":[52.55591,13.50550],"13055":[52.53831,13.49864],"13057":[52.57305,13.54511],"13059":[52.57861,13.52069],
+  "13086":[52.55456,13.44665],"13088":[52.55931,13.47615],"13089":[52.56868,13.44201],
+  "13125":[52.63256,13.47758],"13127":[52.61107,13.42807],"13129":[52.59335,13.45831],
+  "13156":[52.58189,13.39813],"13158":[52.59172,13.38359],"13159":[52.62475,13.40377],
+  "13187":[52.57207,13.41266],"13189":[52.56009,13.42225],
+  "13347":[52.54968,13.36434],"13349":[52.55876,13.34369],"13351":[52.55031,13.33909],"13353":[52.54112,13.35093],
+  "13355":[52.54206,13.39010],"13357":[52.55047,13.37868],"13359":[52.55917,13.38304],
+  "13403":[52.57405,13.31865],"13405":[52.55828,13.30984],"13407":[52.57366,13.35145],"13409":[52.56931,13.37147],
+  "13435":[52.60191,13.34209],"13437":[52.58754,13.33460],"13439":[52.59508,13.35423],
+  "13465":[52.63242,13.28807],"13467":[52.61424,13.30552],"13469":[52.61305,13.33981],
+  "13503":[52.61062,13.24179],"13505":[52.58836,13.24640],"13507":[52.57473,13.27069],"13509":[52.58909,13.30330],
+  "13581":[52.52991,13.18706],"13583":[52.54155,13.18336],"13585":[52.54668,13.20678],"13587":[52.57275,13.19242],
+  "13589":[52.56575,13.15814],"13591":[52.53486,13.14319],"13593":[52.51864,13.16964],"13595":[52.50767,13.19169],
+  "13597":[52.52958,13.21391],"13599":[52.54850,13.23856],
+  "13627":[52.54100,13.30446],"13629":[52.54003,13.26534],
+  "14050":[52.51950,13.27269],"14052":[52.51274,13.25952],"14053":[52.52064,13.22746],"14055":[52.50270,13.23555],
+  "14057":[52.50649,13.28564],"14059":[52.52126,13.28707],"14089":[52.47414,13.15233],
+  "14109":[52.41511,13.14687],"14129":[52.43072,13.20056],
+  "14163":[52.44796,13.23973],"14165":[52.41597,13.25879],"14167":[52.41945,13.27589],"14169":[52.44221,13.26535],
+  "14193":[52.46753,13.21073],"14195":[52.45325,13.28855],"14197":[52.47213,13.31443],"14199":[52.47679,13.29620],
+};
+function coordsFor(postcode) {
+  const c = POSTCODE_COORDS[postcode];
+  return c ? { lat: c[0], lng: c[1] } : null;
 }
 function haversineKm(a, b) {
   const R = 6371;
@@ -484,44 +532,6 @@ function haversineKm(a, b) {
   const h = Math.sin(dLat / 2) ** 2 +
     Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
-}
-
-// null = the postcode box is in its normal plain-substring-match mode.
-// Once set, { rawInput, distances } holds the exact input string this
-// was computed for (so a stale in-flight lookup never overwrites a
-// newer one - see handlePostcodeInput below) plus a postcode -> km Map
-// covering every venue postcode that could be geocoded.
-let nearestMode = null;
-
-async function handlePostcodeInput() {
-  const raw = document.getElementById('postcode-search').value.trim();
-  if (!/^\d{5}$/.test(raw)) {
-    // Not a complete postcode (still typing, or free text) - plain mode.
-    nearestMode = null;
-    render();
-    return;
-  }
-  const origin = await geocodePostcode(raw);
-  if (document.getElementById('postcode-search').value.trim() !== raw) return; // input moved on while we waited
-  if (!origin) {
-    // Looks like a postcode but isn't a real/known one - fall back to
-    // the plain substring behaviour rather than showing an error.
-    nearestMode = null;
-    render();
-    return;
-  }
-  // Geocode every distinct venue postcode in the data (cached, so this
-  // only ever costs real requests once per postcode, however many times
-  // it's searched).
-  const venuePostcodes = [...new Set(Object.values(allData).flat().map(m => extractPostcode(m.venue_address)).filter(Boolean))];
-  const distances = new Map();
-  for (const pc of venuePostcodes) {
-    const geo = await geocodePostcode(pc);
-    if (geo) distances.set(pc, haversineKm(origin, geo));
-  }
-  if (document.getElementById('postcode-search').value.trim() !== raw) return;
-  nearestMode = { rawInput: raw, distances };
-  render();
 }
 
 const DEMO_DATA = {
@@ -772,7 +782,11 @@ function render() {
   const teamFilter = document.getElementById('team-filter').value;
   const postcodeRaw = document.getElementById('postcode-search').value.trim();
   const postcodeSearch = postcodeRaw.toLowerCase();
-  const useNearest = !!(nearestMode && nearestMode.rawInput === postcodeRaw);
+  // Only a full, valid, KNOWN Berlin postcode upgrades to nearest-first
+  // mode - anything else (partial digits, an unknown code, free text)
+  // just falls through to the plain substring match below.
+  const originCoords = /^\d{5}$/.test(postcodeRaw) ? coordsFor(postcodeRaw) : null;
+  const useNearest = !!originCoords;
   const allDatesSorted = Object.keys(allData).sort();
 
   // Which dates to pull fixtures from, most specific wins first:
@@ -809,11 +823,11 @@ function render() {
     filtered = filtered.filter(m => m.home_team === teamFilter || m.away_team === teamFilter);
   }
   if (useNearest) {
-    // Only fixtures whose venue postcode actually geocoded successfully
-    // can be ranked by distance - anything else just isn't shown in
-    // this mode (same "leave it out rather than guess wrong" approach
-    // used elsewhere in this project).
-    filtered = filtered.filter(m => nearestMode.distances.has(extractPostcode(m.venue_address)));
+    // Only fixtures whose venue postcode is in our coordinate table can
+    // be ranked by distance - anything else just isn't shown in this
+    // mode (same "leave it out rather than guess wrong" approach used
+    // elsewhere in this project).
+    filtered = filtered.filter(m => coordsFor(extractPostcode(m.venue_address)));
   } else if (postcodeSearch) {
     filtered = filtered.filter(m => (m.venue_address || '').toLowerCase().includes(postcodeSearch));
   }
@@ -835,7 +849,7 @@ function render() {
   // place of the date - the league is still shown, just as the badge.
   if (useNearest) {
     const withDistance = filtered
-      .map(m => ({ m, km: nearestMode.distances.get(extractPostcode(m.venue_address)) }))
+      .map(m => ({ m, km: haversineKm(originCoords, coordsFor(extractPostcode(m.venue_address))) }))
       .sort((a, b) => a.km - b.km);
     main.innerHTML = `
       <div class="league-group">
@@ -896,7 +910,7 @@ async function init() {
   document.getElementById('league-filter').addEventListener('change', render);
   document.getElementById('district-filter').addEventListener('change', render);
   document.getElementById('team-filter').addEventListener('change', render);
-  document.getElementById('postcode-search').addEventListener('input', handlePostcodeInput);
+  document.getElementById('postcode-search').addEventListener('input', render);
 
   const menuEl = document.getElementById('month-menu');
   document.getElementById('month-prev').addEventListener('click', () => goToMonth(monthIdx - 1, Object.keys(allData).sort()));
