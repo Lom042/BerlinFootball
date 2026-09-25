@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-25",
-    "time": null,
+    "time": "19:00",
     "home_team": "SV Tasmania Berlin",
     "away_team": "FC Carl Zeiss Jena",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-25",
-    "time": null,
+    "time": "19:00",
     "home_team": "BFC Dynamo",
     "away_team": "Greifswalder FC",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-25",
-    "time": null,
+    "time": "19:30",
     "home_team": "F.C. Hertha 03 Zehlendorf",
     "away_team": "Füchse Berlin Reinickendorf",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-25",
-    "time": null,
+    "time": "19:30",
     "home_team": "Tennis Borussia Berlin",
     "away_team": "SV Lichtenberg 47",
     "league": "OBERLIGA NORDOST",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-25",
-    "time": null,
+    "time": "19:45",
     "home_team": "BFC Meteor 06",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
