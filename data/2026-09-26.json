@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": "13:00",
+    "time": "13:03",
     "home_team": "SV Empor Berlin",
     "away_team": "TSV Rudow",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "14:00",
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "B.W. Hohen Neuendorf",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "14:00",
     "home_team": "FC Internationale Berlin",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "17:00",
     "home_team": "Viktoria Berlin",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "15:00",
     "home_team": "VSG Altglienicke II",
     "away_team": "BSV 1892",
     "league": "LANDESLIGA STAFFEL 1",
