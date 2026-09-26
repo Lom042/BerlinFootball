@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "13:00",
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "FC Mecklenburg Schwerin",
     "league": "OBERLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "away_team": "SF Johannisthal",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-26",
-    "time": null,
+    "time": "13:00",
     "home_team": "SV Empor Berlin",
     "away_team": "TSV Rudow",
     "league": "BERLIN-LIGA",
