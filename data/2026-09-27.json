@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "14:00",
     "home_team": "Hertha BSC II",
     "away_team": "FSV Zwickau",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "14:00",
     "home_team": "SC Staaken1919",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": "13:30",
+    "time": "13:31",
     "home_team": "Berlin Hilalspor",
     "away_team": "Berliner SC II",
     "league": "LANDESLIGA STAFFEL 2",
