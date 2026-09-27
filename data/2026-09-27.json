@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "12:00",
     "home_team": "S.D. Croatia Berlin",
     "away_team": "SC Charlottenburg",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "12:00",
     "home_team": "Spandauer FC Veritas",
     "away_team": "BSV Dersim",
     "league": "LANDESLIGA STAFFEL 1",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "13:00",
     "home_team": "FC Internationale Berlin II",
     "away_team": "BFC Preussen II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "away_team": "Türkiyemspor Berlin 1978",
     "league": "LANDESLIGA STAFFEL 1",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "13:30",
     "home_team": "Berlin Hilalspor",
     "away_team": "Berliner SC II",
     "league": "LANDESLIGA STAFFEL 2",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-09-27",
-    "time": null,
+    "time": "13:30",
     "home_team": "BSV Eintracht Mahlsdorf II",
     "away_team": "Polar Pinguin",
     "league": "LANDESLIGA STAFFEL 2",
