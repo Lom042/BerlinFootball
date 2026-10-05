@@ -35,6 +35,23 @@
   {
     "date": "2027-02-28",
     "time": null,
+    "home_team": "VSG Altglienicke Berlin",
+    "away_team": "FC Carl Zeiss Jena",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Spree-Arena",
+    "venue_address": "Hangelsberger Chaussee 1, 15517 Fürstenwalde/Spree",
+    "home_team_website": "https://www.vsg-altglienicke.de",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/vsg-altglienicke-berlin-fc-carl-zeiss-jena/-/spiel/031DEICCL4000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2027-02-28",
+    "time": null,
     "home_team": "BFC Preussen",
     "away_team": "BFC Dynamo",
     "league": "REGIONALLIGA NORDOST",

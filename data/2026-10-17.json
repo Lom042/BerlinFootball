@@ -18,6 +18,23 @@
   {
     "date": "2026-10-17",
     "time": null,
+    "home_team": "BFC Preussen",
+    "away_team": "VSG Altglienicke Berlin",
+    "league": "REGIONALLIGA NORDOST",
+    "league_tier": 4,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Preussen-Stadion NR1",
+    "venue_address": "Malteserstr. 24, 12249 Berlin",
+    "home_team_website": "https://bfc-preussen.de",
+    "away_team_website": "https://www.vsg-altglienicke.de",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-preussen-vsg-altglienicke-berlin/-/spiel/031DEIC438000000VS5489BUVUR5FS5A"
+  },
+  {
+    "date": "2026-10-17",
+    "time": null,
     "home_team": "SV Empor Berlin",
     "away_team": "VfB Fortuna Biesdorf",
     "league": "BERLIN-LIGA",
