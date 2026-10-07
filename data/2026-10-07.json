@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-07",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berliner SC",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-10-07",
-    "time": null,
+    "time": "19:30",
     "home_team": "FC Internationale Berlin",
     "away_team": "VfB Fortuna Biesdorf",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-10-07",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "SC Charlottenburg",
     "league": "BERLIN-LIGA",

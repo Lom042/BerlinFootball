@@ -19,6 +19,23 @@
   {
     "date": "2026-10-09",
     "time": null,
+    "home_team": "BFC Meteor 06",
+    "away_team": "SF Johannisthal",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Cornelius-Fredericks-Straße KR1",
+    "venue_address": "Cornelius-Fredericks-Str. 31, 13351 Berlin",
+    "home_team_website": "https://meteor06.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-sf-johannisthal/-/spiel/031G0H6B9S000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-10-09",
+    "time": null,
     "home_team": "SC Staaken1919",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -32,22 +49,5 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/sc-staaken1919-berlin-tuerkspor/-/spiel/031G0H6B5S000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2026-10-09",
-    "time": null,
-    "home_team": "BFC Meteor 06",
-    "away_team": "SF Johannisthal",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Hanne-Sobek-Sportanl. NR1 (u)",
-    "venue_address": "Osloer Str. 42-62, 13359 Berlin",
-    "home_team_website": "https://meteor06.de/",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/bfc-meteor-06-sf-johannisthal/-/spiel/031G0H6B9S000000VS5489BUVSJ4CRAP"
   }
 ]
