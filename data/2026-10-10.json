@@ -8,7 +8,7 @@
     "league_tier": 1,
     "gender": "M",
     "matchday": "5. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Stadion An der Alten Försterei",
     "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
@@ -85,7 +85,7 @@
   },
   {
     "date": "2026-10-10",
-    "time": null,
+    "time": "14:30",
     "home_team": "Berliner AK 07",
     "away_team": "SG Union Klosterfelde",
     "league": "OBERLIGA NORDOST",
@@ -153,7 +153,7 @@
   },
   {
     "date": "2026-10-10",
-    "time": null,
+    "time": "15:00",
     "home_team": "Viktoria Berlin",
     "away_team": "SV Empor Berlin",
     "league": "BERLIN-LIGA",
@@ -170,7 +170,7 @@
   },
   {
     "date": "2026-10-10",
-    "time": null,
+    "time": "15:00",
     "home_team": "VSG Altglienicke II",
     "away_team": "Friedrichshagener SV",
     "league": "LANDESLIGA STAFFEL 1",
