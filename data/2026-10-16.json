@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-16",
-    "time": null,
+    "time": "19:00",
     "home_team": "Hertha BSC II",
     "away_team": "RSV Eintracht 1949",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-10-16",
-    "time": null,
+    "time": "19:00",
     "home_team": "SV Tasmania Berlin",
     "away_team": "SV Babelsberg 03",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-10-16",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "BFC Meteor 06",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-10-16",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-10-16",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "SFC Stern 1900",
     "league": "BERLIN-LIGA",
