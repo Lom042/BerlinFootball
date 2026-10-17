@@ -8,7 +8,7 @@
     "league_tier": 1,
     "gender": "M",
     "matchday": "6. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Stadion An der Alten Försterei",
     "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
@@ -17,7 +17,7 @@
   },
   {
     "date": "2026-10-17",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen",
     "away_team": "VSG Altglienicke Berlin",
     "league": "REGIONALLIGA NORDOST",
@@ -34,7 +34,7 @@
   },
   {
     "date": "2026-10-17",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Empor Berlin",
     "away_team": "VfB Fortuna Biesdorf",
     "league": "BERLIN-LIGA",
@@ -51,7 +51,7 @@
   },
   {
     "date": "2026-10-17",
-    "time": null,
+    "time": "16:30",
     "home_team": "VfB Fortuna Biesdorf II",
     "away_team": "FC Internationale Berlin II",
     "league": "LANDESLIGA STAFFEL 1",

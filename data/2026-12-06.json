@@ -70,6 +70,23 @@
   {
     "date": "2026-12-06",
     "time": null,
+    "home_team": "Berliner SC",
+    "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Rasenplatz, Hubertussportplatz NR1",
+    "venue_address": "Hubertusallee 50, 14193 Berlin",
+    "home_team_website": "https://www.berlinersc-fussball.de/",
+    "away_team_website": "https://www.blauweiss90berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/berliner-sc-spvg-blau-weiss-1890-berlin/-/spiel/031G0H6ENS000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2026-12-06",
+    "time": null,
     "home_team": "SC Staaken1919",
     "away_team": "S.D. Croatia Berlin",
     "league": "BERLIN-LIGA",
