@@ -2,23 +2,6 @@
   {
     "date": "2027-05-21",
     "time": null,
-    "home_team": "Berlin Türkspor",
-    "away_team": "SC Staaken1919",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Rasenplatz, Heckerdamm NR1",
-    "venue_address": "Heckerdamm 204, 13627 Berlin",
-    "home_team_website": "",
-    "away_team_website": "https://sc-staaken.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/berlin-tuerkspor-sc-staaken1919/-/spiel/031G0H6O5C000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-05-21",
-    "time": null,
     "home_team": "1. FC Wilmersdorf",
     "away_team": "SFC Stern 1900",
     "league": "BERLIN-LIGA",
