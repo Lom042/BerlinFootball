@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-18",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Dynamo",
     "away_team": "Chemnitzer FC",
     "league": "REGIONALLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-10-18",
-    "time": null,
+    "time": "11:30",
     "home_team": "Spandauer Kickers",
     "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-10-18",
-    "time": null,
+    "time": "10:45",
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "FC Stern Marienfelde",
     "league": "LANDESLIGA STAFFEL 1",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-10-18",
-    "time": null,
+    "time": "12:30",
     "home_team": "Viktoria Berlin II (U23)",
     "away_team": "Berliner SC II",
     "league": "LANDESLIGA STAFFEL 2",
@@ -137,7 +137,7 @@
   },
   {
     "date": "2026-10-18",
-    "time": null,
+    "time": "12:30",
     "home_team": "Delay Sports Berlin",
     "away_team": "BSV Eintracht Mahlsdorf II",
     "league": "LANDESLIGA STAFFEL 2",
