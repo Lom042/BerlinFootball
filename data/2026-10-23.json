@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-23",
-    "time": null,
+    "time": "19:00",
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "FSV 63 Luckenwalde",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-10-23",
-    "time": null,
+    "time": "19:00",
     "home_team": "Füchse Berlin Reinickendorf",
     "away_team": "Tennis Borussia Berlin",
     "league": "OBERLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-10-23",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-10-23",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "B.W. Hohen Neuendorf",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-10-23",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "SV Empor Berlin",
     "league": "BERLIN-LIGA",
