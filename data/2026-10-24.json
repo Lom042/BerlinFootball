@@ -8,7 +8,7 @@
     "league_tier": 2,
     "gender": "M",
     "matchday": "9. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Olympiastadion Berlin",
     "venue_address": "Olympischer Platz 3, 14053 Berlin",
     "home_team_website": "https://www.herthabsc.com",
@@ -34,7 +34,7 @@
   },
   {
     "date": "2026-10-24",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Sparta Lichtenberg 1911",
     "away_team": "TUS Makkabi",
     "league": "OBERLIGA NORDOST",
@@ -51,7 +51,7 @@
   },
   {
     "date": "2026-10-24",
-    "time": null,
+    "time": "14:15",
     "home_team": "FC Internationale Berlin",
     "away_team": "S.D. Croatia Berlin",
     "league": "BERLIN-LIGA",
@@ -68,7 +68,7 @@
   },
   {
     "date": "2026-10-24",
-    "time": null,
+    "time": "16:30",
     "home_team": "VfB Fortuna Biesdorf II",
     "away_team": "Friedrichshagener SV",
     "league": "LANDESLIGA STAFFEL 1",
