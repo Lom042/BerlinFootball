@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "14:00",
     "home_team": "Berliner AK 07",
     "away_team": "1. FC Lok Stendal",
     "league": "OBERLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "13:00",
     "home_team": "Berliner SC",
     "away_team": "Viktoria Berlin",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "14:00",
     "home_team": "TSV Mariendorf 1897",
     "away_team": "VfB Fortuna Biesdorf",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "13:00",
     "home_team": "FC Internationale Berlin II",
     "away_team": "Steglitzer SC Südwest 1947",
     "league": "LANDESLIGA STAFFEL 1",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "away_team": "VSG Altglienicke II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "13:30",
     "home_team": "SC Berliner Amateure",
     "away_team": "BSV 1892",
     "league": "LANDESLIGA STAFFEL 1",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen II",
     "away_team": "VfB Hermsdorf",
     "league": "LANDESLIGA STAFFEL 1",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "14:00",
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "BSV Dersim",
     "league": "LANDESLIGA STAFFEL 1",
@@ -154,7 +154,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "12:30",
     "home_team": "Viktoria Berlin II (U23)",
     "away_team": "BSV Eintracht Mahlsdorf II",
     "league": "LANDESLIGA STAFFEL 2",
@@ -171,7 +171,7 @@
   },
   {
     "date": "2026-10-25",
-    "time": null,
+    "time": "13:31",
     "home_team": "Berlin Hilalspor",
     "away_team": "SC Union 06",
     "league": "LANDESLIGA STAFFEL 2",
