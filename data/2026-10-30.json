@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-30",
-    "time": null,
+    "time": "19:00",
     "home_team": "BFC Dynamo",
     "away_team": "RSV Eintracht 1949",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-10-30",
-    "time": null,
+    "time": "19:00",
     "home_team": "F.C. Hertha 03 Zehlendorf",
     "away_team": "TSG Neustrelitz",
     "league": "OBERLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-10-30",
-    "time": null,
+    "time": "19:30",
     "home_team": "BFC Meteor 06",
     "away_team": "FC Internationale Berlin",
     "league": "BERLIN-LIGA",
