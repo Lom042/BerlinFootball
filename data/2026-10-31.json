@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-10-31",
-    "time": null,
+    "time": "14:00",
     "home_team": "BFC Preussen",
     "away_team": "FSV Zwickau",
     "league": "REGIONALLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-10-31",
-    "time": null,
+    "time": "14:02",
     "home_team": "Viktoria Berlin",
     "away_team": "TSV Mariendorf 1897",
     "league": "BERLIN-LIGA",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-10-31",
-    "time": null,
+    "time": "14:00",
     "home_team": "VfB Fortuna Biesdorf",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-10-31",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Empor Berlin",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-10-31",
-    "time": null,
+    "time": "15:00",
     "home_team": "VSG Altglienicke II",
     "away_team": "FC Stern Marienfelde",
     "league": "LANDESLIGA STAFFEL 1",
