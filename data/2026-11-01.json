@@ -8,7 +8,7 @@
     "league_tier": 1,
     "gender": "M",
     "matchday": "8. Spieltag",
-    "finished": false,
+    "finished": true,
     "venue": "Stadion An der Alten Försterei",
     "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
     "home_team_website": "https://www.fc-union-berlin.de",
@@ -17,7 +17,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": "14:00",
+    "time": "14:02",
     "home_team": "SV Tasmania Berlin",
     "away_team": "Chemnitzer FC",
     "league": "REGIONALLIGA NORDOST",
@@ -85,7 +85,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "14:30",
     "home_team": "S.D. Croatia Berlin",
     "away_team": "SFC Stern 1900",
     "league": "BERLIN-LIGA",
@@ -136,7 +136,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "15:55",
     "home_team": "BSV Eintracht Mahlsdorf II",
     "away_team": "FSV Berolina Stralau",
     "league": "LANDESLIGA STAFFEL 2",
