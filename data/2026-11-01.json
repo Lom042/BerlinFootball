@@ -17,7 +17,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "14:00",
     "home_team": "SV Tasmania Berlin",
     "away_team": "Chemnitzer FC",
     "league": "REGIONALLIGA NORDOST",
@@ -34,7 +34,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "13:30",
     "home_team": "Tennis Borussia Berlin",
     "away_team": "SV Sparta Lichtenberg 1911",
     "league": "OBERLIGA NORDOST",
@@ -51,7 +51,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "11:30",
     "home_team": "Spandauer Kickers",
     "away_team": "TSV Rudow",
     "league": "BERLIN-LIGA",
@@ -68,7 +68,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "12:45",
     "home_team": "Frohnauer SC",
     "away_team": "SF Johannisthal",
     "league": "BERLIN-LIGA",
@@ -76,7 +76,7 @@
     "is_cup": false,
     "gender": "M",
     "matchday": "",
-    "venue": "Rasenplatz, Poloplatz NR1",
+    "venue": "Kunstrasenplatz, Poloplatz KR1",
     "venue_address": "Schönfließer Str. 13-19, 13465 Berlin",
     "home_team_website": "https://www.frohnauersc.de/",
     "away_team_website": "",
@@ -102,7 +102,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "12:00",
     "home_team": "Spandauer FC Veritas",
     "away_team": "FC Internationale Berlin II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -119,7 +119,7 @@
   },
   {
     "date": "2026-11-01",
-    "time": null,
+    "time": "12:30",
     "home_team": "Delay Sports Berlin",
     "away_team": "Viktoria Berlin II (U23)",
     "league": "LANDESLIGA STAFFEL 2",
