@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-11-06",
-    "time": null,
+    "time": "19:00",
     "home_team": "VSG Altglienicke Berlin",
     "away_team": "SV Tasmania Berlin",
     "league": "REGIONALLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-11-06",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Charlottenburg",
     "away_team": "SFC Stern 1900",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-11-06",
-    "time": null,
+    "time": "19:30",
     "home_team": "1. FC Wilmersdorf",
     "away_team": "SC Staaken1919",
     "league": "BERLIN-LIGA",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-11-06",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
