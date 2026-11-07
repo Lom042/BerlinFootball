@@ -1,22 +1,6 @@
 [
   {
     "date": "2027-04-03",
-    "time": "15:30",
-    "home_team": "1. FC Union Berlin",
-    "away_team": "1. FSV Mainz 05",
-    "league": "BL1",
-    "league_tier": 1,
-    "gender": "M",
-    "matchday": "28. Spieltag",
-    "finished": false,
-    "venue": "Stadion An der Alten Försterei",
-    "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
-    "home_team_website": "https://www.fc-union-berlin.de",
-    "away_team_website": "",
-    "source": "openligadb"
-  },
-  {
-    "date": "2027-04-03",
     "time": null,
     "home_team": "BSV Eintracht Mahlsdorf",
     "away_team": "SG Union Klosterfelde",
