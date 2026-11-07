@@ -1,6 +1,22 @@
 [
   {
     "date": "2027-05-22",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "Borussia Mönchengladbach",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "34. Spieltag",
+    "finished": false,
+    "venue": "Stadion An der Alten Försterei",
+    "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
+    "home_team_website": "https://www.fc-union-berlin.de",
+    "away_team_website": "",
+    "source": "openligadb"
+  },
+  {
+    "date": "2027-05-22",
     "time": null,
     "home_team": "Tennis Borussia Berlin",
     "away_team": "F.C. Hertha 03 Zehlendorf",

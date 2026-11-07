@@ -1,6 +1,22 @@
 [
   {
     "date": "2027-02-13",
+    "time": "15:30",
+    "home_team": "1. FC Union Berlin",
+    "away_team": "FC Bayern München",
+    "league": "BL1",
+    "league_tier": 1,
+    "gender": "M",
+    "matchday": "21. Spieltag",
+    "finished": false,
+    "venue": "Stadion An der Alten Försterei",
+    "venue_address": "Hämmerlingstraße 61, 12559 Berlin",
+    "home_team_website": "https://www.fc-union-berlin.de",
+    "away_team_website": "",
+    "source": "openligadb"
+  },
+  {
+    "date": "2027-02-13",
     "time": null,
     "home_team": "Sp.Vg. Blau Weiß 1890 Berlin",
     "away_team": "TSV Rudow",
