@@ -103,6 +103,23 @@
   {
     "date": "2027-04-17",
     "time": null,
+    "home_team": "Viktoria Berlin",
+    "away_team": "Spandauer Kickers",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Stadion Lichterfelde KR2",
+    "venue_address": "Ostpreußendamm 3-17, 12207 Berlin",
+    "home_team_website": "",
+    "away_team_website": "https://www.spaki-berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/viktoria-berlin-spandauer-kickers/-/spiel/031G0H6R4K000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-04-17",
+    "time": null,
     "home_team": "VSG Altglienicke II",
     "away_team": "SC Berliner Amateure",
     "league": "LANDESLIGA STAFFEL 1",
