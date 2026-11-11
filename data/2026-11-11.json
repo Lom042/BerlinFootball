@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-11-11",
-    "time": null,
+    "time": "19:30",
     "home_team": "TSV Mariendorf 1897",
     "away_team": "SC Charlottenburg",
     "league": "BERLIN-LIGA",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-11-11",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berliner SC",
     "away_team": "SF Johannisthal",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-11-11",
-    "time": null,
+    "time": "19:30",
     "home_team": "Berlin Türkspor",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
