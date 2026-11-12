@@ -19,23 +19,6 @@
   {
     "date": "2027-06-12",
     "time": null,
-    "home_team": "FC Internationale Berlin",
-    "away_team": "Frohnauer SC",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Tempelhofer Weg KR1",
-    "venue_address": "Ella-Barowsky-Straße 62, 10829 Berlin",
-    "home_team_website": "https://www.inter-berlin.de/",
-    "away_team_website": "https://www.frohnauersc.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/fc-internationale-berlin-frohnauer-sc/-/spiel/031G0H6LLC000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-06-12",
-    "time": null,
     "home_team": "VSG Altglienicke II",
     "away_team": "Spandauer FC Veritas",
     "league": "LANDESLIGA STAFFEL 1",

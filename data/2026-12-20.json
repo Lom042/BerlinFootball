@@ -218,22 +218,5 @@
     "away_team_website": "",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/berlin-hilalspor-weissenseer-fc/-/spiel/031G0GOV94000000VS5489BTVVG7L386"
-  },
-  {
-    "date": "2026-12-20",
-    "time": null,
-    "home_team": "BSV Eintracht Mahlsdorf II",
-    "away_team": "BSV Hürtürkel",
-    "league": "LANDESLIGA STAFFEL 2",
-    "league_tier": 7,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "Kunstrasenplatz, Am Rosenhag KR",
-    "venue_address": "Melanchthonstr. 52 D, 12623 Berlin",
-    "home_team_website": "https://bsv-eintracht-mahlsdorf.de",
-    "away_team_website": "https://www.hurturkel.com/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/bsv-eintracht-mahlsdorf-ii-bsv-huertuerkel/-/spiel/031G0GOVE4000000VS5489BTVVG7L386"
   }
 ]
