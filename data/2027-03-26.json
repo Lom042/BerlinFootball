@@ -53,23 +53,6 @@
   {
     "date": "2027-03-26",
     "time": null,
-    "home_team": "S.D. Croatia Berlin",
-    "away_team": "TSV Rudow",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "home_team_website": "http://sdcroatia.de/",
-    "away_team_website": "",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-tsv-rudow/-/spiel/031G0H7348000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-03-26",
-    "time": null,
     "home_team": "SV Empor Berlin",
     "away_team": "Berliner SC",
     "league": "BERLIN-LIGA",
@@ -117,5 +100,22 @@
     "away_team_website": "https://www.stern1900.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/viktoria-berlin-sfc-stern-1900/-/spiel/031G0H73J0000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-03-26",
+    "time": null,
+    "home_team": "S.D. Croatia Berlin",
+    "away_team": "TSV Rudow",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Friedrich-Ebert-Stadion KR1",
+    "venue_address": "Bosestr. 21, 12103 Berlin",
+    "home_team_website": "http://sdcroatia.de/",
+    "away_team_website": "",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-tsv-rudow/-/spiel/031G0H7348000000VS5489BUVSJ4CRAP"
   }
 ]

@@ -87,23 +87,6 @@
   {
     "date": "2027-03-29",
     "time": null,
-    "home_team": "S.D. Croatia Berlin",
-    "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
-    "league": "BERLIN-LIGA",
-    "league_tier": 6,
-    "is_cup": false,
-    "gender": "M",
-    "matchday": "",
-    "venue": "",
-    "venue_address": "",
-    "home_team_website": "http://sdcroatia.de/",
-    "away_team_website": "https://www.blauweiss90berlin.de/",
-    "source": "fussballde",
-    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-spvg-blau-weiss-1890-berlin/-/spiel/031G0H7588000000VS5489BUVSJ4CRAP"
-  },
-  {
-    "date": "2027-03-29",
-    "time": null,
     "home_team": "TSV Mariendorf 1897",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -117,5 +100,22 @@
     "away_team_website": "https://www.frohnauersc.de/",
     "source": "fussballde",
     "source_url": "https://www.fussball.de/spiel/tsv-mariendorf-1897-frohnauer-sc/-/spiel/031G0H74OK000000VS5489BUVSJ4CRAP"
+  },
+  {
+    "date": "2027-03-29",
+    "time": null,
+    "home_team": "S.D. Croatia Berlin",
+    "away_team": "Sp.Vg. Blau Weiß 1890 Berlin",
+    "league": "BERLIN-LIGA",
+    "league_tier": 6,
+    "is_cup": false,
+    "gender": "M",
+    "matchday": "",
+    "venue": "Kunstrasenplatz, Friedrich-Ebert-Stadion KR1",
+    "venue_address": "Bosestr. 21, 12103 Berlin",
+    "home_team_website": "http://sdcroatia.de/",
+    "away_team_website": "https://www.blauweiss90berlin.de/",
+    "source": "fussballde",
+    "source_url": "https://www.fussball.de/spiel/sd-croatia-berlin-spvg-blau-weiss-1890-berlin/-/spiel/031G0H7588000000VS5489BUVSJ4CRAP"
   }
 ]
