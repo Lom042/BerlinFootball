@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-11-20",
-    "time": null,
+    "time": "19:00",
     "home_team": "SV Lichtenberg 47",
     "away_team": "Füchse Berlin Reinickendorf",
     "league": "OBERLIGA NORDOST",
@@ -18,7 +18,7 @@
   },
   {
     "date": "2026-11-20",
-    "time": null,
+    "time": "19:30",
     "home_team": "BFC Meteor 06",
     "away_team": "Frohnauer SC",
     "league": "BERLIN-LIGA",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-11-20",
-    "time": null,
+    "time": "19:30",
     "home_team": "SC Staaken1919",
     "away_team": "SC Charlottenburg",
     "league": "BERLIN-LIGA",
