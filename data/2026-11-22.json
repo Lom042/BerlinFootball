@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:30",
     "home_team": "BFC Preussen",
     "away_team": "BSG Chemie Leipzig",
     "league": "REGIONALLIGA NORDOST",
@@ -35,7 +35,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:30",
     "home_team": "F.C. Hertha 03 Zehlendorf",
     "away_team": "FC Mecklenburg Schwerin",
     "league": "OBERLIGA NORDOST",
@@ -52,7 +52,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:30",
     "home_team": "Tennis Borussia Berlin",
     "away_team": "BSV Eintracht Mahlsdorf",
     "league": "OBERLIGA NORDOST",
@@ -69,7 +69,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:00",
     "home_team": "Berliner SC",
     "away_team": "1. FC Wilmersdorf",
     "league": "BERLIN-LIGA",
@@ -86,7 +86,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "14:00",
     "home_team": "TSV Mariendorf 1897",
     "away_team": "Berlin Türkspor",
     "league": "BERLIN-LIGA",
@@ -103,7 +103,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "14:30",
     "home_team": "S.D. Croatia Berlin",
     "away_team": "B.W. Hohen Neuendorf",
     "league": "BERLIN-LIGA",
@@ -120,7 +120,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:00",
     "home_team": "FC Internationale Berlin II",
     "away_team": "BSV 1892",
     "league": "LANDESLIGA STAFFEL 1",
@@ -137,7 +137,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:00",
     "home_team": "Sportfreunde Charlottenburg-Wilmersdorf 03",
     "away_team": "Friedrichshagener SV",
     "league": "LANDESLIGA STAFFEL 1",
@@ -154,7 +154,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "14:00",
     "home_team": "Türkiyemspor Berlin 1978",
     "away_team": "VfB Fortuna Biesdorf II",
     "league": "LANDESLIGA STAFFEL 1",
@@ -171,7 +171,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "11:08",
     "home_team": "Berliner SC II",
     "away_team": "Polar Pinguin",
     "league": "LANDESLIGA STAFFEL 2",
@@ -188,7 +188,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:30",
     "home_team": "Berlin Hilalspor",
     "away_team": "Delay Sports Berlin",
     "league": "LANDESLIGA STAFFEL 2",
@@ -205,7 +205,7 @@
   },
   {
     "date": "2026-11-22",
-    "time": null,
+    "time": "13:30",
     "home_team": "BSV Eintracht Mahlsdorf II",
     "away_team": "SSC Teutonia 99",
     "league": "LANDESLIGA STAFFEL 2",
